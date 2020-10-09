@@ -34,7 +34,7 @@ public class PendulumControl : MonoBehaviour
     void FixedUpdate()
     {
         // Multiply by game speed multiplier to allow time warp effect.
-        _startTime += Time.deltaTime * GameManager.GetGameSpeedMultiplier();
+        _startTime += Time.deltaTime;
 
         transform.rotation = Quaternion.Lerp(_start, _end, (Mathf.Sin(_startTime * speed + Mathf.PI / 2) + 1.0f) / 2.0f);
 
