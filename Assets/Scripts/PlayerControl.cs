@@ -29,6 +29,14 @@ public class PlayerControl : MonoBehaviour
     // True if the camera should be bobbing up and down.
     private bool bobbing = false;
 
+    private State state = State.Normal;
+    
+    private enum State { 
+        Normal,
+        Hookshot
+    }
+
+
     void Start()
     {
         /* Don't show user's cursor in the game, and lock the cursor to avoid going out of the game window.
@@ -45,6 +53,7 @@ public class PlayerControl : MonoBehaviour
         originalForwardMovementSpeed = 500f;
         forwardMovementSpeed = originalForwardMovementSpeed;
         horizontalMovementSpeed = 500f;
+
     }
 
     /*
@@ -165,14 +174,35 @@ public class PlayerControl : MonoBehaviour
 
         float forwardSpeed = (Input.GetAxis("Vertical") * Mathf.Cos(facingAngle) - Input.GetAxis("Horizontal") * Mathf.Sin(facingAngle)) * forwardMovementSpeed * Time.fixedUnscaledDeltaTime;
         float horizontalSpeed = (Input.GetAxis("Vertical") * Mathf.Sin(facingAngle) + Input.GetAxis("Horizontal") * Mathf.Cos(facingAngle)) * horizontalMovementSpeed * Time.fixedUnscaledDeltaTime;
-        rigidBody.velocity = new Vector3(horizontalSpeed,
-                                         rigidBody.velocity.y,
-                                         forwardSpeed);
+
+        switch (state) {
+            default:
+            case State.Normal:
+                rigidBody.velocity = new Vector3(horizontalSpeed,
+                                       rigidBody.velocity.y,
+                                        forwardSpeed);
+                break;
+
+            case State.Hookshot:
+                break;
+
+        }
+        
 
         /* Bob the camera up and down if the player is moving
          * (intentionally, not being pushed) and not grounded.
          */
         bobbing = ((Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0) && grounded);
+    }
+
+    public void ActivateHookShotState(){
+
+        state = State.Hookshot;
+                
+    }
+
+    public void DisableHookShotState() {
+        state = State.Normal;
     }
 
     void FixedUpdate()
