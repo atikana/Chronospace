@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -67,5 +69,13 @@ public class GameManager : MonoBehaviour
         Time.fixedDeltaTime = Time.timeScale * 0.02f;
 
         timeWarpCounter = Mathf.Clamp(timeWarpCounter, 0f, timeWarpLength);
+
+        // Restart current level     
+        if (Input.GetKeyDown(KeyCode.R))
+            {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        
     }
+
 }
