@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class GrapplingGun : MonoBehaviour
 {
+
+    private const float NORMAL_FOV = 60f;
+    private const float HOOKSHOT_FOV = 100f;
+
     private LineRenderer lr;
     private Vector3 grapplePoint;
     private Vector3 grappleDir;
+    public CameraFov cameraFov;
     public LayerMask whatIsGrappleable;
 
-    public PlayerControl playerControl; 
+    public PlayerControl playerControl;
+    public ParticleSystem particleSystem;
 
     bool pulling = false;
 
@@ -49,6 +55,7 @@ public class GrapplingGun : MonoBehaviour
             if (joint)
             {
                 PullRope();
+                
             }
         }
         else if (Input.GetAxis("Fire2") == 0)
@@ -56,6 +63,7 @@ public class GrapplingGun : MonoBehaviour
             if (joint && pulling)
             {
                 ResetRope();
+                
             }
         }
 
@@ -114,7 +122,7 @@ public class GrapplingGun : MonoBehaviour
 
     void StopGrapple()
     {
-        playerControl.DisableHookShotState();
+        //playerControl.DisableHookShotState();
         lr.positionCount = 0;
         Destroy(joint);
 
@@ -136,17 +144,22 @@ public class GrapplingGun : MonoBehaviour
 
         pulling = true;
 
+        cameraFov.SetCameraFov(HOOKSHOT_FOV);
+        particleSystem.Play();
+
 
     }
 
     void ResetRope()
     {
-
         Debug.Log("Reset Rope");
 
         playerBody.velocity = Vector3.zero;
 
         pulling = false;
+
+        cameraFov.SetCameraFov(NORMAL_FOV);
+        particleSystem.Stop();
 
         if (joint) {
             joint.spring = 4.5f;

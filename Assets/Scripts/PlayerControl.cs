@@ -75,7 +75,7 @@ public class PlayerControl : MonoBehaviour
 
     private void Dash()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift) || Input.GetButtonDown("Dash"))
         {
             soundManager.PlayDashSound();
             dashCounter = dashLength;
@@ -174,8 +174,12 @@ public class PlayerControl : MonoBehaviour
 
         float forwardSpeed = (Input.GetAxis("Vertical") * Mathf.Cos(facingAngle) - Input.GetAxis("Horizontal") * Mathf.Sin(facingAngle)) * forwardMovementSpeed * Time.fixedUnscaledDeltaTime;
         float horizontalSpeed = (Input.GetAxis("Vertical") * Mathf.Sin(facingAngle) + Input.GetAxis("Horizontal") * Mathf.Cos(facingAngle)) * horizontalMovementSpeed * Time.fixedUnscaledDeltaTime;
-
-        switch (state) {
+        
+        //Temporary fix
+        this.transform.Translate(new Vector3(horizontalSpeed/25f, 0, forwardSpeed/25f));
+        
+        //State machine that handles player movement
+        /*switch (state) {
             default:
             case State.Normal:
                 rigidBody.velocity = new Vector3(horizontalSpeed,
@@ -186,7 +190,7 @@ public class PlayerControl : MonoBehaviour
             case State.Hookshot:
                 break;
 
-        }
+        }*/
         
 
         /* Bob the camera up and down if the player is moving
@@ -195,12 +199,14 @@ public class PlayerControl : MonoBehaviour
         bobbing = ((Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0) && grounded);
     }
 
+    //The grappling hook script will call this function to change the state
     public void ActivateHookShotState(){
 
         state = State.Hookshot;
                 
     }
 
+    //The grappling hook script will call this function to change the state
     public void DisableHookShotState() {
         state = State.Normal;
     }
