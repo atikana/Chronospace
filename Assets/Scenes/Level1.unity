@@ -455,7 +455,7 @@ GameObject:
   - component: {fileID: 122005393}
   - component: {fileID: 122005392}
   - component: {fileID: 122005391}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GrapplePlatform1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2771,7 +2771,7 @@ GameObject:
   - component: {fileID: 1328893701}
   - component: {fileID: 1328893700}
   - component: {fileID: 1328893699}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GrapplePlatform2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
