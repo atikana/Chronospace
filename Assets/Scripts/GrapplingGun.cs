@@ -27,27 +27,31 @@ public class GrapplingGun : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetAxis("Fire1") == 1)
         {
-            StartGrapple();
+            if (!joint) { StartGrapple();}
+   
         }
-        else if (Input.GetMouseButtonUp(0))
+        else if (Input.GetAxis("Fire1") == 0)
         {
             if (pulling)
             {
                 ResetRope();
             }
-            StopGrapple();
+
+            if (joint) {
+                StopGrapple();
+            }
         }
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetAxis("Fire2") == 1)
         {
             if (joint)
             {
                 PullRope();
             }
         }
-        else if (Input.GetMouseButtonUp(1))
+        else if (Input.GetAxis("Fire2") == 0)
         {
             if (joint && pulling)
             {
@@ -87,7 +91,7 @@ public class GrapplingGun : MonoBehaviour
 
             //The distance the grapple will try to keep from the point
             joint.maxDistance = distanceFromPoint * 0.5f;
-            joint.minDistance = distanceFromPoint * 0.25f;
+            joint.minDistance = 0f;
 
             //Change these value to fit the gameplay
             joint.spring = 4.5f;
@@ -144,9 +148,11 @@ public class GrapplingGun : MonoBehaviour
 
         pulling = false;
 
-        joint.spring = 4.5f;
-        joint.damper = 7f;
-        joint.massScale = 4.5f;
+        if (joint) {
+            joint.spring = 4.5f;
+            joint.damper = 7f;
+            joint.massScale = 4.5f;
+        }
 
     }
 

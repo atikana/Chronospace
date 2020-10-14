@@ -66,7 +66,7 @@ public class PlayerControl : MonoBehaviour
 
     private void TimeWarp()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetButtonDown("TimeWarp"))
         {
             soundManager.PlayTimeWarpSound();
             GameManager.SetTimeWarp();
@@ -150,7 +150,7 @@ public class PlayerControl : MonoBehaviour
 
     private void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && this.grounded)
+        if (Input.GetButtonDown("Jump") && this.grounded)
         {
             soundManager.PlayJumpSound();
             this.rigidBody.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
