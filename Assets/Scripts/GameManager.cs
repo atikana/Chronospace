@@ -73,7 +73,8 @@ public class GameManager : MonoBehaviour
         // Restart current level     
         if (Input.GetKeyDown(KeyCode.R))
             {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene("StartMenu");
         }
         
     }

@@ -19,7 +19,8 @@ public class WinScreen : MonoBehaviour
     {
         if (winCondition)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene("StartMenu");
         }
     }
 
