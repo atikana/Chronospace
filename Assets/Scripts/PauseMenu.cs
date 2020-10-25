@@ -1,40 +1,53 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
 
     public GameObject pauseMenu;
-    public static bool paused = false;
+
+    /* Time scale from before the game was paused.  This is necessary so that if
+     * the game is resumed while time warp is enabled, the time warp will continue.
+     */
+    private float originalTimeScale;
+    private bool paused = false;
+
+    private PlayerControl playerControl;
+
     // Start is called before the first frame update
     void Start()
     {
         pauseMenu.SetActive(false);
+
+        // Set a default value for originalTimeScale.
+        originalTimeScale = Time.timeScale;
+
+        playerControl = GameObject.FindObjectOfType<PlayerControl>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PressPause()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (paused)
         {
-            if (paused)
-            {
-                
-            }
-            else
-            {
-                PauseGame();
-            }
-          
+            ResumeGame();
         }
+        else
+        {
+            PauseGame();
+        }
+    }
+
+    public bool checkPaused()
+    {
+        return paused;
     }
 
     public void PauseGame() 
     {
         pauseMenu.SetActive(true);
         paused = true;
+        Debug.Log("paused");
+        //originalTimeScale = Time.timeScale;
         Time.timeScale = 0f;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
@@ -44,9 +57,9 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenu.SetActive(false);
         paused = false;
-        Time.timeScale = 1f;
+        Time.timeScale = 1f;  // originalTimeScale;
         Cursor.visible = false;
-        print("unpaused");
+        Debug.Log("unpaused");
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -55,12 +68,10 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         paused = false;
         SceneManager.LoadScene("StartMenu");
-        //
     }
 
     public void Resume()
     {
         ResumeGame();
     }
-
 }

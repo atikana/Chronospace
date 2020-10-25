@@ -7,16 +7,15 @@ public class GameManager : MonoBehaviour
     /* The speed multiplier of the moving objects in the game.
      * This allows the time warp effect to take place.
      */
-    private static float timeWarpMultiplier;
-
-    // True if time warp is enabled. False otherwise.
-    //private static bool timeWarpEnabled;
+    private float timeWarpMultiplier;
 
     // Number of seconds time warp lasts.
-    private static float timeWarpLength;
+    private float timeWarpLength;
 
     // timeWarpLength - [Current number of seconds the time warp has been enabled].
-    private static float timeWarpCounter;
+    private float timeWarpCounter;
+
+    private PauseMenu pauseMenu;
 
     void Start()
     {
@@ -24,34 +23,16 @@ public class GameManager : MonoBehaviour
         timeWarpLength = 10f;
         timeWarpCounter = 0f;
         timeWarpMultiplier = 0.5f;
+
+        pauseMenu = GameObject.FindObjectOfType<PauseMenu>();
     }
-
-    /*public static bool GetTimeWarpEnabled()
-    {
-        return timeWarpEnabled;
-    }*/
-
-    /*public static float GetGameSpeedMultiplier()
-    {
-        return gameSpeedMultiplier;
-    }*/
 
     /**
      * Change the game speed multiplier.
      */
-    public static void SetTimeWarp()
+    public void SetTimeWarp()
     {
-        //timeWarpEnabled = true;
         timeWarpCounter = timeWarpLength;
-    }
-
-    /**
-     * Reset the game speed multiplier.
-     */
-    public static void RemoveTimeWarp()
-    {
-        //timeWarpEnabled = false;
-        //gameSpeedMultiplier = 1.0f;
     }
 
     void FixedUpdate()
@@ -61,22 +42,26 @@ public class GameManager : MonoBehaviour
             Time.timeScale = timeWarpMultiplier;
             timeWarpCounter -= Time.fixedUnscaledDeltaTime;
         }
-        else
+        else if (!pauseMenu.checkPaused())
         {
             Time.timeScale = 1f;
         }
 
+        // Set fixedDeltaTime to be proportional to the time scale.
+        // TODO:  Is this a good idea?
         Time.fixedDeltaTime = Time.timeScale * 0.02f;
 
         timeWarpCounter = Mathf.Clamp(timeWarpCounter, 0f, timeWarpLength);
+    }
 
-        // Restart current level     
-        if (Input.GetKeyDown(KeyCode.R))
-            {
-            // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            SceneManager.LoadScene("StartMenu");
-        }
-        
+    /*
+     * Allows the player to restart the level they are currently on.
+     * TODO:  Maybe make it bring the player back to their last checkpoint?
+     */
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        //SceneManager.LoadScene("StartMenu");
     }
 
 }

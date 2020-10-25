@@ -15,11 +15,11 @@ public class GrapplingGun : MonoBehaviour
     public LayerMask whatIsGrappleable;
 
     public PlayerControl playerControl;
-    public ParticleSystem particleSystem;
+    public ParticleSystem cameraParticleSystem;
 
     bool pulling = false;
 
-    public Transform gunTip, camera, player;
+    public Transform gunTip, mainCamera, player;
     public Rigidbody playerBody;
     public float maxDistance = 100f;
 
@@ -32,11 +32,10 @@ public class GrapplingGun : MonoBehaviour
 
     void Update()
     {
-
-        if (Input.GetAxis("Fire1") == 1)
+        /*if (Input.GetAxis("Fire1") == 1)
         {
-            if (!joint) { StartGrapple();}
-   
+            if (!joint) { StartGrapple(); }
+
         }
         else if (Input.GetAxis("Fire1") == 0)
         {
@@ -45,7 +44,8 @@ public class GrapplingGun : MonoBehaviour
                 ResetRope();
             }
 
-            if (joint) {
+            if (joint)
+            {
                 StopGrapple();
             }
         }
@@ -55,7 +55,7 @@ public class GrapplingGun : MonoBehaviour
             if (joint)
             {
                 PullRope();
-                
+
             }
         }
         else if (Input.GetAxis("Fire2") == 0)
@@ -63,7 +63,43 @@ public class GrapplingGun : MonoBehaviour
             if (joint && pulling)
             {
                 ResetRope();
-                
+
+            }
+        }*/
+
+        if (playerControl.GetGrappleShoot())
+        {
+            if (!joint)
+            {
+                StartGrapple();
+            }
+
+        }
+        else
+        {
+            if (pulling)
+            {
+                ResetRope();
+            }
+
+            if (joint)
+            {
+                StopGrapple();
+            }
+        }
+
+        if (playerControl.GetGrappleToggle())
+        {
+            if (joint)
+            {
+                PullRope();
+            }
+        }
+        else
+        {
+            if (joint && pulling)
+            {
+                ResetRope();
             }
         }
 
@@ -87,10 +123,10 @@ public class GrapplingGun : MonoBehaviour
     void StartGrapple()
     {
         RaycastHit hit;
-        if (Physics.Raycast(camera.position, camera.forward, out hit, maxDistance, whatIsGrappleable))
+        if (Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, maxDistance, whatIsGrappleable))
         {
             grapplePoint = hit.point;
-            playerControl.ActivateHookShotState();
+            //playerControl.ActivateHookShotState();
             joint = player.gameObject.AddComponent<SpringJoint>();
             joint.autoConfigureConnectedAnchor = false;
             joint.connectedAnchor = grapplePoint;
@@ -145,7 +181,7 @@ public class GrapplingGun : MonoBehaviour
         pulling = true;
 
         cameraFov.SetCameraFov(HOOKSHOT_FOV);
-        particleSystem.Play();
+        cameraParticleSystem.Play();
 
 
     }
@@ -159,7 +195,7 @@ public class GrapplingGun : MonoBehaviour
         pulling = false;
 
         cameraFov.SetCameraFov(NORMAL_FOV);
-        particleSystem.Stop();
+        cameraParticleSystem.Stop();
 
         if (joint) {
             joint.spring = 4.5f;
