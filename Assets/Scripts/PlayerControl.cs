@@ -150,7 +150,7 @@ public class PlayerControl : MonoBehaviour
 
     private void Jump()
     {
-        if (Input.GetButtonDown("Jump") && this.grounded)
+        if (Input.GetButtonDown("Jump"))
         {
             soundManager.PlayJumpSound();
             this.rigidBody.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
