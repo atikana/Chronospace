@@ -5,14 +5,15 @@ using UnityEngine;
 public class TurretBullet : MonoBehaviour
 {
 
-    public float movementSpeed = 12.0f;
+    public float movementSpeed = 36f;
     private GameObject target;
     public float force = 100f;
+    GameManager gameManager;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        gameManager = GameObject.FindObjectOfType<GameManager>();
     }
 
     // Update is called once per frame
@@ -25,9 +26,10 @@ public class TurretBullet : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            print("Player hit");
+            gameManager.RestartLevel();
+            /*print("Player hit");
             target = other.gameObject;
-            target.GetComponent<Rigidbody>().AddForce(force * Vector3.forward);
+            target.GetComponent<Rigidbody>().AddForce(force * Vector3.forward);*/
         }
     }
 }

@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
         timeWarpCounter = 0f;
         timeWarpMultiplier = 0.5f;
 
-        pauseMenu = GameObject.FindObjectOfType<PauseMenu>();
+        pauseMenu = GetComponent<PauseMenu>();// GameObject.FindObjectOfType<PauseMenu>();
     }
 
     /**

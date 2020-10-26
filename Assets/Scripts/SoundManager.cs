@@ -3,15 +3,17 @@
 public class SoundManager : MonoBehaviour
 {
     public AudioSource soundEffectsAudioSource, backgroundMusicAudioSource;
-    public AudioClip jumpClip, dashClip, timeWarpClip;
+    public AudioClip doubleJumpClip, jumpClip, dashClip, timeWarpClip, pendulumClip;
 
     void Start()
     {
         //soundEffectsAudioSource = GetComponent<AudioSource>();
 
-        jumpClip = Resources.Load<AudioClip>("Jump");
-        dashClip = Resources.Load<AudioClip>("Dash");
-        timeWarpClip = Resources.Load<AudioClip>("TimeWarp");
+        jumpClip = Resources.Load<AudioClip>("JUMP_2");
+        doubleJumpClip = Resources.Load<AudioClip>("JUMP_1");
+        dashClip = Resources.Load<AudioClip>("DASH_FORWARD");
+        timeWarpClip = Resources.Load<AudioClip>("TIME_SLOWDOWN");
+        pendulumClip = Resources.Load<AudioClip>("PENDULUM");
 
         // Play background music
         PlayLevel1Music();
@@ -22,6 +24,11 @@ public class SoundManager : MonoBehaviour
         soundEffectsAudioSource.PlayOneShot(jumpClip);
     }
 
+    public void PlayDoubleJumpSound()
+    {
+        soundEffectsAudioSource.PlayOneShot(doubleJumpClip);
+    }
+
     public void PlayDashSound()
     {
         soundEffectsAudioSource.PlayOneShot(dashClip);
@@ -30,6 +37,11 @@ public class SoundManager : MonoBehaviour
     public void PlayTimeWarpSound()
     {
         soundEffectsAudioSource.PlayOneShot(timeWarpClip);
+    }
+
+    public void PlayPendulumSound(Vector3 pendulumLocation)
+    {
+        AudioSource.PlayClipAtPoint(pendulumClip, pendulumLocation);
     }
 
     public void PlayLevel1Music()

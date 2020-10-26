@@ -126,7 +126,7 @@ public class GrapplingGun : MonoBehaviour
         if (Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, maxDistance, whatIsGrappleable))
         {
             grapplePoint = hit.point;
-            //playerControl.ActivateHookShotState();
+            playerControl.ActivateHookShotState();
             joint = player.gameObject.AddComponent<SpringJoint>();
             joint.autoConfigureConnectedAnchor = false;
             joint.connectedAnchor = grapplePoint;
@@ -158,7 +158,7 @@ public class GrapplingGun : MonoBehaviour
 
     void StopGrapple()
     {
-        //playerControl.DisableHookShotState();
+        playerControl.DisableHookShotState();
         lr.positionCount = 0;
         Destroy(joint);
 

@@ -26,6 +26,8 @@ public class PlayerControl : MonoBehaviour
     private Vector2 cameraRotation;
     private float maxYAngle = 90f;
 
+    private bool ableToDoubleJump = false;
+
     // TODO get rid of these.
     public Animator pendulumAnimator1;
     public Animator pendulumAnimator2;
@@ -39,9 +41,6 @@ public class PlayerControl : MonoBehaviour
     private GameManager gameManager;
     private PauseMenu pauseMenu;
 
-    // TODO:  Fix this!
-    public bool pausePressed = false;
-
     // True if the camera should be bobbing up and down.
     private bool bobbing = false;
 
@@ -52,8 +51,7 @@ public class PlayerControl : MonoBehaviour
     
     public enum State { 
         Normal,
-        Hookshot //,
-        //Pulling
+        Hookshot
     }
 
     void Awake()
@@ -76,11 +74,7 @@ public class PlayerControl : MonoBehaviour
         input.Player.TimeWarp.performed += context => TimeWarp();
         input.Player.RestartLevel.performed += context => gameManager.RestartLevel();
 
-        input.Player.Pause.performed += context =>
-        {
-            pauseMenu.PressPause();
-            Debug.Log("Pressed Pause!");
-        };
+        input.Player.Pause.performed += context => pauseMenu.PressPause();
 
         //input.Player.GrappleShoot.performed += context => state = (state == State.Normal) ? State.Hookshot : State.Normal;
         //input.Player.GrappleToggle.performed += context => state = State.Hookshot;
@@ -156,42 +150,16 @@ public class PlayerControl : MonoBehaviour
         {
             this.grounded = true;
         }
-        else if (collision.gameObject.tag.Equals("Pendulum"))
+        else if (collision.collider.tag.Equals("Pendulum"))
         {
-            /*PendulumControl pendulumControl2 = (PendulumControl)collision.gameObject.transform.parent.GetComponent(typeof(PendulumControl));
-            Debug.Log(pendulumControl2.getPlayerForceVector());
-            rigidBody.AddForce(-500 * pendulumControl2.getPlayerForceVector());*/
-
-            //foreach (PendulumControl pendulumControl in FindObjectsOfType<PendulumControl>())
-            //{
-            //    if (GameObject.ReferenceEquals(pendulumControl.gameObject, collision.gameObject))
-            //    {
-            //        Debug.Log(pendulumControl.getPlayerForceVector());
-            //        rigidBody.AddForce(pendulumControl.getPlayerForceVector());
-            //    }
-            //}
-
-            //Debug.Log(((PendulumControl)collision.gameObject.transform.parent.GetComponent(typeof(PendulumControl))) == null);
-            //Debug.Log(collision.impulse);
-            //if (collision.impulse.x < 0)
-            //{
-            //    this.rigidBody.AddForce(new Vector3(-500, 0, 0));
-            //}
-            //else
-            //{
-            //    this.rigidBody.AddForce(new Vector3(500, 0, 0));
-            //}
+            float magnitude = 1000f;
+            //Vector3 force = transform.position - collision.transform.position;
+            Vector3 force = collision.GetContact(0).normal;
+            force.z = 0;
+            force.Normalize();
+            this.rigidBody.AddForce(magnitude * force);
+            Debug.Log("Here:  " + magnitude * force);
         }
-        //foreach (GameObject pendulum in GameObject.FindGameObjectsWithTag("Pendulum"))
-        //{
-        //    if (GameObject.ReferenceEquals(pendulum, collision.gameObject))
-        //    {
-        //        //Debug.Log(pendulum.GetComponent<Rigidbody>().angularVelocity);
-        //        Debug.Log(((PendulumControl)pendulum.transform.parent.GetComponent(typeof(PendulumControl))) == null);
-        //        Vector3 velocity = ((PendulumControl)pendulum.transform.parent.GetComponent(typeof(PendulumControl))).getPlayerForceVector();
-        //        Debug.Log(velocity);
-        //    }
-        //}
     }
 
     private void OnCollisionExit(Collision collision)
@@ -200,6 +168,9 @@ public class PlayerControl : MonoBehaviour
         if (collision.gameObject.tag.Equals("Platform"))
         {
             this.grounded = false;
+
+            // Able to double jump after you've exited a collision with a platform.
+            ableToDoubleJump = true;
         }
     }
 
@@ -210,6 +181,12 @@ public class PlayerControl : MonoBehaviour
         {
             soundManager.PlayJumpSound();
             rigidBody.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
+        }
+        else if (!this.grounded && ableToDoubleJump)
+        {
+            soundManager.PlayDoubleJumpSound();
+            rigidBody.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
+            ableToDoubleJump = false;
         }
     }
 
@@ -227,6 +204,12 @@ public class PlayerControl : MonoBehaviour
     private void Move()
     {
         float facingAngle = transform.eulerAngles.y * Mathf.PI / 180f;
+
+        // If dash is enabled and your joystick isn't as far out as it could be, you should still go the same dash speed.
+        if (dashCounter > 0)
+        {
+            moveVector.Normalize();
+        }
 
         float forwardMovement = (moveVector.y * Mathf.Cos(facingAngle) - moveVector.x * Mathf.Sin(facingAngle)) * movementSpeed * Time.fixedUnscaledDeltaTime;
         float horizontalMovement = (moveVector.y * Mathf.Sin(facingAngle) + moveVector.x * Mathf.Cos(facingAngle)) * movementSpeed * Time.fixedUnscaledDeltaTime;
@@ -279,7 +262,8 @@ public class PlayerControl : MonoBehaviour
 
     private void CheckDeath()
     {
-        if (transform.position.y < -10)
+        // You can't die from falling off a platform if you're currently grappling.
+        if (transform.position.y < -25 && state != State.Hookshot)
         {
             gameManager.RestartLevel();
         }
@@ -287,7 +271,6 @@ public class PlayerControl : MonoBehaviour
 
     void FixedUpdate()
     {
-        Debug.Log(Time.timeScale);
         Move();
         Dash();
         AdjustCamera();

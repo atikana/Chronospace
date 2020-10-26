@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TurretControl : MonoBehaviour
@@ -88,7 +87,6 @@ public class TurretControl : MonoBehaviour
         print("Triggered");
         if (other.tag == "Player")
         {
-            print("Player detected");
             target = other.gameObject;
             targetLocked = true;
         }

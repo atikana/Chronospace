@@ -5,7 +5,7 @@ public class PendulumControl : MonoBehaviour
     Quaternion _start, _end;
 
     private float angle;  // 90f
-    private float speed = 1.0f;
+    private float speed = 4.0f;
     
     private float _startTime = 0.0f;
 
@@ -38,11 +38,13 @@ public class PendulumControl : MonoBehaviour
 
         transform.rotation = Quaternion.Lerp(_start, _end, (Mathf.Sin(_startTime * speed + Mathf.PI / 2) + 1.0f) / 2.0f);
 
+        // TODO:  Figure out what time the pendulum noise should be played during its swing, and make it not play if it is far away.
+
         // Update the force vector to apply to the player if they collide with this pendulum.
         playerForceVector.x = Mathf.Cos(_startTime * speed + Mathf.PI / 2);
     }
 
-    private void OnCollisionEnter(Collision other)
+    /*private void OnCollisionEnter(Collision other)
     {
         if (other.collider.tag == "Player")
         {
@@ -52,7 +54,7 @@ public class PendulumControl : MonoBehaviour
             force.Normalize();
             other.collider.GetComponent<Rigidbody>().AddForce(force * magnitude);
         }
-    }
+    }*/
 
     public Vector3 getPlayerForceVector()
     {
