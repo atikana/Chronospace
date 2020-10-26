@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class PlayerControl : MonoBehaviour
 {
     private Rigidbody rigidBody;
-    private float jumpForce = 10f;
+    private float jumpForce = 7f;
     private float normalMovementSpeed;
     private float dashMovementSpeed;
     private float movementSpeed;
