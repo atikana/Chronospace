@@ -17,16 +17,18 @@ public class GameManager : MonoBehaviour
 
     private PauseMenu pauseMenu;
 
-    private LevelTimer levelTimer;
+    private LevelStats levelStats;
+
+    private bool timeWarpEnabled;
 
     void Start()
     {
-        //timeWarpEnabled = false;
+        timeWarpEnabled = false;
         timeWarpLength = 10f;
         timeWarpCounter = 0f;
         timeWarpMultiplier = 0.5f;
 
-        levelTimer = FindObjectOfType<LevelTimer>();
+        levelStats = FindObjectOfType<LevelStats>();
 
         pauseMenu = GetComponent<PauseMenu>();// GameObject.FindObjectOfType<PauseMenu>();
     }
@@ -36,6 +38,7 @@ public class GameManager : MonoBehaviour
      */
     public void SetTimeWarp()
     {
+        timeWarpEnabled = true;
         timeWarpCounter = timeWarpLength;
     }
 
@@ -46,9 +49,10 @@ public class GameManager : MonoBehaviour
             Time.timeScale = timeWarpMultiplier;
             timeWarpCounter -= Time.fixedUnscaledDeltaTime;
         }
-        else if (!pauseMenu.checkPaused())
+        else if (!pauseMenu.CheckPaused())
         {
             Time.timeScale = 1f;
+            timeWarpEnabled = false;
         }
 
         // Set fixedDeltaTime to be proportional to the time scale.
@@ -58,6 +62,11 @@ public class GameManager : MonoBehaviour
         timeWarpCounter = Mathf.Clamp(timeWarpCounter, 0f, timeWarpLength);
     }
 
+    public bool GetTimeWarpEnabled()
+    {
+        return timeWarpEnabled;
+    }
+
     /*
      * Allows the player to restart the level they are currently on.
      * TODO:  Maybe make it bring the player back to their last checkpoint?
@@ -65,8 +74,7 @@ public class GameManager : MonoBehaviour
     public void RestartLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        levelTimer.ResetTimer();
-        //SceneManager.LoadScene("StartMenu");
+        levelStats.ResetTimer();
     }
 
 }

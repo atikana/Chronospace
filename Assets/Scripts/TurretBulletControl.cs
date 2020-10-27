@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/* TODO:  Can we remove this class?  No GameObjects are currently using it. */
 public class TurretBulletControl : MonoBehaviour
 {
 
