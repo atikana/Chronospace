@@ -17,12 +17,16 @@ public class GameManager : MonoBehaviour
 
     private PauseMenu pauseMenu;
 
+    private LevelTimer levelTimer;
+
     void Start()
     {
         //timeWarpEnabled = false;
         timeWarpLength = 10f;
         timeWarpCounter = 0f;
         timeWarpMultiplier = 0.5f;
+
+        levelTimer = FindObjectOfType<LevelTimer>();
 
         pauseMenu = GetComponent<PauseMenu>();// GameObject.FindObjectOfType<PauseMenu>();
     }
@@ -61,6 +65,7 @@ public class GameManager : MonoBehaviour
     public void RestartLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        levelTimer.ResetTimer();
         //SceneManager.LoadScene("StartMenu");
     }
 

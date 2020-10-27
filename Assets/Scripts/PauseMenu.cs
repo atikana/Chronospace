@@ -12,17 +12,14 @@ public class PauseMenu : MonoBehaviour
     private float originalTimeScale;
     private bool paused = false;
 
-    private PlayerControl playerControl;
-
     // Start is called before the first frame update
     void Start()
     {
+        print("Start");
         pauseMenu.SetActive(false);
 
         // Set a default value for originalTimeScale.
         originalTimeScale = Time.timeScale;
-
-        playerControl = GameObject.FindObjectOfType<PlayerControl>();
     }
 
     public void PressPause()
@@ -44,6 +41,7 @@ public class PauseMenu : MonoBehaviour
 
     public void PauseGame() 
     {
+        Debug.Log("HERE " + pauseMenu);
         pauseMenu.SetActive(true);
         paused = true;
         originalTimeScale = Time.timeScale;

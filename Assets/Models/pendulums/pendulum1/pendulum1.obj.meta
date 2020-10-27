@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c8df998c6574e0d4c83b4f468d337fb9
+guid: 59c8ce6bf8b0b4c4086f68b27bee1e7f
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: pCube8Mat
-    second: {fileID: 2100000, guid: 86a01bb613450994a8f43e365328c906, type: 2}
+      name: pend2_lowMat
+    second: {fileID: 2100000, guid: c33571ea4540f49f4a43eb96eddc2429, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

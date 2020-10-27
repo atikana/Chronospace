@@ -14,19 +14,19 @@ public class PendulumControl : MonoBehaviour
 
     void Start()
     {
-        angle = transform.rotation.eulerAngles.z;
+        angle = transform.rotation.eulerAngles.x;
 
-        Debug.Log(transform.rotation.eulerAngles.z);
-        if (angle == 90f)
-        {
+        //Debug.Log(transform.rotation.eulerAngles.z);
+        //if (angle == 90f)
+        //{
             _start = PendulumRotation(0);
             _end = PendulumRotation(180);
-        }
-        else
-        {
-            _start = PendulumRotation(180);
-            _end = PendulumRotation(0);
-        }
+        //}
+        //else
+        //{
+        //    _start = PendulumRotation(180);
+        //    _end = PendulumRotation(0);
+        //}
 
         playerForceVector = new Vector3(0, 0, 0);
     }
@@ -69,7 +69,7 @@ public class PendulumControl : MonoBehaviour
     private Quaternion PendulumRotation(float angle)
     {
         Quaternion pendulumRotation = transform.rotation;
-        float angleZ = pendulumRotation.eulerAngles.z + angle;
+        float angleX = pendulumRotation.eulerAngles.x + angle;
 
         /* TODO:  This code doesn't seem to do anything.  Can we get rid of it?
         if (angleZ > 180) {
@@ -78,7 +78,7 @@ public class PendulumControl : MonoBehaviour
         else if (angleZ <= -180) {
             angleZ += 0;
         }*/
-        pendulumRotation.eulerAngles = new Vector3(pendulumRotation.eulerAngles.x, pendulumRotation.eulerAngles.y, angleZ);
+        pendulumRotation.eulerAngles = new Vector3(-angleX, pendulumRotation.eulerAngles.y, pendulumRotation.eulerAngles.x);
         return pendulumRotation;
     }
 }

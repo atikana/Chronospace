@@ -56,6 +56,38 @@ public class PlayerControl : MonoBehaviour
 
     void Awake()
     {
+        //gameManager = GameObject.FindObjectOfType<GameManager>();
+        //pauseMenu = GameObject.FindObjectOfType<PauseMenu>();
+        //GrapplingGun grapplingGun = GameObject.FindObjectOfType<GrapplingGun>();
+
+        //input = new PlayerInput();
+        //input.Enable();
+
+        //input.Player.Move.performed += context => moveVector = context.ReadValue<Vector2>();
+        //input.Player.Move.canceled += context => moveVector = Vector2.zero;
+
+        //input.Player.Look.performed += context => lookVector = context.ReadValue<Vector2>();
+        //input.Player.Look.canceled += context => lookVector = Vector2.zero;
+
+        //input.Player.Jump.performed += context => Jump();
+        //input.Player.Dash.performed += context => dashCounter = dashLength;
+        //input.Player.TimeWarp.performed += context => TimeWarp();
+        //input.Player.RestartLevel.performed += context => gameManager.RestartLevel();
+
+        //input.Player.Pause.performed += context => pauseMenu.PressPause();
+
+        ////input.Player.GrappleShoot.performed += context => state = (state == State.Normal) ? State.Hookshot : State.Normal;
+        ////input.Player.GrappleToggle.performed += context => state = State.Hookshot;
+        ////input.Player.GrappleToggle.canceled += context => state = State.Normal;
+        //input.Player.GrappleShoot.performed += context => grappleShoot = true;
+        //input.Player.GrappleShoot.canceled += context => grappleShoot = false;
+        //input.Player.GrappleToggle.performed += context => grappleToggle = true;
+        //input.Player.GrappleToggle.canceled += context => grappleToggle = false;
+    }
+
+
+    void Start()
+    {
         gameManager = GameObject.FindObjectOfType<GameManager>();
         pauseMenu = GameObject.FindObjectOfType<PauseMenu>();
         GrapplingGun grapplingGun = GameObject.FindObjectOfType<GrapplingGun>();
@@ -83,11 +115,7 @@ public class PlayerControl : MonoBehaviour
         input.Player.GrappleShoot.canceled += context => grappleShoot = false;
         input.Player.GrappleToggle.performed += context => grappleToggle = true;
         input.Player.GrappleToggle.canceled += context => grappleToggle = false;
-    }
 
-
-    void Start()
-    {
         /* Don't show user's cursor in the game, and lock the cursor to avoid going out of the game window.
          * Note that the Escape key can be used to show the cursor again (for example to stop running the game).
          */

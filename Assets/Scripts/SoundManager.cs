@@ -7,7 +7,7 @@ public class SoundManager : MonoBehaviour
 
     void Start()
     {
-        //soundEffectsAudioSource = GetComponent<AudioSource>();
+        soundEffectsAudioSource = GetComponent<AudioSource>();
 
         jumpClip = Resources.Load<AudioClip>("JUMP_2");
         doubleJumpClip = Resources.Load<AudioClip>("JUMP_1");
