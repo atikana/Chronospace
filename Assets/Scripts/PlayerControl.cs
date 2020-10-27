@@ -10,6 +10,10 @@ public class PlayerControl : MonoBehaviour
     private float movementSpeed;
     private bool grounded = true;
 
+    // 10 seconds before you regain a dash.
+    private float timeBetweenDashes = 10f;
+    private float timeSinceLastDash;
+
     private PlayerInput input;
     private Vector2 moveVector;
     private Vector2 lookVector;
@@ -44,49 +48,22 @@ public class PlayerControl : MonoBehaviour
     // True if the camera should be bobbing up and down.
     private bool bobbing = false;
 
+    private int numDeaths;
+    private int numTimeWarps;
+    private int numDashes;
+
     private bool grappleShoot = false;
     private bool grappleToggle = false;
 
     public ParticleSystem cameraParticleSystem;
 
     private State state = State.Normal;
-    
-    public enum State { 
+
+    public enum State
+    {
         Normal,
         Hookshot
     }
-
-    void Awake()
-    {
-        //gameManager = GameObject.FindObjectOfType<GameManager>();
-        //pauseMenu = GameObject.FindObjectOfType<PauseMenu>();
-        //GrapplingGun grapplingGun = GameObject.FindObjectOfType<GrapplingGun>();
-
-        //input = new PlayerInput();
-        //input.Enable();
-
-        //input.Player.Move.performed += context => moveVector = context.ReadValue<Vector2>();
-        //input.Player.Move.canceled += context => moveVector = Vector2.zero;
-
-        //input.Player.Look.performed += context => lookVector = context.ReadValue<Vector2>();
-        //input.Player.Look.canceled += context => lookVector = Vector2.zero;
-
-        //input.Player.Jump.performed += context => Jump();
-        //input.Player.Dash.performed += context => dashCounter = dashLength;
-        //input.Player.TimeWarp.performed += context => TimeWarp();
-        //input.Player.RestartLevel.performed += context => gameManager.RestartLevel();
-
-        //input.Player.Pause.performed += context => pauseMenu.PressPause();
-
-        ////input.Player.GrappleShoot.performed += context => state = (state == State.Normal) ? State.Hookshot : State.Normal;
-        ////input.Player.GrappleToggle.performed += context => state = State.Hookshot;
-        ////input.Player.GrappleToggle.canceled += context => state = State.Normal;
-        //input.Player.GrappleShoot.performed += context => grappleShoot = true;
-        //input.Player.GrappleShoot.canceled += context => grappleShoot = false;
-        //input.Player.GrappleToggle.performed += context => grappleToggle = true;
-        //input.Player.GrappleToggle.canceled += context => grappleToggle = false;
-    }
-
 
     void Start()
     {
@@ -104,15 +81,28 @@ public class PlayerControl : MonoBehaviour
         input.Player.Look.canceled += context => lookVector = Vector2.zero;
 
         input.Player.Jump.performed += context => Jump();
-        input.Player.Dash.performed += context => dashCounter = dashLength;
-        input.Player.TimeWarp.performed += context => TimeWarp();
+        input.Player.Dash.performed += context =>
+        {
+            // Can't dash while currently dashing.
+            if (numDashes > 0 && dashCounter == 0)
+            {
+                numDashes--;
+                dashCounter = dashLength;
+            }
+        };
+        input.Player.TimeWarp.performed += context =>
+        {
+            // Can't time warp while time is already slowed down.
+            if (numTimeWarps > 0 && !gameManager.GetTimeWarpEnabled())
+            {
+                numTimeWarps--;
+                TimeWarp();
+            }
+        };
         input.Player.RestartLevel.performed += context => gameManager.RestartLevel();
 
         input.Player.Pause.performed += context => pauseMenu.PressPause();
 
-        //input.Player.GrappleShoot.performed += context => state = (state == State.Normal) ? State.Hookshot : State.Normal;
-        //input.Player.GrappleToggle.performed += context => state = State.Hookshot;
-        //input.Player.GrappleToggle.canceled += context => state = State.Normal;
         input.Player.GrappleShoot.performed += context => grappleShoot = true;
         input.Player.GrappleShoot.canceled += context => grappleShoot = false;
         input.Player.GrappleToggle.performed += context => grappleToggle = true;
@@ -132,9 +122,15 @@ public class PlayerControl : MonoBehaviour
         normalMovementSpeed = 500f;
         dashMovementSpeed = normalMovementSpeed * 10f;
 
+        timeSinceLastDash = timeBetweenDashes;
+
         // Initialize player movement and look vectors to (0, 0).
         lookVector = Vector2.zero;
         cameraRotation = Vector2.zero;
+
+        numDeaths = 0;
+        numDashes = 3;
+        numTimeWarps = 5;
     }
 
     /*
@@ -160,6 +156,7 @@ public class PlayerControl : MonoBehaviour
             {
                 soundManager.PlayDashSound();
                 cameraParticleSystem.Play();
+                timeSinceLastDash = 0;
             }
 
             dashCounter -= Time.fixedUnscaledDeltaTime;
@@ -171,6 +168,14 @@ public class PlayerControl : MonoBehaviour
             cameraParticleSystem.Stop();
         }
         dashCounter = Mathf.Clamp(dashCounter, 0f, dashLength);
+
+        timeSinceLastDash += Time.fixedUnscaledDeltaTime;
+        timeSinceLastDash = Mathf.Clamp(timeSinceLastDash, 0, timeBetweenDashes);
+        if (numDashes < 3 && timeSinceLastDash == 10)
+        {
+            numDashes++;
+            timeSinceLastDash = 0;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -292,13 +297,34 @@ public class PlayerControl : MonoBehaviour
         return grappleToggle;
     }
 
-    private void CheckDeath()
+    public int GetNumDeaths()
+    {
+        return numDeaths;
+    }
+
+    public void AddDeath()
+    {
+        numDeaths++;
+    }
+
+    private void CheckFallOffPlatform()
     {
         // You can't die from falling off a platform if you're currently grappling.
         if (transform.position.y < -25 && state != State.Hookshot)
         {
+            AddDeath();
             gameManager.RestartLevel();
         }
+    }
+
+    public int GetNumTimeWarps()
+    {
+        return numTimeWarps;
+    }
+
+    public int GetNumDashes()
+    {
+        return numDashes;
     }
 
     void FixedUpdate()
@@ -306,6 +332,6 @@ public class PlayerControl : MonoBehaviour
         Move();
         Dash();
         AdjustCamera();
-        CheckDeath();
+        CheckFallOffPlatform();
     }
 }

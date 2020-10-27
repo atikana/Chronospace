@@ -10,10 +10,10 @@ public class TurretControl : MonoBehaviour
     public GameObject bullet;
     public GameObject muzzle1;
     public GameObject muzzle2;
-    public float fireTimer = 2;
+    private float fireTimer = 0.8f;  // Used to be 2.
     private bool readyToShoot;
     private bool readyToShoot2;
-    public float delayTimer = 1;
+    private float delayTimer = 0.4f;  // Used to be 1.
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +30,7 @@ public class TurretControl : MonoBehaviour
         {
             TurretMovable.transform.LookAt(target.transform);
             // Angle adjustments
-            TurretMovable.transform.Rotate(15, 0, 0);
+            TurretMovable.transform.Rotate(8, 0, 0);
 
             if (readyToShoot)
             {

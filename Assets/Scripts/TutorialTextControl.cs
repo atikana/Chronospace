@@ -49,6 +49,5 @@ public class TutorialTextControl : MonoBehaviour
                 text.text = "";
             }
         }
-        Debug.Log(textCounter);
     }
 }

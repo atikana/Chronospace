@@ -15,7 +15,6 @@ public class PauseMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        print("Start");
         pauseMenu.SetActive(false);
 
         // Set a default value for originalTimeScale.
@@ -34,13 +33,17 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-    public bool checkPaused()
+    public bool CheckPaused()
     {
         return paused;
     }
 
-    public void PauseGame() 
+    public void PauseGame()
     {
+        if (pauseMenu == null)
+        {
+            return;
+        }
         Debug.Log("HERE " + pauseMenu);
         pauseMenu.SetActive(true);
         paused = true;
@@ -52,6 +55,10 @@ public class PauseMenu : MonoBehaviour
 
     public void ResumeGame()
     {
+        if (pauseMenu == null)
+        {
+            return;
+        }
         pauseMenu.SetActive(false);
         paused = false;
         Time.timeScale = originalTimeScale;

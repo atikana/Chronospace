@@ -9,27 +9,27 @@ public class TurretBullet : MonoBehaviour
     private GameObject target;
     public float force = 100f;
     GameManager gameManager;
+
+    PlayerControl playerControl;
     
-    // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameObject.FindObjectOfType<GameManager>();
+        gameManager = FindObjectOfType<GameManager>();
+        playerControl = FindObjectOfType<PlayerControl>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        transform.Translate(Vector3.forward * Time.deltaTime * movementSpeed);
+        transform.Translate(Vector3.forward * Time.fixedDeltaTime * movementSpeed);
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
-        if (other.tag == "Player")
+        if (other.gameObject.tag == "Player")
         {
+            playerControl.AddDeath();
             gameManager.RestartLevel();
-            /*print("Player hit");
-            target = other.gameObject;
-            target.GetComponent<Rigidbody>().AddForce(force * Vector3.forward);*/
         }
     }
+
 }
