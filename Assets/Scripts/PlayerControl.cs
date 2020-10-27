@@ -47,6 +47,8 @@ public class PlayerControl : MonoBehaviour
     private bool grappleShoot = false;
     private bool grappleToggle = false;
 
+    public ParticleSystem cameraParticleSystem;
+
     private State state = State.Normal;
     
     public enum State { 
@@ -157,6 +159,7 @@ public class PlayerControl : MonoBehaviour
             if (dashCounter == dashLength)
             {
                 soundManager.PlayDashSound();
+                cameraParticleSystem.Play();
             }
 
             dashCounter -= Time.fixedUnscaledDeltaTime;
@@ -165,6 +168,7 @@ public class PlayerControl : MonoBehaviour
         else
         {
             movementSpeed = normalMovementSpeed;
+            cameraParticleSystem.Stop();
         }
         dashCounter = Mathf.Clamp(dashCounter, 0f, dashLength);
     }

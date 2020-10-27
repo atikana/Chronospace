@@ -10436,7 +10436,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 59c8ce6bf8b0b4c4086f68b27bee1e7f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -103333.31
+      value: -99999.98
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 59c8ce6bf8b0b4c4086f68b27bee1e7f,
         type: 3}
@@ -31460,7 +31460,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 38fde7e9b2623cb418ddde1b8779d572,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -247.95096
+      value: -249.95096
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 38fde7e9b2623cb418ddde1b8779d572,
         type: 3}
@@ -52841,6 +52841,7 @@ MonoBehaviour:
   droneAnimator2: {fileID: 922504746}
   droneAnimator3: {fileID: 1412028194}
   droneAnimator4: {fileID: 1560298584}
+  cameraParticleSystem: {fileID: 1344561854}
 --- !u!54 &1811659950
 Rigidbody:
   m_ObjectHideFlags: 0
