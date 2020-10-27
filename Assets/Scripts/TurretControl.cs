@@ -10,10 +10,10 @@ public class TurretControl : MonoBehaviour
     public GameObject bullet;
     public GameObject muzzle1;
     public GameObject muzzle2;
-    public float fireTimer;
+    public float fireTimer = 2;
     private bool readyToShoot;
     private bool readyToShoot2;
-    public float delayTimer;
+    public float delayTimer = 1;
 
     // Start is called before the first frame update
     void Start()
