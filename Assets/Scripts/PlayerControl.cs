@@ -4,15 +4,19 @@ using UnityEngine.InputSystem;
 public class PlayerControl : MonoBehaviour
 {
     private Rigidbody rigidBody;
-    private float jumpForce = 7f;
+    private float jumpForce = 8f;
     private float normalMovementSpeed;
     private float dashMovementSpeed;
     private float movementSpeed;
+    private float maxSpeed = 20;
+    public float counterMovement = 0.5f;
+    private float threshold = 0.01f;
     private bool grounded = true;
 
     // 10 seconds before you regain a dash.
     private float timeBetweenDashes = 10f;
     private float timeSinceLastDash;
+
 
     private PlayerInput input;
     private Vector2 moveVector;
@@ -23,6 +27,7 @@ public class PlayerControl : MonoBehaviour
 
     // Dash time taken so far.
     private float dashCounter = 0f;
+    private float dashMultiplier = 5f;
 
     public SoundManager soundManager;
     private float mouseSensitivity = 2f;
@@ -54,6 +59,7 @@ public class PlayerControl : MonoBehaviour
 
     private bool grappleShoot = false;
     private bool grappleToggle = false;
+    private bool dashing = false;
 
     public ParticleSystem cameraParticleSystem;
 
@@ -75,6 +81,7 @@ public class PlayerControl : MonoBehaviour
         input.Enable();
 
         input.Player.Move.performed += context => moveVector = context.ReadValue<Vector2>();
+        
         input.Player.Move.canceled += context => moveVector = Vector2.zero;
 
         input.Player.Look.performed += context => lookVector = context.ReadValue<Vector2>();
@@ -120,7 +127,7 @@ public class PlayerControl : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
 
         normalMovementSpeed = 500f;
-        dashMovementSpeed = normalMovementSpeed * 10f;
+        dashMovementSpeed = normalMovementSpeed*dashMultiplier;
 
         timeSinceLastDash = timeBetweenDashes;
 
@@ -129,7 +136,7 @@ public class PlayerControl : MonoBehaviour
         cameraRotation = Vector2.zero;
 
         numDeaths = 0;
-        numDashes = 3;
+        numDashes = 100;
         numTimeWarps = 5;
     }
 
@@ -154,16 +161,24 @@ public class PlayerControl : MonoBehaviour
             // Play dash sound at the beginning of the dash.
             if (dashCounter == dashLength)
             {
+                dashing = true;
                 soundManager.PlayDashSound();
                 cameraParticleSystem.Play();
                 timeSinceLastDash = 0;
+              
             }
-
+            
             dashCounter -= Time.fixedUnscaledDeltaTime;
             movementSpeed = dashMovementSpeed;
+           
         }
         else
         {
+            if (dashing) {
+                rigidBody.velocity = Vector3.zero;
+            }
+            dashing = false;
+            rigidBody.useGravity = true;
             movementSpeed = normalMovementSpeed;
             cameraParticleSystem.Stop();
         }
@@ -238,8 +253,28 @@ public class PlayerControl : MonoBehaviour
         this.transform.eulerAngles = new Vector3(0, cameraRotation.x, 0);
     }
 
+    public Vector2 VelRelativeToLook()
+    {
+        float lookAngle = transform.eulerAngles.y;
+        float moveAngle = Mathf.Atan2(rigidBody.velocity.x, rigidBody.velocity.z) * Mathf.Rad2Deg;
+
+        float u = Mathf.DeltaAngle(lookAngle, moveAngle);
+        float v = 90 - u;
+
+        float magnitue = rigidBody.velocity.magnitude;
+        float yMag = magnitue * Mathf.Cos(u * Mathf.Deg2Rad);
+        float xMag = magnitue * Mathf.Cos(v * Mathf.Deg2Rad);
+
+        return new Vector2(xMag, yMag);
+    }
+
     private void Move()
     {
+
+        //rigidBody.AddForce(Vector3.down * Time.fixedUnscaledDeltaTime * 10);
+        Vector2 mag = VelRelativeToLook();
+        float xMag = mag.x, yMag = mag.y;
+
         float facingAngle = transform.eulerAngles.y * Mathf.PI / 180f;
 
         // If dash is enabled and your joystick isn't as far out as it could be, you should still go the same dash speed.
@@ -248,12 +283,40 @@ public class PlayerControl : MonoBehaviour
             moveVector.Normalize();
         }
 
-        float forwardMovement = (moveVector.y * Mathf.Cos(facingAngle) - moveVector.x * Mathf.Sin(facingAngle)) * movementSpeed * Time.fixedUnscaledDeltaTime;
-        float horizontalMovement = (moveVector.y * Mathf.Sin(facingAngle) + moveVector.x * Mathf.Cos(facingAngle)) * movementSpeed * Time.fixedUnscaledDeltaTime;
+        float maxspeed = this.maxSpeed;
+        float x = moveVector.x, y = moveVector.y;
 
-        //Temporary fix
-        this.transform.Translate(new Vector3(horizontalMovement / 25f, 0, forwardMovement / 25f), Space.World);
+        CounterMovement(x, y, mag);
+
+        if (x > 0 && xMag > maxSpeed && !dashing) x = 0;
+        if (x < 0 && xMag < -maxSpeed && !dashing) x = 0;
+        if (y > 0 && yMag > maxSpeed && !dashing) y = 0;
+        if (y < 0 && yMag < -maxSpeed && !dashing) y = 0;
+
+
+
+        Debug.Log(moveVector.ToString());
+        if (dashing) {
+            float forwardMovement = (moveVector.y * Mathf.Cos(facingAngle) - moveVector.x * Mathf.Sin(facingAngle)) * movementSpeed * Time.fixedUnscaledDeltaTime;
+            float horizontalMovement = (moveVector.y * Mathf.Sin(facingAngle) + moveVector.x * Mathf.Cos(facingAngle)) * movementSpeed * Time.fixedUnscaledDeltaTime;
+            //this.transform.Translate(new Vector3(horizontalMovement / 25f, 0, forwardMovement / 25f), Space.World);
+            Vector3 direction = new Vector3(horizontalMovement / 25f, 0, forwardMovement / 25f);
+            //rigidBody.velocity = direction * movementSpeed /25f;
+            this.transform.Translate(direction, Space.World);
+
+            return;
+        }
         
+    
+        float multiplier = 5f, multiplierV = 5f;
+        if (!grounded)
+        {
+            multiplier = 2.5f;
+            multiplierV = 2.5f;
+        }
+        rigidBody.AddForce(transform.forward * y * movementSpeed * Time.fixedUnscaledDeltaTime * multiplier * multiplierV);
+        rigidBody.AddForce(transform.right * x * movementSpeed * Time.fixedUnscaledDeltaTime *multiplier);
+
         //State machine that handles player movement
         /*switch (state) {
             default:
@@ -267,12 +330,43 @@ public class PlayerControl : MonoBehaviour
                 break;
 
         }*/
-        
+
 
         /* Bob the camera up and down if the player is moving
          * (intentionally, not being pushed) and not grounded.
          */
         bobbing = (moveVector.magnitude > 0 && grounded);
+    }
+
+    private void CounterMovement(float x, float y, Vector2 mag)
+    {
+
+        if (!grounded && dashing) {
+            //rigidBody.AddForce(-Physics.gravity, ForceMode.Acceleration);
+            return;
+        }
+
+        if (!grounded) return;
+
+
+
+        //Counter movement
+        if (Mathf.Abs(mag.x) > threshold && Mathf.Abs(x) < 0.05f || (mag.x < -threshold && x > 0) || (mag.x > threshold && x < 0))
+        {
+            rigidBody.AddForce(movementSpeed * transform.right * Time.fixedUnscaledDeltaTime * -mag.x * counterMovement);
+        }
+        if (Mathf.Abs(mag.y) > threshold && Mathf.Abs(y) < 0.05f || (mag.y < -threshold && y > 0) || (mag.y > threshold && y < 0))
+        {
+            rigidBody.AddForce(movementSpeed * transform.forward * Time.fixedUnscaledDeltaTime * -mag.y * counterMovement);
+        }
+
+        //Limit diagonal running. This will also cause a full stop if sliding fast and un-crouching, so not optimal.
+        if (Mathf.Sqrt((Mathf.Pow(rigidBody.velocity.x, 2) + Mathf.Pow(rigidBody.velocity.z, 2))) > maxSpeed)
+        {
+            float fallspeed = rigidBody.velocity.y;
+            Vector3 n = rigidBody.velocity.normalized * maxSpeed;
+            rigidBody.velocity = new Vector3(n.x, fallspeed, n.z);
+        }
     }
 
     //The grappling hook script will call this function to change the state

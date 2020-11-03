@@ -11040,6 +11040,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: pendulum1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 59c8ce6bf8b0b4c4086f68b27bee1e7f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59c8ce6bf8b0b4c4086f68b27bee1e7f, type: 3}
 --- !u!1 &436934817 stripped
@@ -26761,6 +26766,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: pendulum1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 59c8ce6bf8b0b4c4086f68b27bee1e7f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59c8ce6bf8b0b4c4086f68b27bee1e7f, type: 3}
 --- !u!4 &1028604223 stripped
@@ -27897,6 +27907,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: pendulum1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 59c8ce6bf8b0b4c4086f68b27bee1e7f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59c8ce6bf8b0b4c4086f68b27bee1e7f, type: 3}
@@ -33257,7 +33272,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 596b8ab00f2886f4391e1dd4b62ec41a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.9730947
+      value: 0.026905298
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 596b8ab00f2886f4391e1dd4b62ec41a,
         type: 3}
@@ -36010,7 +36025,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1344561851}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.00000011920926}
-  m_LocalPosition: {x: -0.25, y: 0, z: 4.25}
+  m_LocalPosition: {x: -0.25, y: 1, z: 4.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2039982407}
@@ -54252,6 +54267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f919783c60a6415c82f6b09b97fa9bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  counterMovement: 0.175
   soundManager: {fileID: 374585080}
   cameraTransform: {fileID: 2039982407}
   pendulumAnimator1: {fileID: 1523614892}
@@ -58612,7 +58628,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 238983beba645bc4e882bafcf0237a49,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 17.762293
+      value: 19.762293
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 238983beba645bc4e882bafcf0237a49,
         type: 3}
