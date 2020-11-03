@@ -307,10 +307,10 @@ public class PlayerControl : MonoBehaviour
         numDeaths++;
     }
 
-    private void CheckFallOffPlatform()
+    public void HitBoundary()
     {
         // You can't die from falling off a platform if you're currently grappling.
-        if (transform.position.y < -25 && state != State.Hookshot)
+        if (state != State.Hookshot)
         {
             AddDeath();
             gameManager.RestartLevel();
@@ -332,6 +332,5 @@ public class PlayerControl : MonoBehaviour
         Move();
         Dash();
         AdjustCamera();
-        CheckFallOffPlatform();
     }
 }
