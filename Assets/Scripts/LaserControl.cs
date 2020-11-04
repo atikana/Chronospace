@@ -12,15 +12,16 @@ public class LaserControl : MonoBehaviour
     private float fireTimer = 0.8f;
     private bool readyToFire;
     public float range;
-    GameManager gameManager;
-    PlayerControl playerControl;
-    // Start is called before the first frame update
+    private GameManager gameManager;
+    private PlayerControl playerControl;
+
     void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
         readyToFire = false;
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         // lr.SetPosition(0, firePoint.transform.position);

@@ -8,6 +8,9 @@ public class PlayerControl : MonoBehaviour
     private float normalMovementSpeed;
     private float dashMovementSpeed;
     private float movementSpeed;
+    private float maxSpeed = 20;
+    private float counterMovement = 0.5f;
+    private float threshold = 0.01f;
     private bool grounded = true;
 
     // 10 seconds before you regain a dash.
@@ -25,6 +28,9 @@ public class PlayerControl : MonoBehaviour
 
     // Dash time taken so far.
     private float dashCounter = 0f;
+
+    // Dash speed multiplier.
+    private float dashMultiplier = 10f;
 
     public SoundManager soundManager;
     public float mouseSensitivity = 1.5f;
@@ -56,6 +62,7 @@ public class PlayerControl : MonoBehaviour
 
     private bool grappleShoot = false;
     private bool grappleToggle = false;
+    private bool dashing = false;
 
     public ParticleSystem cameraParticleSystem;
 
@@ -72,6 +79,8 @@ public class PlayerControl : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
         pauseMenu = FindObjectOfType<PauseMenu>();
         handsAnimator = FindObjectOfType<Animator>();
+        handsAnimator.ResetTrigger("TimeWarp");
+        handsAnimator.ResetTrigger("Grappling");
 
         // Set up player input.
         input = new PlayerInput();
@@ -127,7 +136,7 @@ public class PlayerControl : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
 
         normalMovementSpeed = 500f;
-        dashMovementSpeed = normalMovementSpeed * 10f;
+        dashMovementSpeed = normalMovementSpeed * dashMultiplier;
 
         timeSinceLastDash = timeBetweenDashes;
 
@@ -161,9 +170,13 @@ public class PlayerControl : MonoBehaviour
             // Play dash sound at the beginning of the dash.
             if (dashCounter == dashLength)
             {
+                dashing = true;
                 soundManager.PlayDashSound();
                 cameraParticleSystem.Play();
                 timeSinceLastDash = 0;
+                //float dashUpMultiplier = 0.4f;
+                //float timeScaleMultiplier = 1 / Time.timeScale;
+                //rigidBody.AddForce(new Vector3(0, jumpForce * dashUpMultiplier * timeScaleMultiplier * timeScaleMultiplier, 0), ForceMode.Impulse);
             }
 
             dashCounter -= Time.fixedUnscaledDeltaTime;
@@ -171,6 +184,11 @@ public class PlayerControl : MonoBehaviour
         }
         else
         {
+            //if (dashing)
+            //{
+            //    rigidBody.velocity = Vector3.zero;
+            //}
+            //dashing = false;
             movementSpeed = normalMovementSpeed;
             cameraParticleSystem.Stop();
         }
@@ -226,10 +244,11 @@ public class PlayerControl : MonoBehaviour
     private void Jump()
     {
         // Added "&& rigidBody" because Jump() was being called when rigidBody was null.
+        float timeScaleMultiplier = 1 / Time.timeScale;
         if (this.grounded && rigidBody)
         {
             soundManager.PlayJumpSound();
-            rigidBody.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
+            rigidBody.AddForce(new Vector3(0, jumpForce * timeScaleMultiplier, 0), ForceMode.Impulse);
         }
         else if (!this.grounded && ableToDoubleJump)
         {
@@ -237,7 +256,7 @@ public class PlayerControl : MonoBehaviour
             // TODO:  I put this if statement here because this is sometimes null.  Figure out why that is!
             if (rigidBody)
             {
-                rigidBody.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
+                rigidBody.AddForce(new Vector3(0, jumpForce * timeScaleMultiplier, 0), ForceMode.Impulse);
             }
             ableToDoubleJump = false;
         }
@@ -254,9 +273,30 @@ public class PlayerControl : MonoBehaviour
         this.transform.eulerAngles = new Vector3(0, cameraRotation.x, 0);
     }
 
+    /*
+     * 
+     */
+    public Vector2 VelRelativeToLook()
+    {
+        float lookAngle = transform.eulerAngles.y;
+        float moveAngle = Mathf.Atan2(rigidBody.velocity.x, rigidBody.velocity.z) * Mathf.Rad2Deg;
+
+        float u = Mathf.DeltaAngle(lookAngle, moveAngle);
+        float v = 90 - u;
+
+        float magnitude = rigidBody.velocity.magnitude;
+        float yMag = magnitude * Mathf.Cos(u * Mathf.Deg2Rad);
+        float xMag = magnitude * Mathf.Cos(v * Mathf.Deg2Rad);
+
+        return new Vector2(xMag, yMag);
+    }
+
     private void Move()
     {
-        float facingAngle = transform.eulerAngles.y * Mathf.PI / 180f;
+        //float timeScaleMultiplier = 1 / Time.timeScale;
+        //rigidBody.AddForce(Physics.gravity * timeScaleMultiplier * timeScaleMultiplier, ForceMode.Acceleration);
+        //Vector2 mag = VelRelativeToLook();
+        //float xMag = mag.x, yMag = mag.y;
 
         // If dash is enabled and your joystick isn't as far out as it could be, you should still go the same dash speed.
         if (dashCounter > 0)
@@ -266,31 +306,57 @@ public class PlayerControl : MonoBehaviour
 
         handsAnimator.SetBool("Running", (moveVector.magnitude > 0 && grounded));
 
+        //Temporary fix
+        float facingAngle = transform.eulerAngles.y * Mathf.PI / 180f;
         float forwardMovement = (moveVector.y * Mathf.Cos(facingAngle) - moveVector.x * Mathf.Sin(facingAngle)) * movementSpeed * Time.fixedUnscaledDeltaTime;
         float horizontalMovement = (moveVector.y * Mathf.Sin(facingAngle) + moveVector.x * Mathf.Cos(facingAngle)) * movementSpeed * Time.fixedUnscaledDeltaTime;
-
-        //Temporary fix
         this.transform.Translate(new Vector3(horizontalMovement / 25f, 0, forwardMovement / 25f), Space.World);
-        
-        //State machine that handles player movement
-        /*switch (state) {
-            default:
-            case State.Normal:
-                rigidBody.velocity = new Vector3(horizontalSpeed,
-                                       rigidBody.velocity.y,
-                                        forwardSpeed);
-                break;
 
-            case State.Hookshot:
-                break;
+        //float x = moveVector.x, y = moveVector.y;
 
-        }*/
-        
+        //CounterMovement(x, y, mag);
+
+        //if (x > 0 && xMag > maxSpeed * timeScaleMultiplier && !dashing) x = 0;
+        //if (x < 0 && xMag < -maxSpeed * timeScaleMultiplier && !dashing) x = 0;
+        //if (y > 0 && yMag > maxSpeed * timeScaleMultiplier && !dashing) y = 0;
+        //if (y < 0 && yMag < -maxSpeed * timeScaleMultiplier && !dashing) y = 0;
+
+
+        //Debug.Log(moveVector.ToString());
+
+        //float multiplier = 5f, multiplierV = 5f;
+        //if (!grounded)
+        //{
+        //    multiplier = 2.5f;
+        //    multiplierV = 2.5f;
+        //}
+        //rigidBody.AddForce(transform.forward * y * movementSpeed * Time.fixedUnscaledDeltaTime * multiplier * multiplierV * timeScaleMultiplier);
+        //rigidBody.AddForce(transform.right * x * movementSpeed * Time.fixedUnscaledDeltaTime * multiplier * multiplierV * timeScaleMultiplier);
 
         /* Bob the camera up and down if the player is moving
          * (intentionally, not being pushed) and not grounded.
          */
         bobbing = (moveVector.magnitude > 0 && grounded);
+    }
+
+    /*
+     * Provides a counter force to the player's movement so that they can move slowly using addForce().
+     */
+    private void CounterMovement(float x, float y, Vector2 mag)
+    {
+        if (!grounded || dashing) return;
+
+        float timeScaleMultiplier = 1 / Time.timeScale;
+
+        // Counter movement
+        if (Mathf.Abs(mag.x) > threshold && Mathf.Abs(x) < 0.05f || (mag.x < -threshold && x > 0) || (mag.x > threshold && x < 0))
+        {
+            rigidBody.AddForce(movementSpeed * transform.right * Time.fixedUnscaledDeltaTime * -mag.x * counterMovement * timeScaleMultiplier);
+        }
+        if (Mathf.Abs(mag.y) > threshold && Mathf.Abs(y) < 0.05f || (mag.y < -threshold && y > 0) || (mag.y > threshold && y < 0))
+        {
+            rigidBody.AddForce(movementSpeed * transform.forward * Time.fixedUnscaledDeltaTime * -mag.y * counterMovement * timeScaleMultiplier);
+        }
     }
 
     //The grappling hook script will call this function to change the state

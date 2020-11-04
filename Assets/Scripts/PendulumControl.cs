@@ -7,7 +7,7 @@ public class PendulumControl : MonoBehaviour
     private float angle;  // 90f
     private float speed = 4.0f;
 
-    public float startAnlge = 0.0f;
+    public float startAngle = 0.0f;
     private float _startTime = 0.0f;
 
     // Vector of extra force to apply to the player if they are colliding with this pendulum.
@@ -20,8 +20,8 @@ public class PendulumControl : MonoBehaviour
         //Debug.Log(transform.rotation.eulerAngles.z);
         //if (angle == 90f)
         //{
-            _start = PendulumRotation(startAnlge);
-            _end = PendulumRotation(startAnlge+180);
+            _start = PendulumRotation(startAngle);
+            _end = PendulumRotation(startAngle + 180);
         //}
         //else
         //{
@@ -45,18 +45,6 @@ public class PendulumControl : MonoBehaviour
         playerForceVector.x = Mathf.Cos(_startTime * speed + Mathf.PI / 2);
     }
 
-    /*private void OnCollisionEnter(Collision other)
-    {
-        if (other.collider.tag == "Player")
-        {
-            Debug.Log("pendulum hits player");
-            var magnitude = 5000;
-            var force = transform.position - other.transform.position;
-            force.Normalize();
-            other.collider.GetComponent<Rigidbody>().AddForce(force * magnitude);
-        }
-    }*/
-
     public Vector3 getPlayerForceVector()
     {
         return playerForceVector;
@@ -72,13 +60,6 @@ public class PendulumControl : MonoBehaviour
         Quaternion pendulumRotation = transform.rotation;
         float angleX = pendulumRotation.eulerAngles.x + angle;
 
-        /* TODO:  This code doesn't seem to do anything.  Can we get rid of it?
-        if (angleZ > 180) {
-            angleZ -= 0;
-        }
-        else if (angleZ <= -180) {
-            angleZ += 0;
-        }*/
         pendulumRotation.eulerAngles = new Vector3(-angleX, pendulumRotation.eulerAngles.y, pendulumRotation.eulerAngles.x);
         return pendulumRotation;
     }
