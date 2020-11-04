@@ -27,7 +27,7 @@ public class PlayerControl : MonoBehaviour
     private float dashCounter = 0f;
 
     public SoundManager soundManager;
-    private float mouseSensitivity = 2f;
+    public float mouseSensitivity = 1.5f;
     public Transform cameraTransform;
     private Vector2 cameraRotation;
     private float maxYAngle = 90f;

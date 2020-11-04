@@ -7,6 +7,7 @@ public class TurretBullet : MonoBehaviour
 
     public float movementSpeed = 36f;
     public float force = 100f;
+    public float timer = 0f;
     GameManager gameManager;
 
     PlayerControl playerControl;
@@ -20,6 +21,12 @@ public class TurretBullet : MonoBehaviour
     void FixedUpdate()
     {
         transform.Translate(Vector3.forward * Time.fixedDeltaTime * movementSpeed);
+        timer += 1.0F * Time.deltaTime;
+        if (timer >= 3)
+        {
+            // GameObject.Destroy(gameObject);
+            Destroy(this.gameObject);
+        }
     }
 
     private void OnCollisionEnter(Collision other)
@@ -28,6 +35,9 @@ public class TurretBullet : MonoBehaviour
         {
             playerControl.AddDeath();
             gameManager.RestartLevel();
+        }
+        else {
+            Destroy(this.gameObject);
         }
     }
 
