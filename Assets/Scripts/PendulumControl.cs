@@ -16,8 +16,12 @@ public class PendulumControl : MonoBehaviour
     // Vector of extra force to apply to the player if they are colliding with this pendulum.
     private Vector3 playerForceVector;
 
+    private GameManager gameManager;
+
     void Start()
     {
+
+        gameManager = FindObjectOfType<GameManager>();
         angle = transform.rotation.eulerAngles.x;
 
         //Debug.Log(transform.rotation.eulerAngles.z);
@@ -38,7 +42,7 @@ public class PendulumControl : MonoBehaviour
     void FixedUpdate()
     {
         // Multiply by game speed multiplier to allow time warp effect.
-        _startTime += Time.deltaTime;
+        _startTime += Time.deltaTime * gameManager.GetTimeWarpMultiplier();
 
         transform.rotation = Quaternion.Lerp(_start, _end, (Mathf.Sin(_startTime * speed + Mathf.PI / 2) + 1.0f) / 2.0f);
 

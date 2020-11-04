@@ -46,18 +46,18 @@ public class GameManager : MonoBehaviour
     {
         if (timeWarpCounter > 0)
         {
-            Time.timeScale = timeWarpMultiplier;
+            //Time.timeScale = timeWarpMultiplier;
             timeWarpCounter -= Time.fixedUnscaledDeltaTime;
         }
         else if (!pauseMenu.CheckPaused())
         {
-            Time.timeScale = 1f;
+            //Time.timeScale = 1f;
             timeWarpEnabled = false;
         }
 
         // Set fixedDeltaTime to be proportional to the time scale.
         // TODO:  Is this a good idea?
-        Time.fixedDeltaTime = Time.timeScale * 0.02f;
+        //Time.fixedDeltaTime = Time.timeScale * 0.02f;
 
         timeWarpCounter = Mathf.Clamp(timeWarpCounter, 0f, timeWarpLength);
     }
@@ -65,6 +65,11 @@ public class GameManager : MonoBehaviour
     public bool GetTimeWarpEnabled()
     {
         return timeWarpEnabled;
+    }
+
+    public float GetTimeWarpMultiplier()
+    {
+        return (timeWarpEnabled) ? timeWarpMultiplier : 1f;
     }
 
     /*

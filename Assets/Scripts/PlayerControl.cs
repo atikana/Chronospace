@@ -4,7 +4,8 @@ using UnityEngine.InputSystem;
 public class PlayerControl : MonoBehaviour
 {
     private Rigidbody rigidBody;
-    private float jumpForce = 9f;
+    private float jumpForce = 11f;
+    private float doubleJumpForce = 9f;
     private float normalMovementSpeed;
     private float dashMovementSpeed;
     private float movementSpeed;
@@ -258,7 +259,7 @@ public class PlayerControl : MonoBehaviour
             // TODO:  I put this if statement here because this is sometimes null.  Figure out why that is!
             if (rigidBody)
             {
-                rigidBody.AddForce(new Vector3(0, jumpForce * timeScaleMultiplier, 0), ForceMode.Impulse);
+                rigidBody.AddForce(new Vector3(0, doubleJumpForce * timeScaleMultiplier, 0), ForceMode.Impulse);
             }
             ableToDoubleJump = false;
         }

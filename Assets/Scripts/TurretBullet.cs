@@ -20,7 +20,7 @@ public class TurretBullet : MonoBehaviour
 
     void FixedUpdate()
     {
-        transform.Translate(Vector3.forward * Time.fixedDeltaTime * movementSpeed);
+        transform.Translate(Vector3.forward * Time.fixedDeltaTime * (movementSpeed * gameManager.GetTimeWarpMultiplier()));
         timer += 1.0F * Time.deltaTime;
         if (timer >= 3)
         {
