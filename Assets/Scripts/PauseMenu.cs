@@ -25,7 +25,8 @@ public class PauseMenu : MonoBehaviour
     {
         if (paused)
         {
-            ResumeGame();
+            // Need to resume with resume bottom, minor issue otherwise      
+            // ResumeGame();
         }
         else
         {
@@ -68,8 +69,8 @@ public class PauseMenu : MonoBehaviour
 
     public void BackToMain()
     {
-        Time.timeScale = 1f;
-        paused = false;
-        SceneManager.LoadScene("StartMenu");
+        // Time.timeScale = 1f;
+        // paused = false;
+        // SceneManager.LoadScene("StartMenu");
     }
 }

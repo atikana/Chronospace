@@ -6,7 +6,8 @@ public class PendulumControl : MonoBehaviour
 
     private float angle;  // 90f
     private float speed = 4.0f;
-    
+
+    public float startAnlge = 0.0f;
     private float _startTime = 0.0f;
 
     // Vector of extra force to apply to the player if they are colliding with this pendulum.
@@ -19,8 +20,8 @@ public class PendulumControl : MonoBehaviour
         //Debug.Log(transform.rotation.eulerAngles.z);
         //if (angle == 90f)
         //{
-            _start = PendulumRotation(0);
-            _end = PendulumRotation(180);
+            _start = PendulumRotation(startAnlge);
+            _end = PendulumRotation(startAnlge+180);
         //}
         //else
         //{
