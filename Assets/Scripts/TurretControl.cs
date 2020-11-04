@@ -84,7 +84,6 @@ public class TurretControl : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        print("Triggered");
         if (other.tag == "Player")
         {
             target = other.gameObject;

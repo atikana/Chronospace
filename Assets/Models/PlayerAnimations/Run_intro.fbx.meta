@@ -1,12 +1,17 @@
 fileFormatVersion: 2
-guid: b15721df427734893970323b0b7687b5
+guid: 3c4b4dacab9a347f4b25f83c4282f617
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable:
   - first:
-      74: 8975978745956370463
-    second: baked
-  externalObjects: {}
+      74: 6958413674931860211
+    second: Run_intro_2_baked
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert1
+    second: {fileID: 2100000, guid: dfa38d491b51646df90242641f6f9f97, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -93,7 +98,7 @@ ModelImporter:
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

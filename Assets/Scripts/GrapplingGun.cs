@@ -25,9 +25,13 @@ public class GrapplingGun : MonoBehaviour
 
     private SpringJoint joint;
 
+    // For animating the hands when the player grapples.
+    public Animator handsAnimator;
+
     void Awake()
     {
         lr = GetComponent<LineRenderer>();
+        handsAnimator = FindObjectOfType<Animator>();
     }
 
     void Update()
@@ -125,6 +129,9 @@ public class GrapplingGun : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, maxDistance, whatIsGrappleable))
         {
+            // Only animate the hands if you shoot the grappling gun.
+            playerControl.GrapplingHookAnimation();
+
             grapplePoint = hit.point;
             playerControl.ActivateHookShotState();
             joint = player.gameObject.AddComponent<SpringJoint>();

@@ -2,8 +2,8 @@
 
 public class SoundManager : MonoBehaviour
 {
-    public AudioSource soundEffectsAudioSource, backgroundMusicAudioSource;
-    public AudioClip doubleJumpClip, jumpClip, dashClip, timeWarpClip, pendulumClip;
+    public AudioSource soundEffectsAudioSource;
+    private AudioClip doubleJumpClip, jumpClip, dashClip, timeWarpClip, pendulumClip;
 
     void Start()
     {
@@ -14,38 +14,45 @@ public class SoundManager : MonoBehaviour
         dashClip = Resources.Load<AudioClip>("DASH_FORWARD");
         timeWarpClip = Resources.Load<AudioClip>("TIME_SLOWDOWN");
         pendulumClip = Resources.Load<AudioClip>("PENDULUM");
-
-        // Play background music
-        PlayLevel1Music();
     }
 
     public void PlayJumpSound()
     {
-        soundEffectsAudioSource.PlayOneShot(jumpClip);
+        if (soundEffectsAudioSource && jumpClip)
+        {
+            soundEffectsAudioSource.PlayOneShot(jumpClip);
+        }
     }
 
     public void PlayDoubleJumpSound()
     {
-        soundEffectsAudioSource.PlayOneShot(doubleJumpClip);
+        if (soundEffectsAudioSource && doubleJumpClip)
+        {
+            soundEffectsAudioSource.PlayOneShot(doubleJumpClip);
+        }
     }
 
     public void PlayDashSound()
     {
-        soundEffectsAudioSource.PlayOneShot(dashClip);
+        if (soundEffectsAudioSource && dashClip)
+        {
+            soundEffectsAudioSource.PlayOneShot(dashClip);
+        }
     }
 
     public void PlayTimeWarpSound()
     {
-        soundEffectsAudioSource.PlayOneShot(timeWarpClip);
+        if (soundEffectsAudioSource && timeWarpClip)
+        {
+            soundEffectsAudioSource.PlayOneShot(timeWarpClip);
+        }
     }
 
     public void PlayPendulumSound(Vector3 pendulumLocation)
     {
-        AudioSource.PlayClipAtPoint(pendulumClip, pendulumLocation);
-    }
-
-    public void PlayLevel1Music()
-    {
-        backgroundMusicAudioSource.Play();
+        if (pendulumClip)
+        {
+            AudioSource.PlayClipAtPoint(pendulumClip, pendulumLocation);
+        }
     }
 }
