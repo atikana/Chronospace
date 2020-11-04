@@ -69,8 +69,8 @@ public class PauseMenu : MonoBehaviour
 
     public void BackToMain()
     {
-        // Time.timeScale = 1f;
-        // paused = false;
-        // SceneManager.LoadScene("StartMenu");
+        Time.timeScale = 1f;
+        paused = false;
+        SceneManager.LoadScene("StartMenu");
     }
 }
