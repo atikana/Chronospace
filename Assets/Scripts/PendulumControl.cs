@@ -10,6 +10,9 @@ public class PendulumControl : MonoBehaviour
     public float startAngle = 0.0f;
     private float _startTime = 0.0f;
 
+    // TODO:  Figure out how to make the pendulums start facing left or right depending on this bool.
+    public bool startsFacingRight = true;
+
     // Vector of extra force to apply to the player if they are colliding with this pendulum.
     private Vector3 playerForceVector;
 
@@ -25,8 +28,8 @@ public class PendulumControl : MonoBehaviour
         //}
         //else
         //{
-        //    _start = PendulumRotation(180);
-        //    _end = PendulumRotation(0);
+        //    _start = PendulumRotation(startAngle + 180);
+        //    _end = PendulumRotation(startAngle);
         //}
 
         playerForceVector = new Vector3(0, 0, 0);

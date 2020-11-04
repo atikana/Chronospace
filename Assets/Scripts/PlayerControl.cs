@@ -111,6 +111,8 @@ public class PlayerControl : MonoBehaviour
                 numTimeWarps--;
                 TimeWarp();
             }
+            // Cheat to get you to the end of the level.
+            // transform.SetPositionAndRotation(new Vector3(502, 5, 1132), transform.rotation);
         };
         input.Player.RestartLevel.performed += context => gameManager.RestartLevel();
 
