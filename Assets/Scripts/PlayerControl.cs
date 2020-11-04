@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class PlayerControl : MonoBehaviour
 {
     private Rigidbody rigidBody;
-    private float jumpForce = 7f;
+    private float jumpForce = 9f;
     private float normalMovementSpeed;
     private float dashMovementSpeed;
     private float movementSpeed;
@@ -14,12 +14,14 @@ public class PlayerControl : MonoBehaviour
     private float timeBetweenDashes = 10f;
     private float timeSinceLastDash;
 
+    public Animator handsAnimator;
+
     private PlayerInput input;
     private Vector2 moveVector;
     private Vector2 lookVector;
 
     // Number of seconds dash lasts for.
-    private float dashLength = 0.2f;
+    private float dashLength = 0.14f;
 
     // Dash time taken so far.
     private float dashCounter = 0f;
@@ -67,10 +69,11 @@ public class PlayerControl : MonoBehaviour
 
     void Start()
     {
-        gameManager = GameObject.FindObjectOfType<GameManager>();
-        pauseMenu = GameObject.FindObjectOfType<PauseMenu>();
-        GrapplingGun grapplingGun = GameObject.FindObjectOfType<GrapplingGun>();
+        gameManager = FindObjectOfType<GameManager>();
+        pauseMenu = FindObjectOfType<PauseMenu>();
+        handsAnimator = FindObjectOfType<Animator>();
 
+        // Set up player input.
         input = new PlayerInput();
         input.Enable();
 
@@ -95,6 +98,7 @@ public class PlayerControl : MonoBehaviour
             // Can't time warp while time is already slowed down.
             if (numTimeWarps > 0 && !gameManager.GetTimeWarpEnabled())
             {
+                handsAnimator.SetTrigger("TimeWarp");
                 numTimeWarps--;
                 TimeWarp();
             }
@@ -103,7 +107,10 @@ public class PlayerControl : MonoBehaviour
 
         input.Player.Pause.performed += context => pauseMenu.PressPause();
 
-        input.Player.GrappleShoot.performed += context => grappleShoot = true;
+        input.Player.GrappleShoot.performed += context =>
+        {
+            grappleShoot = true;
+        };
         input.Player.GrappleShoot.canceled += context => grappleShoot = false;
         input.Player.GrappleToggle.performed += context => grappleToggle = true;
         input.Player.GrappleToggle.canceled += context => grappleToggle = false;
@@ -211,6 +218,11 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
+    public void GrapplingHookAnimation()
+    {
+        handsAnimator.SetTrigger("Grappling");
+    }
+
     private void Jump()
     {
         // Added "&& rigidBody" because Jump() was being called when rigidBody was null.
@@ -222,14 +234,18 @@ public class PlayerControl : MonoBehaviour
         else if (!this.grounded && ableToDoubleJump)
         {
             soundManager.PlayDoubleJumpSound();
-            rigidBody.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
+            // TODO:  I put this if statement here because this is sometimes null.  Figure out why that is!
+            if (rigidBody)
+            {
+                rigidBody.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
+            }
             ableToDoubleJump = false;
         }
     }
 
     private void AdjustCamera()
     {
-        // Rotate the camera based on mouse movement.
+        // Rotate the camera based on mouse/joystick movement.
         cameraRotation.x = Mathf.Repeat(cameraRotation.x + lookVector.x * mouseSensitivity, 360);
         cameraRotation.y = Mathf.Clamp(cameraRotation.y - lookVector.y * mouseSensitivity, -maxYAngle, maxYAngle);
         cameraTransform.rotation = Quaternion.Euler(cameraRotation.y, cameraRotation.x, 0);
@@ -247,6 +263,8 @@ public class PlayerControl : MonoBehaviour
         {
             moveVector.Normalize();
         }
+
+        handsAnimator.SetBool("Running", (moveVector.magnitude > 0 && grounded));
 
         float forwardMovement = (moveVector.y * Mathf.Cos(facingAngle) - moveVector.x * Mathf.Sin(facingAngle)) * movementSpeed * Time.fixedUnscaledDeltaTime;
         float horizontalMovement = (moveVector.y * Mathf.Sin(facingAngle) + moveVector.x * Mathf.Cos(facingAngle)) * movementSpeed * Time.fixedUnscaledDeltaTime;

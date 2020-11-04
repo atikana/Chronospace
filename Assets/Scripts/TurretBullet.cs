@@ -6,7 +6,6 @@ public class TurretBullet : MonoBehaviour
 {
 
     public float movementSpeed = 36f;
-    private GameObject target;
     public float force = 100f;
     GameManager gameManager;
 
