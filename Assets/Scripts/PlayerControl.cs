@@ -5,11 +5,11 @@ public class PlayerControl : MonoBehaviour
 {
     private Rigidbody rigidBody;
     private float jumpForce = 550f;
-    private float normalMovementSpeed;
+    private float normalMovementSpeed = 4500;
     private float dashMovementSpeed;
     private float movementSpeed;
-    private float maxSpeed = 20;
-    private float counterMovement = 0.5f;
+    private float maxSpeed = 30;
+    private float counterMovement = 0.175f;
     private float threshold = 0.01f;
     private bool grounded = true;
 
@@ -60,6 +60,10 @@ public class PlayerControl : MonoBehaviour
     private bool grappleShoot = false;
     private bool grappleToggle = false;
     private bool dashing = false;
+    private bool jumping = false;
+    private bool readyToJump = true;
+
+    private float jumpCooldown = 0.25f;
 
     public ParticleSystem cameraParticleSystem;
 
@@ -87,7 +91,8 @@ public class PlayerControl : MonoBehaviour
         input.Player.Look.performed += context => lookVector = context.ReadValue<Vector2>();
         input.Player.Look.canceled += context => lookVector = Vector2.zero;
 
-        input.Player.Jump.performed += context => Jump();
+        input.Player.Jump.performed += context => jumping = true;
+        input.Player.Jump.canceled += context => jumping = false;
         input.Player.Dash.performed += context =>
         {
             // Can't dash while currently dashing.
@@ -126,7 +131,6 @@ public class PlayerControl : MonoBehaviour
 
         rigidBody = GetComponent<Rigidbody>();
 
-        normalMovementSpeed = 500f;
         dashMovementSpeed = normalMovementSpeed*dashMultiplier;
 
         timeSinceLastDash = timeBetweenDashes;
@@ -202,6 +206,7 @@ public class PlayerControl : MonoBehaviour
         if (collision.gameObject.tag.Equals("Platform"))
         {
             this.grounded = true;
+            jumping = false;
         }
         else if (collision.collider.tag.Equals("Pendulum"))
         {
@@ -230,20 +235,43 @@ public class PlayerControl : MonoBehaviour
     private void Jump()
     {
         // Added "&& rigidBody" because Jump() was being called when rigidBody was null.
+
         
-        if (this.grounded && rigidBody)
+        if (grounded && readyToJump && rigidBody)
         {
+            readyToJump = false;
             soundManager.PlayJumpSound();
             rigidBody.AddForce(Vector2.up * jumpForce * 1.5f);
             rigidBody.AddForce(Vector3.up * jumpForce * 0.5f);
+
+            Vector3 vel = rigidBody.velocity;
+            if (rigidBody.velocity.y < 0.5f)
+                rigidBody.velocity = new Vector3(vel.x, 0, vel.z);
+            else if (rigidBody.velocity.y > 0)
+                rigidBody.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
+
+            Invoke(nameof(ResetJump), jumpCooldown);
         }
-        else if (!this.grounded && ableToDoubleJump)
+
+        /*else if (!this.grounded && ableToDoubleJump)
         {
+            
             soundManager.PlayDoubleJumpSound();
             rigidBody.AddForce(Vector2.up * jumpForce * 1.5f);
             rigidBody.AddForce(Vector3.up * jumpForce * 0.5f);
             ableToDoubleJump = false;
-        }
+
+
+        }*/
+
+     
+
+
+    }
+
+    private void ResetJump()
+    {
+        readyToJump = true;
     }
 
     private void AdjustCamera()
@@ -275,11 +303,14 @@ public class PlayerControl : MonoBehaviour
 
     private void Move()
     {
+        //Extra gravity
+        rigidBody.AddForce(Vector3.down * Time.deltaTime * 10);
         
+        //velocity relative to where player is looking
         Vector2 mag = VelRelativeToLook();
         float xMag = mag.x, yMag = mag.y;
 
-        float facingAngle = transform.eulerAngles.y * Mathf.PI / 180f;
+      
 
         // If dash is enabled and your joystick isn't as far out as it could be, you should still go the same dash speed.
         if (dashCounter > 0)
@@ -292,6 +323,8 @@ public class PlayerControl : MonoBehaviour
 
         CounterMovement(x, y, mag);
 
+        if (jumping && readyToJump) Jump();
+
         if (x > 0 && xMag > maxSpeed  && !dashing) x = 0;
         if (x < 0 && xMag < -maxSpeed  && !dashing) x = 0;
         if (y > 0 && yMag > maxSpeed   && !dashing) y = 0;
@@ -300,14 +333,15 @@ public class PlayerControl : MonoBehaviour
 
         Debug.Log(moveVector.ToString());
  
-        float multiplier = 5f, multiplierV = 5f;
+        float multiplier = 1f, multiplierV =1f;
         if (!grounded)
         {
-            multiplier = 2.5f;
-            multiplierV = 2.5f;
+            Debug.Log("!ground");
+            multiplier = 0.5f;
+            multiplierV = 0.5f;
         }
-        rigidBody.AddForce(transform.forward * y * movementSpeed * Time.fixedUnscaledDeltaTime * multiplier * multiplierV ) ;
-        rigidBody.AddForce(transform.right * x * movementSpeed * Time.fixedUnscaledDeltaTime * multiplier * multiplierV );
+        rigidBody.AddForce(transform.forward * y * normalMovementSpeed * Time.deltaTime * multiplier * multiplierV ) ;
+        rigidBody.AddForce(transform.right * x * normalMovementSpeed * Time.deltaTime * multiplier);
 
 
         /* Bob the camera up and down if the player is moving
@@ -318,16 +352,23 @@ public class PlayerControl : MonoBehaviour
 
     private void CounterMovement(float x, float y, Vector2 mag)
     {
-        if (!grounded || dashing) return;
+        if (!grounded || dashing|| jumping) return;
 
         //Counter movement
         if (Mathf.Abs(mag.x) > threshold && Mathf.Abs(x) < 0.05f || (mag.x < -threshold && x > 0) || (mag.x > threshold && x < 0))
         {
-            rigidBody.AddForce(movementSpeed * transform.right * Time.fixedUnscaledDeltaTime * -mag.x * counterMovement);
+            rigidBody.AddForce(normalMovementSpeed * transform.right * Time.fixedUnscaledDeltaTime * -mag.x * counterMovement);
         }
         if (Mathf.Abs(mag.y) > threshold && Mathf.Abs(y) < 0.05f || (mag.y < -threshold && y > 0) || (mag.y > threshold && y < 0))
         {
-            rigidBody.AddForce(movementSpeed * transform.forward * Time.fixedUnscaledDeltaTime * -mag.y * counterMovement);
+            rigidBody.AddForce(normalMovementSpeed * transform.forward * Time.fixedUnscaledDeltaTime * -mag.y * counterMovement);
+        }
+
+        if (Mathf.Sqrt((Mathf.Pow(rigidBody.velocity.x, 2) + Mathf.Pow(rigidBody.velocity.z, 2))) > maxSpeed)
+        {
+            float fallspeed = rigidBody.velocity.y;
+            Vector3 n = rigidBody.velocity.normalized * maxSpeed;
+            rigidBody.velocity = new Vector3(n.x, fallspeed, n.z);
         }
     }
 
@@ -386,7 +427,7 @@ public class PlayerControl : MonoBehaviour
     void FixedUpdate()
     {
         Move();
-        Dash();
+        //Dash();
         AdjustCamera();
         
     }
