@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class PlayerControl : MonoBehaviour
 {
     private Rigidbody rigidBody;
-    private float jumpForce = 8f;
+    private float jumpForce = 550f;
     private float normalMovementSpeed;
     private float dashMovementSpeed;
     private float movementSpeed;
@@ -166,8 +166,7 @@ public class PlayerControl : MonoBehaviour
                 cameraParticleSystem.Play();
                 timeSinceLastDash = 0;
                 float dashUpMultiplier = 0.4f;
-                float timeScaleMultiplier = 1 / Time.timeScale;
-                rigidBody.AddForce(new Vector3(0, jumpForce * dashUpMultiplier * timeScaleMultiplier * timeScaleMultiplier, 0), ForceMode.Impulse);
+                rigidBody.AddForce(new Vector3(0, jumpForce * dashUpMultiplier, 0), ForceMode.Impulse);
 
             }
             
@@ -231,16 +230,18 @@ public class PlayerControl : MonoBehaviour
     private void Jump()
     {
         // Added "&& rigidBody" because Jump() was being called when rigidBody was null.
-        float timeScaleMultiplier = 1 / Time.timeScale;
+        
         if (this.grounded && rigidBody)
         {
             soundManager.PlayJumpSound();
-            rigidBody.AddForce(new Vector3(0, jumpForce * timeScaleMultiplier, 0), ForceMode.Impulse);
+            rigidBody.AddForce(Vector2.up * jumpForce * 1.5f);
+            rigidBody.AddForce(Vector3.up * jumpForce * 0.5f);
         }
         else if (!this.grounded && ableToDoubleJump)
         {
             soundManager.PlayDoubleJumpSound();
-            rigidBody.AddForce(new Vector3(0, jumpForce * timeScaleMultiplier, 0), ForceMode.Impulse);
+            rigidBody.AddForce(Vector2.up * jumpForce * 1.5f);
+            rigidBody.AddForce(Vector3.up * jumpForce * 0.5f);
             ableToDoubleJump = false;
         }
     }
@@ -274,8 +275,7 @@ public class PlayerControl : MonoBehaviour
 
     private void Move()
     {
-        float timeScaleMultiplier = 1/ Time.timeScale;
-        rigidBody.AddForce(Physics.gravity * timeScaleMultiplier *timeScaleMultiplier, ForceMode.Acceleration);
+        
         Vector2 mag = VelRelativeToLook();
         float xMag = mag.x, yMag = mag.y;
 
@@ -292,10 +292,10 @@ public class PlayerControl : MonoBehaviour
 
         CounterMovement(x, y, mag);
 
-        if (x > 0 && xMag > maxSpeed * timeScaleMultiplier && !dashing) x = 0;
-        if (x < 0 && xMag < -maxSpeed * timeScaleMultiplier && !dashing) x = 0;
-        if (y > 0 && yMag > maxSpeed  * timeScaleMultiplier && !dashing) y = 0;
-        if (y < 0 && yMag < -maxSpeed * timeScaleMultiplier && !dashing) y = 0;
+        if (x > 0 && xMag > maxSpeed  && !dashing) x = 0;
+        if (x < 0 && xMag < -maxSpeed  && !dashing) x = 0;
+        if (y > 0 && yMag > maxSpeed   && !dashing) y = 0;
+        if (y < 0 && yMag < -maxSpeed  && !dashing) y = 0;
 
 
         Debug.Log(moveVector.ToString());
@@ -306,8 +306,8 @@ public class PlayerControl : MonoBehaviour
             multiplier = 2.5f;
             multiplierV = 2.5f;
         }
-        rigidBody.AddForce(transform.forward * y * movementSpeed * Time.fixedUnscaledDeltaTime * multiplier * multiplierV *timeScaleMultiplier) ;
-        rigidBody.AddForce(transform.right * x * movementSpeed * Time.fixedUnscaledDeltaTime * multiplier * multiplierV *timeScaleMultiplier);
+        rigidBody.AddForce(transform.forward * y * movementSpeed * Time.fixedUnscaledDeltaTime * multiplier * multiplierV ) ;
+        rigidBody.AddForce(transform.right * x * movementSpeed * Time.fixedUnscaledDeltaTime * multiplier * multiplierV );
 
 
         /* Bob the camera up and down if the player is moving
@@ -320,15 +320,14 @@ public class PlayerControl : MonoBehaviour
     {
         if (!grounded || dashing) return;
 
-        float timeScaleMultiplier = 1 / Time.timeScale;
         //Counter movement
         if (Mathf.Abs(mag.x) > threshold && Mathf.Abs(x) < 0.05f || (mag.x < -threshold && x > 0) || (mag.x > threshold && x < 0))
         {
-            rigidBody.AddForce(movementSpeed * transform.right * Time.fixedUnscaledDeltaTime * -mag.x * counterMovement * timeScaleMultiplier);
+            rigidBody.AddForce(movementSpeed * transform.right * Time.fixedUnscaledDeltaTime * -mag.x * counterMovement);
         }
         if (Mathf.Abs(mag.y) > threshold && Mathf.Abs(y) < 0.05f || (mag.y < -threshold && y > 0) || (mag.y > threshold && y < 0))
         {
-            rigidBody.AddForce(movementSpeed * transform.forward * Time.fixedUnscaledDeltaTime * -mag.y * counterMovement *timeScaleMultiplier);
+            rigidBody.AddForce(movementSpeed * transform.forward * Time.fixedUnscaledDeltaTime * -mag.y * counterMovement);
         }
     }
 
