@@ -57,13 +57,13 @@ public class GameManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        Debug.Log("Sensitivity - " + sensitivity);
+        //Debug.Log("Sensitivity - " + sensitivity);
         MaintainTimeWarp();
     }
 
     public void PauseGame()
     {
-        pauseMenu.PauseGame();
+        pauseMenu.PressPause();
     }
 
     public bool GetTimeWarpEnabled()
@@ -83,10 +83,14 @@ public class GameManager : MonoBehaviour
     /*
      * Allows the player to restart the level they are currently on.
      */
-    public void RestartLevel()
+    public void RestartLevel(bool dead = false)
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        levelStats.ResetTimer();
+
+        if (dead)
+        {
+            levelStats.ResetTimer();
+        }
     }
 
     public int GetNumDeaths()
@@ -117,6 +121,6 @@ public class GameManager : MonoBehaviour
     {
         // TODO:  Modify this when checkpoints are implemented!
         AddDeath();
-        RestartLevel();
+        RestartLevel(true);
     }
 }

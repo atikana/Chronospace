@@ -22,8 +22,6 @@ public class LevelStats : MonoBehaviour
 
     void Start()
     {
-        pauseMenu = FindObjectOfType<PauseMenu>();
-        playerControl = FindObjectOfType<PlayerControl>();
         ResetTimer();
     }
 

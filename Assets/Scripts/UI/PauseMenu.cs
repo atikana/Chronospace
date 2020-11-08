@@ -10,14 +10,16 @@ public class PauseMenu : MonoBehaviour
      * the game is resumed while time warp is enabled, the time warp will continue.
      */
     private float originalTimeScale;
-   
+
 
     // Start is called before the first frame update
-    void Start()
+
+    private void Awake()
     {
         pauseMenu = transform.GetChild(0).gameObject;
-       
-
+    }
+    void Start()
+    {
         // Set a default value for originalTimeScale.
         originalTimeScale = Time.timeScale;
     }
@@ -30,10 +32,10 @@ public class PauseMenu : MonoBehaviour
         }
         else
         {
-            
+
             ResumeGame();
         }
-       
+
     }
 
     public bool CheckPaused()
