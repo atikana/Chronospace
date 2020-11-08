@@ -200,7 +200,6 @@ public class PlayerControl : MonoBehaviour
             dashCooldownCounter = dashCooldownLength;
         }
 
-        Debug.Log(dashCooldownCounter);
         if (dashCooldownCounter > 0)
         {
             dashCooldownCounter -= Time.fixedUnscaledDeltaTime;
@@ -377,8 +376,8 @@ public class PlayerControl : MonoBehaviour
      */
     private void AdjustCamera()
     {
-        cameraRotation.x = Mathf.Repeat(cameraRotation.x + lookVector.x * gameManager.GetSensitivity() * Time.fixedDeltaTime, 360);
-        cameraRotation.y = Mathf.Clamp(cameraRotation.y - lookVector.y * gameManager.GetSensitivity() * Time.fixedDeltaTime, -maxYAngle, maxYAngle);
+        cameraRotation.x = Mathf.Repeat(cameraRotation.x + lookVector.x * gameManager.GetSensitivity() * Time.deltaTime, 360);
+        cameraRotation.y = Mathf.Clamp(cameraRotation.y - lookVector.y * gameManager.GetSensitivity() * Time.deltaTime, -maxYAngle, maxYAngle);
         cameraTransform.rotation = Quaternion.Euler(cameraRotation.y, cameraRotation.x, 0);
 
         // Rotate the player about the Y axis based on the camera's rotation.
@@ -391,9 +390,7 @@ public class PlayerControl : MonoBehaviour
     private void Move()
     {
         //Extra gravity
-        rigidBody.AddForce(Vector3.down * Time.deltaTime * 10);
-
-        Debug.Log(rigidBody.velocity);
+        rigidBody.AddForce(Vector3.down * Time.fixedDeltaTime * 10);
 
         //velocity relative to where player is looking
         Vector2 mag = VelRelativeToLook();
@@ -426,9 +423,6 @@ public class PlayerControl : MonoBehaviour
         if (y > 0 && yMag > maxSpeed && !dashing) y = 0;
         if (y < 0 && yMag < -maxSpeed && !dashing) y = 0;
 
-
-        Debug.Log(moveVector.ToString());
-
         float multiplier = 1f, multiplierV = 1f;
         if (!grounded)
         {
@@ -436,19 +430,13 @@ public class PlayerControl : MonoBehaviour
             multiplier = 0.4f;
             multiplierV = 0.4f;
         }
-        rigidBody.AddForce(transform.forward * y * normalMovementSpeed * Time.deltaTime * multiplier * multiplierV);
-        rigidBody.AddForce(transform.right * x * normalMovementSpeed * Time.deltaTime * multiplier * multiplierV);
+        rigidBody.AddForce(transform.forward * y * normalMovementSpeed * Time.fixedDeltaTime * multiplier * multiplierV);
+        rigidBody.AddForce(transform.right * x * normalMovementSpeed * Time.fixedDeltaTime * multiplier * multiplierV);
 
         running = moveVector.magnitude > 0 && grounded;
 
         // Do running animation if the player is running.
         handsAnimator.SetBool("Running", running);
-
-        // Temporary fix
-        //float facingAngle = transform.eulerAngles.y * Mathf.PI / 180f;
-        //float forwardMovement = (moveVector.y * Mathf.Cos(facingAngle) - moveVector.x * Mathf.Sin(facingAngle)) * movementSpeed * Time.fixedUnscaledDeltaTime;
-        //float horizontalMovement = (moveVector.y * Mathf.Sin(facingAngle) + moveVector.x * Mathf.Cos(facingAngle)) * movementSpeed * Time.fixedUnscaledDeltaTime;
-        //transform.Translate(new Vector3(horizontalMovement / 25f, 0, forwardMovement / 25f), Space.World);
     }
 
     /* TODO:  Get rid of these! */
@@ -474,11 +462,11 @@ public class PlayerControl : MonoBehaviour
     {
         MaintainDash();
         Move();
-        AdjustCamera();
+        //AdjustCamera();
     }
 
-    //private void Update()
-    //{
-    //    AdjustCamera();
-    //}
+    private void Update()
+    {
+        AdjustCamera();
+    }
 }

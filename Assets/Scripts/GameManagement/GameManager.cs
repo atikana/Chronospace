@@ -22,7 +22,9 @@ public class GameManager : MonoBehaviour
     private int numPlayerDeaths = 0;
 
     // Look joystick/mouse sensitivity.
-    private float sensitivity = 1.5f;
+    private float sensitivity = 7;
+
+    private float mouseSensitivityMultiplier = 15f;
 
     void Start()
     {
@@ -57,6 +59,7 @@ public class GameManager : MonoBehaviour
 
     void FixedUpdate()
     {
+        Debug.Log("Sensitivity - " + sensitivity);
         MaintainTimeWarp();
     }
 
@@ -103,9 +106,13 @@ public class GameManager : MonoBehaviour
         sensitivity = newSensitivity;
     }
 
+    /**
+     * Returns the look sensitivity, multiplied by a factor
+     * which allows sensitivity to be in the range [1, 15].
+     */
     public float GetSensitivity()
     {
-        return sensitivity;
+        return mouseSensitivityMultiplier * sensitivity;
     }
 
     public void KillPlayer()
