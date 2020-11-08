@@ -1,16 +1,24 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class LevelStats : MonoBehaviour
 {
-    public Text levelTimerText;
-    public Text numDeathsText;
-    public Text timeWarpText;
+    Text levelTimerText;
+    Text numDeathsText;
+    Text timeWarpText;
 
     private float timer;
-    private PauseMenu pauseMenu;
+    public PauseMenu pauseMenu;
 
-    private PlayerControl playerControl;
+    public PlayerControl playerControl;
+
+    private void Awake()
+    {
+        levelTimerText = transform.GetChild(0).GetComponent<Text>();
+        numDeathsText = transform.GetChild(1).GetComponent<Text>();
+        timeWarpText = transform.GetChild(2).GetComponent<Text>();
+    }
 
     void Start()
     {
@@ -30,7 +38,10 @@ public class LevelStats : MonoBehaviour
         if (!pauseMenu.CheckPaused())
         {
             timer += Time.unscaledDeltaTime;
-            levelTimerText.text = timer.ToString("0.00");
+
+            TimeSpan timeSpan = TimeSpan.FromSeconds(timer);
+
+            levelTimerText.text = "Time: " + string.Format("{0,1:0}:{1,2:00}", timeSpan.Minutes, timeSpan.Seconds);
         }
 
         // Update the number of deaths text.
