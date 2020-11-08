@@ -12,14 +12,30 @@ public class PlayerControl : MonoBehaviour
     private SoundManager soundManager;
     private ParticleSystem cameraParticleSystem;
 
-    private float jumpForce = 11f;
-    private float doubleJumpForce = 9f;
+    public float jumpForce = 550f;
     private bool ableToDoubleJump = false;
     private bool grounded = true;
+    private bool cancellingGrounded = false;
 
     private float movementSpeed;
-    private float normalMovementSpeed = 500f;
+    private float normalMovementSpeed = 4500f;
     private float dashMovementSpeed;
+
+    public float maxSpeed = 30f;
+    public float counterMovement = 0.175f;
+    private float counterMovementThreshold = 0.01f;
+    private float maxSlopeAngle = 45f;
+
+    public LayerMask groundMask;
+    public LayerMask pendulumMask;
+
+    private bool dashing = false;
+    private bool jumping = false;
+    private bool firstJump = true;
+    private bool readyToJump = true;
+
+    private float jumpCooldown = 0.25f;
+    public float doubleJumpWindow = 0.25f;
 
     // Dash speed multiplier.
     private float dashMultiplier = 10f;
@@ -75,7 +91,16 @@ public class PlayerControl : MonoBehaviour
         input.Player.Look.performed += context => lookVector = context.ReadValue<Vector2>();
         input.Player.Look.canceled += context => lookVector = Vector2.zero;
 
-        input.Player.Jump.performed += context => Jump();
+        input.Player.Jump.performed += context => jumping = true;
+        input.Player.Jump.canceled += context =>
+        {
+            if (ableToDoubleJump)
+            {
+                firstJump = !firstJump;
+            }
+            jumping = false;
+        };
+
         input.Player.Dash.performed += context => Dash();
         input.Player.TimeWarp.performed += context => TimeWarp();
         input.Player.RestartLevel.performed += context => gameManager.RestartLevel();
@@ -131,11 +156,19 @@ public class PlayerControl : MonoBehaviour
     {
         if (dashAvailable)
         {
+            dashing = true;
             dashAvailable = false;
             dashCounter = dashLength;
             soundManager.PlayDashSound();
             movementSpeed = dashMovementSpeed;
-            cameraParticleSystem.Play();
+            if (cameraParticleSystem)
+            {
+                cameraParticleSystem.Play();
+            }
+
+            // Dashing gives you a very small upward force so that you can dash between platforms and not worry about falling through.
+            float dashUpMultiplier = 0.4f;
+            rigidBody.AddForce(new Vector3(0, jumpForce * dashUpMultiplier, 0), ForceMode.Impulse);
         }
     }
 
@@ -150,33 +183,66 @@ public class PlayerControl : MonoBehaviour
             dashCounter -= Time.fixedUnscaledDeltaTime;
         }
 
-        dashCounter = Mathf.Min(dashCounter, 0f);
+        dashCounter = Mathf.Max(dashCounter, 0f);
         if (dashCounter == 0)
         {
             // After the delay, stop the dash.
+            if (dashing)
+            {
+                rigidBody.velocity = Vector3.zero;
+            }
+            dashing = false;
             movementSpeed = normalMovementSpeed;
-            cameraParticleSystem.Stop();
+            if (cameraParticleSystem)
+            {
+                cameraParticleSystem.Stop();
+            }
             dashCooldownCounter = dashCooldownLength;
         }
 
+        Debug.Log(dashCooldownCounter);
         if (dashCooldownCounter > 0)
         {
             dashCooldownCounter -= Time.fixedUnscaledDeltaTime;
         }
 
-        dashCooldownCounter = Mathf.Min(dashCooldownCounter, 0f);
+        dashCooldownCounter = Mathf.Max(dashCooldownCounter, 0f);
         if (dashCooldownCounter == 0)
         {
             dashAvailable = true;
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision other)
     {
-        // If the player collides with a platform, they are grounded.
-        if (collision.gameObject.tag.Equals("Platform"))
+        // Make sure we are only checking for walkable layers.
+        int layer = other.gameObject.layer;
+        if (groundMask == (groundMask | (1 << layer)))
         {
-            this.grounded = true;
+            for (int i = 0; i < other.contactCount; i++)
+            {
+                Vector3 normal = other.contacts[i].normal;
+                //FLOOR
+                if (IsFloor(normal))
+                {
+                    grounded = true;
+                    if (!firstJump)
+                    {
+                        firstJump = true;
+                    }
+
+                    cancellingGrounded = false;
+
+                    CancelInvoke(nameof(StopGrounded));
+                }
+            }
+
+            float delay = 3f;
+            if (!cancellingGrounded)
+            {
+                cancellingGrounded = true;
+                Invoke(nameof(StopGrounded), Time.deltaTime * delay);
+            }
         }
     }
 
@@ -185,30 +251,124 @@ public class PlayerControl : MonoBehaviour
         // If the player has exited a collision with a platform, they are no longer grounded.
         if (collision.gameObject.tag.Equals("Platform"))
         {
-            this.grounded = false;
+            grounded = false;
 
             // Able to double jump after you've left a platform.
             ableToDoubleJump = true;
         }
     }
 
-    private void Jump()
+    private void FirstJump()
     {
-        // TODO:  Added "&& rigidBody" because Jump() was being called when rigidBody was null.  Figure out why this happens!
-        if (this.grounded && rigidBody)
+        // TODO:  Added "&& rigidBody" because FirstJump() was being called when rigidBody was null.  Figure out why this happens!
+        if (grounded && rigidBody && readyToJump)
         {
             soundManager.PlayJumpSound();
-            rigidBody.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
-        }
-        else if (!this.grounded && ableToDoubleJump)
-        {
-            soundManager.PlayDoubleJumpSound();
-            // TODO:  Same thing here.
-            if (rigidBody)
+            readyToJump = false;
+            ableToDoubleJump = true;
+            rigidBody.AddForce(Vector2.up * jumpForce * 1.5f);
+            rigidBody.AddForce(Vector3.up * jumpForce * 0.5f);
+            Vector3 vel = rigidBody.velocity;
+            if (rigidBody.velocity.y < 0.5f)
             {
-                rigidBody.AddForce(new Vector3(0, doubleJumpForce, 0), ForceMode.Impulse);
+                rigidBody.velocity = new Vector3(vel.x, 0, vel.z);
+            }
+            else if (rigidBody.velocity.y > 0)
+            {
+                rigidBody.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
+            }
+
+            Invoke(nameof(ResetJump), jumpCooldown);
+            Invoke(nameof(ResetDoubleJump), doubleJumpWindow);
         }
+        else
+        {
+            Debug.Log("Jump failded. Not on ground");
+        }
+    }
+
+    private void SecondJump()
+    {
+        // TODO:  Added "&& rigidBody" because SecondJump() was being called when rigidBody was null.  Figure out why this happens!
+
+        if (!grounded && rigidBody && ableToDoubleJump)
+        {
+            ableToDoubleJump = false;
+            soundManager.PlayDoubleJumpSound();
+            rigidBody.AddForce(Vector2.up * jumpForce * 1.5f);
+            rigidBody.AddForce(Vector3.up * jumpForce * 0.5f);
+
+
+            Vector3 vel = rigidBody.velocity;
+            if (rigidBody.velocity.y < 0.5f)
+                rigidBody.velocity = new Vector3(vel.x, 0, vel.z);
+            else if (rigidBody.velocity.y > 0)
+                rigidBody.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
+        }
+    }
+
+    private bool IsFloor(Vector3 v)
+    {
+        float angle = Vector3.Angle(Vector3.up, v);
+        return angle < maxSlopeAngle;
+    }
+
+
+    private void StopGrounded()
+    {
+        grounded = false;
+    }
+
+    private void ResetJump()
+    {
+        readyToJump = true;
+
+    }
+
+    private void ResetDoubleJump()
+    {
         ableToDoubleJump = false;
+    }
+
+    /*
+     * Returns the player's velocity relative to the direction they are looking.
+     */
+    public Vector2 VelRelativeToLook()
+    {
+        float lookAngle = transform.eulerAngles.y;
+        float moveAngle = Mathf.Atan2(rigidBody.velocity.x, rigidBody.velocity.z) * Mathf.Rad2Deg;
+
+        float u = Mathf.DeltaAngle(lookAngle, moveAngle);
+        float v = 90 - u;
+
+        float magnitue = rigidBody.velocity.magnitude;
+        float yMag = magnitue * Mathf.Cos(u * Mathf.Deg2Rad);
+        float xMag = magnitue * Mathf.Cos(v * Mathf.Deg2Rad);
+
+        return new Vector2(xMag, yMag);
+    }
+
+    /**
+     * Balances out movement force on rigidbody with a counter force.
+     */
+    private void CounterMovement(float x, float y, Vector2 mag)
+    {
+        if (!grounded || dashing || jumping) return;
+
+        if (Mathf.Abs(mag.x) > counterMovementThreshold && Mathf.Abs(x) < 0.05f || (mag.x < -counterMovementThreshold && x > 0) || (mag.x > counterMovementThreshold && x < 0))
+        {
+            rigidBody.AddForce(normalMovementSpeed * transform.right * Time.deltaTime * -mag.x * counterMovement);
+        }
+        if (Mathf.Abs(mag.y) > counterMovementThreshold && Mathf.Abs(y) < 0.05f || (mag.y < -counterMovementThreshold && y > 0) || (mag.y > counterMovementThreshold && y < 0))
+        {
+            rigidBody.AddForce(normalMovementSpeed * transform.forward * Time.deltaTime * -mag.y * counterMovement);
+        }
+
+        if (Mathf.Sqrt((Mathf.Pow(rigidBody.velocity.x, 2) + Mathf.Pow(rigidBody.velocity.z, 2))) > maxSpeed)
+        {
+            float fallspeed = rigidBody.velocity.y;
+            Vector3 n = rigidBody.velocity.normalized * maxSpeed;
+            rigidBody.velocity = new Vector3(n.x, fallspeed, n.z);
         }
     }
 
@@ -217,8 +377,8 @@ public class PlayerControl : MonoBehaviour
      */
     private void AdjustCamera()
     {
-        cameraRotation.x = Mathf.Repeat(cameraRotation.x + lookVector.x * gameManager.GetSensitivity(), 360);
-        cameraRotation.y = Mathf.Clamp(cameraRotation.y - lookVector.y * gameManager.GetSensitivity(), -maxYAngle, maxYAngle);
+        cameraRotation.x = Mathf.Repeat(cameraRotation.x + lookVector.x * gameManager.GetSensitivity() * Time.fixedDeltaTime, 360);
+        cameraRotation.y = Mathf.Clamp(cameraRotation.y - lookVector.y * gameManager.GetSensitivity() * Time.fixedDeltaTime, -maxYAngle, maxYAngle);
         cameraTransform.rotation = Quaternion.Euler(cameraRotation.y, cameraRotation.x, 0);
 
         // Rotate the player about the Y axis based on the camera's rotation.
@@ -230,11 +390,54 @@ public class PlayerControl : MonoBehaviour
      */
     private void Move()
     {
+        //Extra gravity
+        rigidBody.AddForce(Vector3.down * Time.deltaTime * 10);
+
+        Debug.Log(rigidBody.velocity);
+
+        //velocity relative to where player is looking
+        Vector2 mag = VelRelativeToLook();
+        float xMag = mag.x, yMag = mag.y;
+
         // If dash is enabled and your joystick isn't as far out as it could be, you should still go the same dash speed.
         if (dashCounter > 0)
         {
             moveVector.Normalize();
         }
+
+        float x = moveVector.x, y = moveVector.y;
+
+        CounterMovement(x, y, mag);
+
+        if (jumping)
+        {
+            if (firstJump)
+            {
+                FirstJump();
+            }
+            else
+            {
+                SecondJump();
+            }
+        }
+
+        if (x > 0 && xMag > maxSpeed && !dashing) x = 0;
+        if (x < 0 && xMag < -maxSpeed && !dashing) x = 0;
+        if (y > 0 && yMag > maxSpeed && !dashing) y = 0;
+        if (y < 0 && yMag < -maxSpeed && !dashing) y = 0;
+
+
+        Debug.Log(moveVector.ToString());
+
+        float multiplier = 1f, multiplierV = 1f;
+        if (!grounded)
+        {
+            Debug.Log("!ground");
+            multiplier = 0.4f;
+            multiplierV = 0.4f;
+        }
+        rigidBody.AddForce(transform.forward * y * normalMovementSpeed * Time.deltaTime * multiplier * multiplierV);
+        rigidBody.AddForce(transform.right * x * normalMovementSpeed * Time.deltaTime * multiplier * multiplierV);
 
         running = moveVector.magnitude > 0 && grounded;
 
@@ -242,10 +445,10 @@ public class PlayerControl : MonoBehaviour
         handsAnimator.SetBool("Running", running);
 
         // Temporary fix
-        float facingAngle = transform.eulerAngles.y * Mathf.PI / 180f;
-        float forwardMovement = (moveVector.y * Mathf.Cos(facingAngle) - moveVector.x * Mathf.Sin(facingAngle)) * movementSpeed * Time.fixedUnscaledDeltaTime;
-        float horizontalMovement = (moveVector.y * Mathf.Sin(facingAngle) + moveVector.x * Mathf.Cos(facingAngle)) * movementSpeed * Time.fixedUnscaledDeltaTime;
-        transform.Translate(new Vector3(horizontalMovement / 25f, 0, forwardMovement / 25f), Space.World);
+        //float facingAngle = transform.eulerAngles.y * Mathf.PI / 180f;
+        //float forwardMovement = (moveVector.y * Mathf.Cos(facingAngle) - moveVector.x * Mathf.Sin(facingAngle)) * movementSpeed * Time.fixedUnscaledDeltaTime;
+        //float horizontalMovement = (moveVector.y * Mathf.Sin(facingAngle) + moveVector.x * Mathf.Cos(facingAngle)) * movementSpeed * Time.fixedUnscaledDeltaTime;
+        //transform.Translate(new Vector3(horizontalMovement / 25f, 0, forwardMovement / 25f), Space.World);
     }
 
     /* TODO:  Get rid of these! */
@@ -267,10 +470,15 @@ public class PlayerControl : MonoBehaviour
         return numTimeWarps;
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         MaintainDash();
         Move();
         AdjustCamera();
     }
+
+    //private void Update()
+    //{
+    //    AdjustCamera();
+    //}
 }
