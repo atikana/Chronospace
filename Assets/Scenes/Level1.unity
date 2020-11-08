@@ -2788,7 +2788,7 @@ GameObject:
   - component: {fileID: 132535647}
   - component: {fileID: 132535646}
   - component: {fileID: 132535649}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SmallPlatform1
   m_TagString: Platform
   m_Icon: {fileID: 0}
@@ -2816,9 +2816,9 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 132535644}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: d05b593c599da674ca00904631386cb5, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -4565,7 +4565,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16274
+  m_Name: pb_Mesh16276
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -7102,11 +7102,24 @@ MeshCollider:
   m_GameObject: {fileID: 309895810}
   m_Material: {fileID: 13400000, guid: d05b593c599da674ca00904631386cb5, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 2600857027603048390, guid: 596b8ab00f2886f4391e1dd4b62ec41a, type: 3}
+--- !u!65 &309895815
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 309895810}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.24513336, y: 0.040145643, z: 0.15887552}
+  m_Center: {x: -0.000000029802322, y: 0.0000000018626451, z: -9.313226e-10}
 --- !u!1 &313109016
 GameObject:
   m_ObjectHideFlags: 0
@@ -18568,6 +18581,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Platform
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 596b8ab00f2886f4391e1dd4b62ec41a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 596b8ab00f2886f4391e1dd4b62ec41a, type: 3}
 --- !u!1 &707627364 stripped
@@ -18603,7 +18621,7 @@ GameObject:
   - component: {fileID: 708055609}
   - component: {fileID: 708055608}
   - component: {fileID: 708055607}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SmallPlatform4
   m_TagString: Platform
   m_Icon: {fileID: 0}
@@ -19261,7 +19279,7 @@ GameObject:
   - component: {fileID: 715232744}
   - component: {fileID: 715232743}
   - component: {fileID: 715232748}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SmallPlatform2
   m_TagString: Platform
   m_Icon: {fileID: 0}
@@ -19566,7 +19584,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 715232742}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: d05b593c599da674ca00904631386cb5, type: 2}
   m_IsTrigger: 0
   m_Enabled: 0
   serializedVersion: 2
@@ -21502,6 +21520,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Pendulum
+      objectReference: {fileID: 0}
+    - target: {fileID: -8467157688845653420, guid: 59c8ce6bf8b0b4c4086f68b27bee1e7f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 59c8ce6bf8b0b4c4086f68b27bee1e7f,
         type: 3}
@@ -32384,7 +32407,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh18108
+  m_Name: pb_Mesh18112
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -53630,7 +53653,7 @@ GameObject:
   - component: {fileID: 1801694048}
   - component: {fileID: 1801694047}
   - component: {fileID: 1801694046}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SmallPlatform3
   m_TagString: Platform
   m_Icon: {fileID: 0}
@@ -54311,6 +54334,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f919783c60a6415c82f6b09b97fa9bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxSpeed: 30
+  maxSlopeAngle: 45
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  pendulumMask:
+    serializedVersion: 2
+    m_Bits: 2048
   soundManager: {fileID: 374585080}
   cameraTransform: {fileID: 2039982407}
   pendulumAnimator1: {fileID: 1523614892}
@@ -58896,7 +58927,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16372
+  m_Name: pb_Mesh16374
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -59746,7 +59777,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 80
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -60451,7 +60482,7 @@ GameObject:
   - component: {fileID: 2059372410}
   - component: {fileID: 2059372409}
   - component: {fileID: 2059372412}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: StartPlatform
   m_TagString: Platform
   m_Icon: {fileID: 0}
@@ -60479,9 +60510,9 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2059372407}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: d05b593c599da674ca00904631386cb5, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -61695,7 +61726,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16392
+  m_Name: pb_Mesh16394
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
