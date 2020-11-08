@@ -3,8 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private PauseMenu pauseMenu;
-    private LevelStats levelStats;
+    public PauseMenu pauseMenu;
+    public LevelStats levelStats;
 
     /* The speed multiplier of the moving objects in the game.
      * This allows the time warp effect to take place.
@@ -28,8 +28,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        levelStats = FindObjectOfType<LevelStats>();
-        pauseMenu = GetComponent<PauseMenu>();
     }
 
     /**

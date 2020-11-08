@@ -4,18 +4,19 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
 
-    public GameObject pauseMenu;
+    GameObject pauseMenu;
 
     /* Time scale from before the game was paused.  This is necessary so that if
      * the game is resumed while time warp is enabled, the time warp will continue.
      */
     private float originalTimeScale;
-    private bool paused = false;
+   
 
     // Start is called before the first frame update
     void Start()
     {
-        pauseMenu.SetActive(false);
+        pauseMenu = transform.GetChild(0).gameObject;
+       
 
         // Set a default value for originalTimeScale.
         originalTimeScale = Time.timeScale;
@@ -23,30 +24,21 @@ public class PauseMenu : MonoBehaviour
 
     public void PressPause()
     {
-        if (paused)
-        {
-            // Need to resume with resume button, minor issue otherwise
-            // ResumeGame();
-        }
-        else
+        if (!pauseMenu.activeInHierarchy)
         {
             PauseGame();
         }
+       
     }
 
     public bool CheckPaused()
     {
-        return paused;
+        return pauseMenu.activeInHierarchy;
     }
 
     public void PauseGame()
     {
-        if (pauseMenu == null)
-        {
-            return;
-        }
         pauseMenu.SetActive(true);
-        paused = true;
         originalTimeScale = Time.timeScale;
         Time.timeScale = 0f;
         Cursor.visible = true;
@@ -55,12 +47,7 @@ public class PauseMenu : MonoBehaviour
 
     public void ResumeGame()
     {
-        if (pauseMenu == null)
-        {
-            return;
-        }
         pauseMenu.SetActive(false);
-        paused = false;
         Time.timeScale = originalTimeScale;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -69,7 +56,6 @@ public class PauseMenu : MonoBehaviour
     public void BackToMain()
     {
         Time.timeScale = 1f;
-        paused = false;
         SceneManager.LoadScene("StartMenu");
     }
 
