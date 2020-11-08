@@ -28,6 +28,11 @@ public class PauseMenu : MonoBehaviour
         {
             PauseGame();
         }
+        else
+        {
+            
+            ResumeGame();
+        }
        
     }
 
