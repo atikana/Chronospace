@@ -4,17 +4,17 @@ using UnityEngine.InputSystem;
 public class PlayerControl : MonoBehaviour
 {
     private Rigidbody rigidBody;
-    private float jumpForce = 550f;
+    public float jumpForce = 550f;
     private float normalMovementSpeed = 4500;
     private float dashMovementSpeed;
     private float movementSpeed;
     public float maxSpeed = 30;
-    private float counterMovement = 0.175f;
+    public float counterMovement = 0.175f;
     private float threshold = 0.01f;
     private bool grounded = true;
     private bool cancellingGrounded;
 
-    public float maxSlopeAngle = 45f;
+    private float maxSlopeAngle = 45f;
 
     public LayerMask groundMask;
     public LayerMask pendulumMask;
@@ -68,9 +68,11 @@ public class PlayerControl : MonoBehaviour
     private bool grappleToggle = false;
     private bool dashing = false;
     private bool jumping = false;
+    private bool firstJump = true;
     private bool readyToJump = true;
 
     private float jumpCooldown = 0.25f;
+    public float doubleJumpWindow = 0.25f;
 
     public ParticleSystem cameraParticleSystem;
 
@@ -98,8 +100,14 @@ public class PlayerControl : MonoBehaviour
         input.Player.Look.performed += context => lookVector = context.ReadValue<Vector2>();
         input.Player.Look.canceled += context => lookVector = Vector2.zero;
 
-        input.Player.Jump.performed += context => jumping = true;
-        input.Player.Jump.canceled += context => jumping = false;
+        input.Player.Jump.performed += context => {
+            jumping = true;
+        };
+        input.Player.Jump.canceled += context =>
+        {
+            if (ableToDoubleJump) { firstJump = !firstJump; }
+            jumping = false;
+        };
         input.Player.Dash.performed += context =>
         {
             // Can't dash while currently dashing.
@@ -251,6 +259,10 @@ public class PlayerControl : MonoBehaviour
                 if (IsFloor(normal))
                 {
                     grounded = true;
+                    if (!firstJump) {
+                        firstJump = true;
+                    }
+
                     cancellingGrounded = false;
                     
                     CancelInvoke(nameof(StopGrounded));
@@ -282,7 +294,7 @@ public class PlayerControl : MonoBehaviour
         }
 
     }
-    private void Jump()
+    private void FirstJump()
     {
         // Added "&& rigidBody" because Jump() was being called when rigidBody was null.
 
@@ -290,9 +302,11 @@ public class PlayerControl : MonoBehaviour
         if (grounded && readyToJump)
         {
             readyToJump = false;
+            ableToDoubleJump = true;
             soundManager.PlayJumpSound();
             rigidBody.AddForce(Vector2.up * jumpForce * 1.5f);
             rigidBody.AddForce(Vector3.up * jumpForce * 0.5f);
+           
 
             Vector3 vel = rigidBody.velocity;
             if (rigidBody.velocity.y < 0.5f)
@@ -301,10 +315,40 @@ public class PlayerControl : MonoBehaviour
                 rigidBody.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
 
             Invoke(nameof(ResetJump), jumpCooldown);
+            Invoke(nameof(ResetDoubleJump), doubleJumpWindow);
+
         }
+
 
         else { Debug.Log("Jump failded. Not on ground"); }
         
+    }
+
+    private void SecondJump()
+    {
+        // Added "&& rigidBody" because Jump() was being called when rigidBody was null.
+
+
+        if (!grounded && ableToDoubleJump)
+        {
+
+            ableToDoubleJump = false;
+            soundManager.PlayDoubleJumpSound();
+            rigidBody.AddForce(Vector2.up * jumpForce * 1.5f);
+            rigidBody.AddForce(Vector3.up * jumpForce * 0.5f);
+           
+
+            Vector3 vel = rigidBody.velocity;
+            if (rigidBody.velocity.y < 0.5f)
+                rigidBody.velocity = new Vector3(vel.x, 0, vel.z);
+            else if (rigidBody.velocity.y > 0)
+                rigidBody.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
+       
+
+        }
+
+
+      
     }
 
     private bool IsFloor(Vector3 v)
@@ -322,6 +366,13 @@ public class PlayerControl : MonoBehaviour
     private void ResetJump()
     {
         readyToJump = true;
+       
+    }
+
+    private void ResetDoubleJump()
+    {
+        ableToDoubleJump = false;
+
     }
 
     private void AdjustCamera()
@@ -375,7 +426,15 @@ public class PlayerControl : MonoBehaviour
 
         CounterMovement(x, y, mag);
 
-        if (jumping && readyToJump) Jump();
+        if (jumping) {
+            if (firstJump)
+            {
+                FirstJump();
+            }
+            else {
+                SecondJump();
+            }
+        }
 
         if (x > 0 && xMag > maxSpeed  && !dashing) x = 0;
         if (x < 0 && xMag < -maxSpeed  && !dashing) x = 0;
@@ -389,8 +448,8 @@ public class PlayerControl : MonoBehaviour
         if (!grounded)
         {
             Debug.Log("!ground");
-            multiplier = 0.5f;
-            multiplierV = 0.5f;
+            multiplier = 0.4f;
+            multiplierV = 0.4f;
         }
         rigidBody.AddForce(transform.forward * y * normalMovementSpeed * Time.deltaTime * multiplier * multiplierV ) ;
         rigidBody.AddForce(transform.right * x * normalMovementSpeed * Time.deltaTime * multiplier * multiplierV);
