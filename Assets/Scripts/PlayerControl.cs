@@ -237,7 +237,7 @@ public class PlayerControl : MonoBehaviour
         // Added "&& rigidBody" because Jump() was being called when rigidBody was null.
 
         
-        if (grounded && readyToJump && rigidBody)
+        if (grounded && readyToJump)
         {
             readyToJump = false;
             soundManager.PlayJumpSound();
@@ -252,6 +252,8 @@ public class PlayerControl : MonoBehaviour
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
+
+        Debug.Log("Jump failded. Not on ground");
 
         /*else if (!this.grounded && ableToDoubleJump)
         {
