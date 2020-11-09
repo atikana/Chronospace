@@ -54,9 +54,11 @@ public class LaserControl : MonoBehaviour
     {
         line = new GameObject("Line").AddComponent<LineRenderer>();
         //line.material = new Material(Shader.Find("Diffuse"));
-        line.SetVertexCount(2);
-        line.SetWidth(5.0f, 5.0f);
-        line.SetColors(Color.black, Color.black);
+        line.positionCount = 2;
+        line.startWidth = 5f;
+        line.endWidth = 5f;
+        line.startColor = Color.gray;
+        line.endColor = Color.gray;
         line.useWorldSpace = true;
     }
 

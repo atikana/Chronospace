@@ -282,7 +282,7 @@ public class PlayerControl : MonoBehaviour
         }
         else
         {
-            Debug.Log("Jump failded. Not on ground");
+           // Debug.Log("Jump failded. Not on ground");
         }
     }
 
@@ -426,7 +426,7 @@ public class PlayerControl : MonoBehaviour
         float multiplier = 1f, multiplierV = 1f;
         if (!grounded)
         {
-            Debug.Log("!ground");
+           // Debug.Log("!ground");
             multiplier = 0.4f;
             multiplierV = 0.4f;
         }
