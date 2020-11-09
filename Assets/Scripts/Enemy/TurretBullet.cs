@@ -29,7 +29,19 @@ public class TurretBullet : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision other)
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            gameManager.KillPlayer();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+   /* private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag == "Player")
         {
@@ -38,6 +50,6 @@ public class TurretBullet : MonoBehaviour
         else {
             Destroy(this.gameObject);
         }
-    }
+    } */
 
 }
