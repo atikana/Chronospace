@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
         {
             // camera is shaking
             
-            player.MovePosition(CheckPoint.GetClosestCheckPoint(player.transform.position));
+            player.MovePosition(CheckPoint.GetClosestCheckPoint());
           
           
         }

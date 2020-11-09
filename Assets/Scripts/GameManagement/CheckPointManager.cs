@@ -5,12 +5,12 @@ using UnityEngine;
 public class CheckPointManager : MonoBehaviour
 {
 
-
+    List<Vector3> checkpoint = new List<Vector3>();
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        checkpoint.Add(transform.GetChild(0).position);
     }
 
     // Update is called once per frame
@@ -19,28 +19,18 @@ public class CheckPointManager : MonoBehaviour
         
     }
 
-    public Vector3 GetClosestCheckPoint(Vector3 pos)
+    public void AddCheckPoint(Vector3 pos)
     {
-        // find the closest checkpoint
-        float distance = 99999;
-        int index = 0;
-        
+        checkpoint.Add(pos);
+    }
 
-        for (int i = 0; i < transform.childCount; i++)
-        {
-           
-            Transform t = transform.GetChild(i);
-            float temp = Vector3.Distance(pos, t.position);
-
-            if (distance > temp && pos.z > t.position.z)
-            {
-                distance = temp;
-                index = i;
-            }
-        }
-
+    public Vector3 GetClosestCheckPoint()
+    {
        
-
-        return transform.GetChild(index).position;
+       
+            return checkpoint[checkpoint.Count - 1];
+       
+   
+        
     }
 }
