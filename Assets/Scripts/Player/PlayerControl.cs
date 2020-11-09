@@ -184,13 +184,12 @@ public class PlayerControl : MonoBehaviour
         }
 
         dashCounter = Mathf.Max(dashCounter, 0f);
-        if (dashCounter == 0)
+        if (dashCounter == 0 && dashing)
         {
             // After the delay, stop the dash.
-            if (dashing)
-            {
-                rigidBody.velocity = Vector3.zero;
-            }
+            
+            rigidBody.velocity = Vector3.zero;
+          
             dashing = false;
             movementSpeed = normalMovementSpeed;
             if (cameraParticleSystem)
