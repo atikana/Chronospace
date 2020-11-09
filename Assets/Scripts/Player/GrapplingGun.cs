@@ -2,7 +2,7 @@
 
 public class GrapplingGun : MonoBehaviour
 {
-    private const float NORMAL_FOV = 60f;
+    private const float NORMAL_FOV = 90f;
     private const float HOOKSHOT_FOV = 100f;
 
     private LineRenderer lr;

@@ -245,18 +245,7 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        // If the player has exited a collision with a platform, they are no longer grounded.
-        if (collision.gameObject.tag.Equals("Platform"))
-        {
-            grounded = false;
-
-            // Able to double jump after you've left a platform.
-            ableToDoubleJump = true;
-        }
-    }
-
+ 
     private void FirstJump()
     {
         // TODO:  Added "&& rigidBody" because FirstJump() was being called when rigidBody was null.  Figure out why this happens!
