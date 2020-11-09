@@ -14,10 +14,12 @@ public class TurretControl : MonoBehaviour
     private bool readyToShoot;
     private bool readyToShoot2;
     private float delayTimer = 0.4f;  // Used to be 1.
+    private PlayerControl playerScript;
 
     // Start is called before the first frame update
     void Start()
     {
+        playerScript = FindObjectOfType<PlayerControl>();
         readyToShoot = true;
         readyToShoot2 = false;
         StartCoroutine(delay());
@@ -28,7 +30,9 @@ public class TurretControl : MonoBehaviour
     {
         if (targetLocked)
         {
-            TurretMovable.transform.LookAt(target.transform);
+            Vector2 mag = playerScript.VelRelativeToLook();
+            Vector3 playerVelocity = new Vector3(mag.x, mag.y, 0);
+            TurretMovable.transform.LookAt(target.transform.position + playerVelocity * 1.0f);
             // Angle adjustments
             TurretMovable.transform.Rotate(8, 0, 0);
 
@@ -40,6 +44,8 @@ public class TurretControl : MonoBehaviour
             {
                 Shoot2();
             }
+            // targetLocked = false;
+            // target = null;
         }
     }
 
