@@ -38,10 +38,10 @@ public class PlayerControl : MonoBehaviour
     public float doubleJumpWindow = 0.25f;
 
     // Dash speed multiplier.
-    private float dashMultiplier = 10f;
+    public float dashMultiplier = 10f;
 
     // Number of seconds dash lasts for.
-    private float dashLength = 0.14f;
+    private float dashLength = 0.2f;
 
     // Number of seconds that have passed since the last time warp finished.
     private float dashCooldownCounter = 0f;
@@ -167,7 +167,7 @@ public class PlayerControl : MonoBehaviour
             }
 
             // Dashing gives you a very small upward force so that you can dash between platforms and not worry about falling through.
-            float dashUpMultiplier = 0.4f;
+            float dashUpMultiplier = 0.01f;
             rigidBody.AddForce(new Vector3(0, jumpForce * dashUpMultiplier, 0), ForceMode.Impulse);
         }
     }
@@ -210,6 +210,8 @@ public class PlayerControl : MonoBehaviour
         {
             dashAvailable = true;
         }
+
+        Debug.Log(dashCooldownCounter);
     }
 
     private void OnCollisionStay(Collision other)
@@ -413,14 +415,14 @@ public class PlayerControl : MonoBehaviour
         if (y < 0 && yMag < -maxSpeed && !dashing) y = 0;
 
         float multiplier = 1f, multiplierV = 1f;
-        if (!grounded)
+        if (!grounded && !dashing)
         {
            // Debug.Log("!ground");
             multiplier = 0.4f;
             multiplierV = 0.4f;
         }
-        rigidBody.AddForce(transform.forward * y * normalMovementSpeed * Time.fixedDeltaTime * multiplier * multiplierV);
-        rigidBody.AddForce(transform.right * x * normalMovementSpeed * Time.fixedDeltaTime * multiplier * multiplierV);
+        rigidBody.AddForce(transform.forward * y * movementSpeed * Time.fixedDeltaTime * multiplier * multiplierV);
+        rigidBody.AddForce(transform.right * x * movementSpeed * Time.fixedDeltaTime * multiplier * multiplierV);
 
         running = moveVector.magnitude > 0 && grounded;
 
@@ -451,7 +453,7 @@ public class PlayerControl : MonoBehaviour
     {
         MaintainDash();
         Move();
-        //AdjustCamera();
+        
     }
 
     private void Update()
