@@ -30,6 +30,7 @@ public class LevelStats : MonoBehaviour
         timer = 0f;
     }
 
+
     void Update()
     {
         // Update the level timer and set the text.

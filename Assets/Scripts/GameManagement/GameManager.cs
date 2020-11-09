@@ -5,6 +5,8 @@ public class GameManager : MonoBehaviour
 {
     public PauseMenu pauseMenu;
     public LevelStats levelStats;
+    public CheckPointManager CheckPoint;
+    public Rigidbody player;
 
     /* The speed multiplier of the moving objects in the game.
      * This allows the time warp effect to take place.
@@ -26,8 +28,10 @@ public class GameManager : MonoBehaviour
 
     private float mouseSensitivityMultiplier = 15f;
 
+
     void Start()
     {
+        
     }
 
     /**
@@ -85,12 +89,21 @@ public class GameManager : MonoBehaviour
      */
     public void RestartLevel(bool dead = false)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
+     
         if (dead)
         {
-            levelStats.ResetTimer();
+            // camera is shaking
+            
+            player.MovePosition(CheckPoint.GetClosestCheckPoint(player.transform.position));
+          
+          
         }
+        else
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+       
     }
 
     public int GetNumDeaths()
