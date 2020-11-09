@@ -205,7 +205,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 180776422}
         m_MethodName: BackToMain
         m_Mode: 1
         m_Arguments:
@@ -11039,9 +11039,9 @@ Transform:
   - {fileID: 1268519108}
   - {fileID: 212656128}
   - {fileID: 905686165}
-  - {fileID: 154037142}
-  - {fileID: 255958408}
   - {fileID: 2025123221}
+  - {fileID: 255958408}
+  - {fileID: 154037142}
   - {fileID: 118342466}
   m_Father: {fileID: 0}
   m_RootOrder: 2
