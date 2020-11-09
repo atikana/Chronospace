@@ -27001,7 +27001,7 @@ MonoBehaviour:
   pauseMenu: {fileID: 180776422}
   levelStats: {fileID: 736850038}
   CheckPoint: {fileID: 1616474973}
-  player: {fileID: 1811659948}
+  player: {fileID: 1811659950}
 --- !u!4 &1404047974
 Transform:
   m_ObjectHideFlags: 0

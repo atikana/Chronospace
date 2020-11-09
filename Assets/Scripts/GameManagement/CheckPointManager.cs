@@ -31,8 +31,8 @@ public class CheckPointManager : MonoBehaviour
            
             Transform t = transform.GetChild(i);
             float temp = Vector3.Distance(pos, t.position);
-  
-            if (distance > temp)
+
+            if (distance > temp && pos.z > t.position.z)
             {
                 distance = temp;
                 index = i;
