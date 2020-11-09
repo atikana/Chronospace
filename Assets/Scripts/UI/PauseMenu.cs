@@ -4,7 +4,10 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
 
+    GameObject menu;
     GameObject pauseMenu;
+    GameObject optionMenu;
+ 
 
     /* Time scale from before the game was paused.  This is necessary so that if
      * the game is resumed while time warp is enabled, the time warp will continue.
@@ -16,7 +19,12 @@ public class PauseMenu : MonoBehaviour
 
     private void Awake()
     {
-        pauseMenu = transform.GetChild(0).gameObject;
+        menu = transform.GetChild(0).gameObject;
+        Debug.Log(gameObject.name);
+        pauseMenu = transform.GetChild(0).GetChild(0).gameObject;
+        Debug.Log(pauseMenu.name);
+        optionMenu = transform.GetChild(0).GetChild(1).gameObject;
+        Debug.Log(optionMenu.name);
     }
     void Start()
     {
@@ -26,35 +34,48 @@ public class PauseMenu : MonoBehaviour
 
     public void PressPause()
     {
-        if (!pauseMenu.activeInHierarchy)
-        {
-            PauseGame();
-        }
-        else
+        if (!menu.activeInHierarchy)
         {
 
-            ResumeGame();
+            PauseGame();
+        }
+        else if (menu.activeInHierarchy)
+        {
+            if (optionMenu.activeInHierarchy)
+            {
+                optionMenu.SetActive(false);
+                pauseMenu.SetActive(true);
+            }
+            else
+            {
+                ResumeGame();
+            }
         }
 
     }
 
     public bool CheckPaused()
     {
-        return pauseMenu.activeInHierarchy;
+        return menu.activeInHierarchy;
     }
 
     public void PauseGame()
     {
+        menu.SetActive(true);
         pauseMenu.SetActive(true);
         originalTimeScale = Time.timeScale;
         Time.timeScale = 0f;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
+
+
     }
 
     public void ResumeGame()
     {
+        
         pauseMenu.SetActive(false);
+        menu.SetActive(false);
         Time.timeScale = originalTimeScale;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;

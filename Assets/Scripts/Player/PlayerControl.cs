@@ -213,7 +213,7 @@ public class PlayerControl : MonoBehaviour
             dashAvailable = true;
         }
 
-        Debug.Log(dashCooldownCounter);
+       // Debug.Log(dashCooldownCounter);
     }
 
     private void OnCollisionStay(Collision other)

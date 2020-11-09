@@ -6,7 +6,7 @@ public class CheckPoint : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    bool found;
+    
 
     void Start()
     {
@@ -21,9 +21,9 @@ public class CheckPoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !found)
+        if (other.CompareTag("Player"))
         {
-            found = true;
+            
             transform.parent.GetComponent<CheckPointManager>().AddCheckPoint(transform.position);
         }
     }
