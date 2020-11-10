@@ -190,11 +190,6 @@ public class PlayerControl : MonoBehaviour
         if (dashCounter == 0 && dashing)
         {
             // After the delay, stop the dash.
-            //if (dashing)
-            //{
-            //    rigidBody.velocity = Vector3.zero;
-            //    dashCooldownCounter = dashCooldownLength;
-            //}
             dashing = false;
             rigidBody.velocity = preDashVelocity;
             dashCooldownCounter = dashCooldownLength;
