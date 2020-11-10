@@ -5,13 +5,15 @@ public class GameManager : MonoBehaviour
 {
     public PauseMenu pauseMenu;
     public LevelStats levelStats;
-    public CheckPointManager CheckPoint;
+    public CheckPointManager checkPointManager;
     public Rigidbody player;
+    public Transform cameraTransform;
+    private PlayerControl playerControl;
 
     /* The speed multiplier of the moving objects in the game.
      * This allows the time warp effect to take place.
      */
-    private float timeWarpMultiplier = 0.5f;
+    private const float timeWarpMultiplier = 0.5f;
 
     // Number of seconds time warp lasts.
     private float timeWarpLength = 10f;
@@ -31,7 +33,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        
+        playerControl = FindObjectOfType<PlayerControl>();
     }
 
     /**
@@ -41,6 +43,15 @@ public class GameManager : MonoBehaviour
     {
         timeWarpEnabled = true;
         timeWarpCounter = timeWarpLength;
+    }
+
+    /**
+     * Turn off time warp.
+     */
+    private void ResetTimeWarp()
+    {
+        timeWarpEnabled = false;
+        timeWarpCounter = 0f;
     }
 
     /**
@@ -61,7 +72,6 @@ public class GameManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        //Debug.Log("Sensitivity - " + sensitivity);
         MaintainTimeWarp();
     }
 
@@ -75,7 +85,7 @@ public class GameManager : MonoBehaviour
         return timeWarpEnabled;
     }
 
-    /* Returns the game's time scale - timeWarpMultiplier if a time warp is happening,
+    /* Returns the game's time scale, i.e. timeWarpMultiplier if a time warp is happening,
      * 1 otherwise.  Note that we are not directly modifying Time.timeScale because
      * this messes up things relying on physics, such as jumping.
      */
@@ -92,18 +102,22 @@ public class GameManager : MonoBehaviour
      
         if (dead)
         {
+            CheckPoint lastCheckPoint = checkPointManager.GetClosestCheckPoint();
+
             // camera is shaking
-            
-            player.MovePosition(CheckPoint.GetClosestCheckPoint());
-          
-          
+            player.MovePosition(lastCheckPoint.GetCheckPointPosition());
+
+            // Reset the player's velocity and looking angle.
+            player.velocity = Vector3.zero;
+            playerControl.SetCameraRotation(new Vector2(lastCheckPoint.playerRotation, 0f));
+
+            // Turn off time warp.
+            ResetTimeWarp();
         }
         else
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
-
-       
     }
 
     public int GetNumDeaths()

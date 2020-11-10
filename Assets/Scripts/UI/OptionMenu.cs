@@ -2,20 +2,18 @@
 
 public class OptionMenu : MonoBehaviour
 {
-
-    public GameObject soundManager;
     private GameManager gameManager;
-    private AudioSource audioSource;
+    private SoundManager soundManager;
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-        audioSource = (AudioSource)soundManager.GetComponent("soundEffectsAudioSource");
+        soundManager = FindObjectOfType<SoundManager>();
     }
 
     public void SetVolume(float volume)
     {
-        audioSource.volume = volume;
+        soundManager.SetVolume(volume);
     }
 
     public void SetMouseSensitivity(float sensitivity)

@@ -8,7 +8,7 @@ public class PendulumControl : MonoBehaviour
     // The start and end rotations of the pendulum.
     private Quaternion startRotation, endRotation;
 
-    private float rotationSpeed = 4.0f;
+    public float rotationSpeed = 4.0f;
     private float timePassed = 0f;
 
     // The pendulum should rotate 180 degrees.

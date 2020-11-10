@@ -1,32 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CheckPoint : MonoBehaviour
 {
-    // Start is called before the first frame update
+    // Player's optimal rotation when starting at this checkpoint.
+    public float playerRotation;
 
-    
-
-    void Start()
+    public Vector3 GetCheckPointPosition()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        return transform.position;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            
-            transform.parent.GetComponent<CheckPointManager>().AddCheckPoint(transform.position);
+            transform.parent.GetComponent<CheckPointManager>().AddCheckPoint(this);
         }
     }
-
-    
 }

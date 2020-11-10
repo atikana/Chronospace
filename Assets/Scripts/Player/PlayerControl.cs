@@ -51,6 +51,7 @@ public class PlayerControl : MonoBehaviour
 
     private bool dashAvailable = true;
     private float dashCounter = 0f;
+    private Vector3 preDashVelocity;
 
     private Vector2 moveVector;
     private Vector2 lookVector;
@@ -120,6 +121,7 @@ public class PlayerControl : MonoBehaviour
         Cursor.visible = false;
 
         dashMovementSpeed = normalMovementSpeed * dashMultiplier;
+        movementSpeed = normalMovementSpeed;
 
         // Initialize look vector and camera rotation to (0, 0).
         lookVector = Vector2.zero;
@@ -156,6 +158,7 @@ public class PlayerControl : MonoBehaviour
     {
         if (dashAvailable)
         {
+            preDashVelocity = rigidBody.velocity;
             dashing = true;
             dashAvailable = false;
             dashCounter = dashLength;
@@ -184,18 +187,19 @@ public class PlayerControl : MonoBehaviour
         }
 
         dashCounter = Mathf.Max(dashCounter, 0f);
-        if (dashCounter == 0)
+        if (dashCounter == 0 && dashing)
         {
             // After the delay, stop the dash.
-
-            if (dashing) {
-                rigidBody.velocity = Vector3.zero;
-                dashCooldownCounter = dashCooldownLength;
-            }
-            
-          
+            //if (dashing)
+            //{
+            //    rigidBody.velocity = Vector3.zero;
+            //    dashCooldownCounter = dashCooldownLength;
+            //}
             dashing = false;
+            rigidBody.velocity = preDashVelocity;
+            dashCooldownCounter = dashCooldownLength;
             movementSpeed = normalMovementSpeed;
+
             if (cameraParticleSystem)
             {
                 cameraParticleSystem.Stop();
@@ -208,7 +212,7 @@ public class PlayerControl : MonoBehaviour
         }
 
         dashCooldownCounter = Mathf.Max(dashCooldownCounter, 0f);
-        if (dashCooldownCounter == 0)
+        if (dashCooldownCounter == 0 && !dashing)
         {
             dashAvailable = true;
         }
@@ -362,6 +366,15 @@ public class PlayerControl : MonoBehaviour
             Vector3 n = rigidBody.velocity.normalized * maxSpeed;
             rigidBody.velocity = new Vector3(n.x, fallspeed, n.z);
         }
+    }
+
+    /**
+     * Sets the camera's rotation to the specified rotation vector.
+     */
+    public void SetCameraRotation(Vector2 newRotation)
+    {
+        cameraRotation = newRotation;
+        cameraTransform.rotation = Quaternion.Euler(cameraRotation.y, cameraRotation.x, 0);
     }
 
     /**
