@@ -2737,6 +2737,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   doubleJumpWindow: 0.25
+  dashMultiplier: 10
 --- !u!1 &1513205724
 GameObject:
   m_ObjectHideFlags: 0
@@ -3830,7 +3831,7 @@ PrefabInstance:
     - target: {fileID: 3080512270385096577, guid: db019c07508d5504ba5e4c48bfb81b71,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3080512270385096588, guid: db019c07508d5504ba5e4c48bfb81b71,
         type: 3}
@@ -3860,12 +3861,12 @@ PrefabInstance:
     - target: {fileID: 3080512270415121827, guid: db019c07508d5504ba5e4c48bfb81b71,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.24242425
       objectReference: {fileID: 0}
     - target: {fileID: 3080512270415121827, guid: db019c07508d5504ba5e4c48bfb81b71,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.24242425
       objectReference: {fileID: 0}
     - target: {fileID: 3080512270415121827, guid: db019c07508d5504ba5e4c48bfb81b71,
         type: 3}
@@ -3875,7 +3876,7 @@ PrefabInstance:
     - target: {fileID: 3080512270497297042, guid: db019c07508d5504ba5e4c48bfb81b71,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.24242425
       objectReference: {fileID: 0}
     - target: {fileID: 3080512270497297042, guid: db019c07508d5504ba5e4c48bfb81b71,
         type: 3}

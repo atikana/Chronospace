@@ -27,7 +27,8 @@ public class PauseMenu : MonoBehaviour
         Debug.Log(optionMenu.name);
     }
     void Start()
-    {
+    {   
+
         // Set a default value for originalTimeScale.
         originalTimeScale = Time.timeScale;
     }
