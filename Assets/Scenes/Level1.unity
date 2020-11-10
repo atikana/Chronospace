@@ -3178,7 +3178,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61db0c1697b1a458cb7ef67d9e0e3794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundEffectsAudioSource: {fileID: 374585082}
+  volume: 0
+  soundEffectsAudioSource: {fileID: 0}
+  musicAudioSource: {fileID: 0}
 --- !u!4 &374585081
 Transform:
   m_ObjectHideFlags: 0
@@ -3205,7 +3207,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -3301,7 +3303,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 2bbf43d6e9293455795c9415a917c2f1, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -8472,6 +8474,7 @@ GameObject:
   - component: {fileID: 661480382}
   - component: {fileID: 661480381}
   - component: {fileID: 661480380}
+  - component: {fileID: 661480383}
   m_Layer: 0
   m_Name: 1
   m_TagString: Untagged
@@ -8553,6 +8556,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 661480378}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &661480383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 661480378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6af7d915f73c60940b712f2842257920, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerRotation: 0
 --- !u!1 &662868760
 GameObject:
   m_ObjectHideFlags: 0
@@ -13881,6 +13897,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6af7d915f73c60940b712f2842257920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerRotation: 0
 --- !u!65 &1099343337
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14121,6 +14138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6af7d915f73c60940b712f2842257920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerRotation: 90
 --- !u!65 &1112526188
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -24967,8 +24985,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 180776422}
   levelStats: {fileID: 736850038}
-  CheckPoint: {fileID: 1616474973}
+  checkPointManager: {fileID: 1616474973}
   player: {fileID: 1811659950}
+  cameraTransform: {fileID: 2039982407}
 --- !u!4 &1404047974
 Transform:
   m_ObjectHideFlags: 0
@@ -29750,6 +29769,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6af7d915f73c60940b712f2842257920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerRotation: 0
 --- !u!65 &1617077010
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -35315,6 +35335,7 @@ GameObject:
   - component: {fileID: 2039982408}
   - component: {fileID: 2039982409}
   - component: {fileID: 2039982410}
+  - component: {fileID: 2039982411}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -35472,6 +35493,53 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!114 &2039982411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2039982404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b0ba117f9d8e6a4a8a2aaca7154c935, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectClick: 0
+  waveCount: 10
+  timeInfinity: 1
+  waveTime: 3
+  waveAnimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  waveInternalRadio: 0.6
+  waveExternalRadio: 0.04
+  waveScale: 8
+  waveSpeed: 0.34
+  waveFrequency: 2.2
+  circleXScale: 1
+  circleYScale: 1
 --- !u!1001 &2040082617
 PrefabInstance:
   m_ObjectHideFlags: 0

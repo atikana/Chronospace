@@ -2,12 +2,15 @@
 
 public class SoundManager : MonoBehaviour
 {
-    public AudioSource soundEffectsAudioSource;
+    private float volume = 0.5f;
+    private AudioSource soundEffectsAudioSource, musicAudioSource;
     private AudioClip doubleJumpClip, jumpClip, dashClip, timeWarpClip, pendulumClip, grapplingClip;
 
     void Start()
     {
-        soundEffectsAudioSource = GetComponent<AudioSource>();
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+        soundEffectsAudioSource = audioSources[0];
+        musicAudioSource = audioSources[1];
 
         jumpClip = Resources.Load<AudioClip>("JUMP_2");
         doubleJumpClip = Resources.Load<AudioClip>("JUMP_1");
@@ -15,13 +18,24 @@ public class SoundManager : MonoBehaviour
         timeWarpClip = Resources.Load<AudioClip>("TIME_SLOWDOWN");
         pendulumClip = Resources.Load<AudioClip>("PENDULUM");
         grapplingClip = Resources.Load<AudioClip>("HOOKSHOT");
+
+        // Default volume when game starts.
+        SetVolume(0.5f);
+    }
+
+    public void SetVolume(float newVolume)
+    {
+        volume = newVolume;
+
+        // Manually set the music audioSource volume.
+        musicAudioSource.volume = 0.5f * newVolume;
     }
 
     public void PlayJumpSound()
     {
         if (soundEffectsAudioSource && jumpClip)
         {
-            soundEffectsAudioSource.PlayOneShot(jumpClip);
+            soundEffectsAudioSource.PlayOneShot(jumpClip, volume);
         }
     }
 
@@ -29,7 +43,7 @@ public class SoundManager : MonoBehaviour
     {
         if (soundEffectsAudioSource && doubleJumpClip)
         {
-            soundEffectsAudioSource.PlayOneShot(doubleJumpClip);
+            soundEffectsAudioSource.PlayOneShot(doubleJumpClip, volume);
         }
     }
 
@@ -37,7 +51,7 @@ public class SoundManager : MonoBehaviour
     {
         if (soundEffectsAudioSource && dashClip)
         {
-            soundEffectsAudioSource.PlayOneShot(dashClip);
+            soundEffectsAudioSource.PlayOneShot(dashClip, volume);
         }
     }
 
@@ -45,7 +59,7 @@ public class SoundManager : MonoBehaviour
     {
         if (soundEffectsAudioSource && timeWarpClip)
         {
-            soundEffectsAudioSource.PlayOneShot(timeWarpClip);
+            soundEffectsAudioSource.PlayOneShot(timeWarpClip, volume);
         }
     }
 
@@ -53,7 +67,7 @@ public class SoundManager : MonoBehaviour
     {
         if (soundEffectsAudioSource && grapplingClip)
         {
-            soundEffectsAudioSource.PlayOneShot(grapplingClip);
+            soundEffectsAudioSource.PlayOneShot(grapplingClip, volume);
         }
     }
 
@@ -64,7 +78,7 @@ public class SoundManager : MonoBehaviour
             /* Use PlayClipAtPoint to make pendulum noise sound
              * like it's originating at the pendulum's location.
              */
-            AudioSource.PlayClipAtPoint(pendulumClip, pendulumLocation);
+            AudioSource.PlayClipAtPoint(pendulumClip, pendulumLocation, volume);
         }
     }
 }

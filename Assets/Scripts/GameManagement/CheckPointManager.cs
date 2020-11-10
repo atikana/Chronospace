@@ -1,36 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CheckPointManager : MonoBehaviour
 {
+    private CheckPoint lastCheckpoint;
 
-    Vector3 checkpoint;
-
-    // Start is called before the first frame update
     void Start()
     {
-        checkpoint = transform.GetChild(0).position;
+        lastCheckpoint = transform.GetChild(0).GetComponent<CheckPoint>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void AddCheckPoint(CheckPoint checkPoint)
     {
-        
+        lastCheckpoint = checkPoint;
     }
 
-    public void AddCheckPoint(Vector3 pos)
+    public CheckPoint GetClosestCheckPoint()
     {
-        checkpoint= pos;
-    }
-
-    public Vector3 GetClosestCheckPoint()
-    {
-       
-       
-        return checkpoint;
-       
-   
-        
+        return lastCheckpoint;
     }
 }
