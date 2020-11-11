@@ -12,7 +12,7 @@ public class TurretControl : MonoBehaviour
     private float fireTimer = 0.8f;  // Used to be 2.
     private bool readyToShoot;
     private bool readyToShoot2;
-    private float delayTimer = 0.4f;  // Used to be 1.
+    private float delayTimer = 3.0f;  // Used to be 1.
     private PlayerControl playerScript;
 
     void Start()

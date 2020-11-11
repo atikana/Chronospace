@@ -6,19 +6,24 @@ public class TurretBullet : MonoBehaviour
     public float movementSpeed = 60f;
     private float timer = 0f;
     GameManager gameManager;
+    private bool isActive;
     
     void Start()
     {
+        isActive = true;
         gameManager = FindObjectOfType<GameManager>();
     }
 
     void FixedUpdate()
     {
-        transform.Translate(Vector3.forward * Time.fixedDeltaTime * movementSpeed * gameManager.GetTimeWarpMultiplier());
-        timer += 1.0F * Time.deltaTime;
-        if (timer >= 3)
+        if (isActive)
         {
-            Destroy(this.gameObject);
+            transform.Translate(Vector3.forward * Time.fixedDeltaTime * movementSpeed * gameManager.GetTimeWarpMultiplier());
+            timer += 1.0F * Time.deltaTime;
+            if (timer >= 3)
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 
@@ -27,11 +32,14 @@ public class TurretBullet : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            isActive = false;
+            Destroy(this.gameObject);
             gameManager.KillPlayer();
         }
         else
         {
-            Destroy(gameObject);
+            isActive = false;
+            Destroy(this.gameObject);
         }
     }
 }
