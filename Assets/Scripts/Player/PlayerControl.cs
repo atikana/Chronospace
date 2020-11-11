@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
+using WaterRippleForScreens;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -49,7 +50,8 @@ public class PlayerControl : MonoBehaviour
     // Dash cooldown, in seconds.
     private float dashCooldownLength = 3f;
 
-    private bool dashAvailable = true;
+    private int dashCapacity = 2;
+    private int numDashes;
     private float dashCounter = 0f;
     private Vector3 preDashVelocity;
 
@@ -71,6 +73,8 @@ public class PlayerControl : MonoBehaviour
     private float timeWarpCounter = 0f;
     private float timeWarpCooldownCounter = 0f;
     private bool timeWarpAvailable = true;
+
+    private RippleEffect rippleCameraEffect;
 
     private bool grappleShoot = false;
     private bool grappleToggle = false;
@@ -128,8 +132,11 @@ public class PlayerControl : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
+        rippleCameraEffect = cameraTransform.GetComponent<RippleEffect>();
+
         dashMovementSpeed = normalMovementSpeed * dashMultiplier;
         movementSpeed = normalMovementSpeed;
+        numDashes = dashCapacity;
 
         // Initialize look vector and camera rotation to (0, 0).
         lookVector = Vector2.zero;
@@ -150,9 +157,11 @@ public class PlayerControl : MonoBehaviour
     public void ResetTimeWarp()
     {
         gameManager.SetTimeWarpEnabled(false);
+        soundManager.SetHighPassFilterEnabled(false);
         timeWarpAvailable = true;
         timeWarpCounter = 0f;
         timeWarpCooldownCounter = 0f;
+        rippleCameraEffect.StopAllEffects();
     }
 
     /**
@@ -169,6 +178,7 @@ public class PlayerControl : MonoBehaviour
         if (timeWarpCounter == 0 && gameManager.GetTimeWarpEnabled())
         {
             gameManager.SetTimeWarpEnabled(false);
+            soundManager.SetHighPassFilterEnabled(false);
             timeWarpCooldownCounter = timeWarpCooldownLength;
         }
 
@@ -195,8 +205,10 @@ public class PlayerControl : MonoBehaviour
             timeWarpAvailable = false;
             handsAnimator.SetTrigger("TimeWarp");
             soundManager.PlayTimeWarpSound();
+            soundManager.SetHighPassFilterEnabled(true);
             gameManager.SetTimeWarpEnabled(true);
             timeWarpCounter = timeWarpLength;
+            rippleCameraEffect.SetNewRipplePosition(new Vector2(Screen.width / 2, (Screen.height / 2) - 35f));
         }
     }
 
@@ -205,12 +217,17 @@ public class PlayerControl : MonoBehaviour
      */
     private void Dash()
     {
-        if (dashAvailable)
+        if (numDashes > 0)
         {
             preDashVelocity = rigidBody.velocity;
             dashing = true;
-            dashAvailable = false;
+            numDashes--;
             dashCounter = dashLength;
+
+            /* TODO:  Currently, if you dash while a dash is reloading, you will lose your progress with
+             * reloading the dash and you will use your second dash. Uncomment this line to avoid this!
+             */
+            dashCooldownCounter = 0f;
             soundManager.PlayDashSound();
             movementSpeed = dashMovementSpeed;
             if (cameraParticleSystem)
@@ -228,7 +245,7 @@ public class PlayerControl : MonoBehaviour
      * Called every FixedUpdate.  Updates the dash counter
      * and dash cooldown counter to function.
      */
-    private void MaintainDash()
+            private void MaintainDash()
     {
         if (dashCounter > 0)
         {
@@ -256,9 +273,10 @@ public class PlayerControl : MonoBehaviour
         }
 
         dashCooldownCounter = Mathf.Max(dashCooldownCounter, 0f);
-        if (dashCooldownCounter == 0 && !dashing)
+        if (dashCooldownCounter == 0 && !dashing && numDashes < dashCapacity)
         {
-            dashAvailable = true;
+            numDashes++;
+            dashCooldownCounter = dashCooldownLength;
         }
     }
 
@@ -505,7 +523,7 @@ public class PlayerControl : MonoBehaviour
     {
         dashCounter = 0;
         dashCooldownCounter = 0;
-        dashAvailable = true;
+        numDashes = 2;
         dashing = false;
     }
 

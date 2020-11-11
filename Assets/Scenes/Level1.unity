@@ -3178,6 +3178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61db0c1697b1a458cb7ef67d9e0e3794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  highPassFilter: {fileID: 2039982412}
 --- !u!4 &374585081
 Transform:
   m_ObjectHideFlags: 0
@@ -3295,7 +3296,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 374585079}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 2bbf43d6e9293455795c9415a917c2f1, type: 3}
@@ -35328,6 +35329,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2039982407}
   - component: {fileID: 2039982406}
+  - component: {fileID: 2039982412}
   - component: {fileID: 2039982405}
   - component: {fileID: 2039982408}
   - component: {fileID: 2039982409}
@@ -35503,23 +35505,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectClick: 0
-  waveCount: 10
-  timeInfinity: 1
-  waveTime: 3
+  waveCount: 1
+  timeInfinity: 0
+  waveTime: 1.5
   waveAnimCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1
+      time: 0.5148926
       value: 1
       inSlope: 0
       outSlope: 0
@@ -35527,16 +35529,35 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0
+    - serializedVersion: 3
+      time: 1.001356
+      value: -0.00006452855
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
-    m_PostInfinity: 2
+    m_PostInfinity: 0
     m_RotationOrder: 4
-  waveInternalRadio: 0.6
-  waveExternalRadio: 0.04
-  waveScale: 8
+  waveInternalRadio: 0
+  waveExternalRadio: 0.7
+  waveScale: 2
   waveSpeed: 0.34
-  waveFrequency: 2.2
+  waveFrequency: 1
   circleXScale: 1
   circleYScale: 1
+--- !u!165 &2039982412
+AudioHighPassFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2039982404}
+  m_Enabled: 0
+  m_CutoffFrequency: 1000
+  m_HighpassResonanceQ: 1
 --- !u!1001 &2040082617
 PrefabInstance:
   m_ObjectHideFlags: 0
