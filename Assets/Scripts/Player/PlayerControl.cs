@@ -12,6 +12,7 @@ public class PlayerControl : MonoBehaviour
     private GameManager gameManager;
     private SoundManager soundManager;
     private ParticleSystem cameraParticleSystem;
+    private LevelStats levelStats;
 
     public float jumpForce = 550f;
     private bool ableToDoubleJump = false;
@@ -89,6 +90,7 @@ public class PlayerControl : MonoBehaviour
         handsAnimator = GetComponentInChildren<Animator>();
         rigidBody = GetComponent<Rigidbody>();
         cameraParticleSystem = GetComponentInChildren<ParticleSystem>();
+        levelStats = FindObjectOfType<LevelStats>();
 
         // Reset animation triggers to prevent them running at start.
         handsAnimator.ResetTrigger("TimeWarp");
@@ -208,7 +210,7 @@ public class PlayerControl : MonoBehaviour
             soundManager.SetHighPassFilterEnabled(true);
             gameManager.SetTimeWarpEnabled(true);
             timeWarpCounter = timeWarpLength;
-            rippleCameraEffect.SetNewRipplePosition(new Vector2(Screen.width / 2, (Screen.height / 2) - 35f));
+            rippleCameraEffect.SetNewRipplePosition(new Vector2(Screen.width / 2, (Screen.height / 2) + 35f));
         }
     }
 
@@ -223,6 +225,7 @@ public class PlayerControl : MonoBehaviour
             dashing = true;
             numDashes--;
             dashCounter = dashLength;
+            levelStats.StartDashGaugeAnimation();
 
             /* TODO:  Currently, if you dash while a dash is reloading, you will lose your progress with
              * reloading the dash and you will use your second dash. Uncomment this line to avoid this!

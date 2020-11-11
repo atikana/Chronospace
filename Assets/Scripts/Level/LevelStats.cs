@@ -4,9 +4,10 @@ using System;
 
 public class LevelStats : MonoBehaviour
 {
-    Text levelTimerText;
-    Text numDeathsText;
-    Text timeWarpText;
+    private Text levelTimerText;
+    private Text numDeathsText;
+    private Text timeWarpText;
+    private Animator dashGaugeAnimator;
 
     private float timer;
     public PauseMenu pauseMenu;
@@ -15,6 +16,7 @@ public class LevelStats : MonoBehaviour
 
     private void Awake()
     {
+        dashGaugeAnimator = GetComponentInChildren<Animator>();
         levelTimerText = transform.GetChild(0).GetComponent<Text>();
         numDeathsText = transform.GetChild(1).GetComponent<Text>();
         timeWarpText = transform.GetChild(2).GetComponent<Text>();
@@ -22,6 +24,7 @@ public class LevelStats : MonoBehaviour
 
     void Start()
     {
+        dashGaugeAnimator.ResetTrigger("Dashing");
         ResetTimer();
     }
 
@@ -30,6 +33,10 @@ public class LevelStats : MonoBehaviour
         timer = 0f;
     }
 
+    public void StartDashGaugeAnimation()
+    {
+        dashGaugeAnimator.SetTrigger("Dashing");
+    }
 
     void Update()
     {
