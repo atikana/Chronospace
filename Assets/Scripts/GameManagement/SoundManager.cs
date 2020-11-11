@@ -6,6 +6,9 @@ public class SoundManager : MonoBehaviour
     private AudioSource soundEffectsAudioSource, musicAudioSource;
     private AudioClip doubleJumpClip, jumpClip, dashClip, timeWarpClip, pendulumClip, grapplingClip;
 
+    // High pass filter to be applied during time warp.
+    public AudioHighPassFilter highPassFilter;
+
     void Start()
     {
         AudioSource[] audioSources = GetComponents<AudioSource>();
@@ -21,6 +24,11 @@ public class SoundManager : MonoBehaviour
 
         // Default volume when game starts.
         SetVolume(volume);
+    }
+
+    public void SetHighPassFilterEnabled(bool enabled)
+    {
+        highPassFilter.enabled = enabled;
     }
 
     public void SetVolume(float newVolume)
