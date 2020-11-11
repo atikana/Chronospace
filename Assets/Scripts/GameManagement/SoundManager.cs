@@ -20,7 +20,7 @@ public class SoundManager : MonoBehaviour
         grapplingClip = Resources.Load<AudioClip>("HOOKSHOT");
 
         // Default volume when game starts.
-        SetVolume(0.5f);
+        SetVolume(volume);
     }
 
     public void SetVolume(float newVolume)

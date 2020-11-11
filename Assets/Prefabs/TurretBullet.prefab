@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 864800293584566001}
   m_Layer: 0
   m_Name: TurretBullet
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -58,9 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8334044c57644cb48f4361eeff97de9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 36
-  force: 100
-  timer: 0
+  movementSpeed: 0
 --- !u!1 &6983419057331310221
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,8 +3,8 @@
 public class TurretBullet : MonoBehaviour
 {
 
-    public float movementSpeed = 36f;
-    public float timer = 0f;
+    public float movementSpeed = 60f;
+    private float timer = 0f;
     GameManager gameManager;
     
     void Start()
@@ -14,7 +14,7 @@ public class TurretBullet : MonoBehaviour
 
     void FixedUpdate()
     {
-        transform.Translate(Vector3.forward * Time.fixedDeltaTime * (movementSpeed * gameManager.GetTimeWarpMultiplier()));
+        transform.Translate(Vector3.forward * Time.fixedDeltaTime * movementSpeed * gameManager.GetTimeWarpMultiplier());
         timer += 1.0F * Time.deltaTime;
         if (timer >= 3)
         {
@@ -34,15 +34,4 @@ public class TurretBullet : MonoBehaviour
             Destroy(gameObject);
         }
     }
-   /* private void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            gameManager.KillPlayer();
-        }
-        else {
-            Destroy(this.gameObject);
-        }
-    } */
-
 }

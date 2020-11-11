@@ -6,20 +6,14 @@ public class GameManager : MonoBehaviour
     public PauseMenu pauseMenu;
     public LevelStats levelStats;
     public CheckPointManager checkPointManager;
-    public Rigidbody player;
-    public Transform cameraTransform;
     private PlayerControl playerControl;
+    public Rigidbody playerRigidbody;
+    public Transform cameraTransform;
 
     /* The speed multiplier of the moving objects in the game.
      * This allows the time warp effect to take place.
      */
     private const float timeWarpMultiplier = 0.5f;
-
-    // Number of seconds time warp lasts.
-    private float timeWarpLength = 10f;
-
-    // Number of remaining seconds in current time warp.
-    private float timeWarpCounter = 0f;
 
     private bool timeWarpEnabled = false;
 
@@ -36,48 +30,14 @@ public class GameManager : MonoBehaviour
         playerControl = FindObjectOfType<PlayerControl>();
     }
 
-    /**
-     * Change the game speed multiplier.
-     */
-    public void SetTimeWarp()
-    {
-        timeWarpEnabled = true;
-        timeWarpCounter = timeWarpLength;
-    }
-
-    /**
-     * Turn off time warp.
-     */
-    private void ResetTimeWarp()
-    {
-        timeWarpEnabled = false;
-        timeWarpCounter = 0f;
-    }
-
-    /**
-     * Called every FixedUpdate.  Updates variables related to time warp.
-     */
-    private void MaintainTimeWarp()
-    {
-        if (timeWarpCounter > 0)
-        {
-            timeWarpCounter -= Time.fixedUnscaledDeltaTime;
-            timeWarpCounter = Mathf.Clamp(timeWarpCounter, 0f, timeWarpLength);
-        }
-        else
-        {
-            timeWarpEnabled = false;
-        }
-    }
-
-    void FixedUpdate()
-    {
-        MaintainTimeWarp();
-    }
-
     public void PauseGame()
     {
         pauseMenu.PressPause();
+    }
+
+    public void SetTimeWarpEnabled(bool enabled)
+    {
+        timeWarpEnabled = enabled;
     }
 
     public bool GetTimeWarpEnabled()
@@ -105,14 +65,24 @@ public class GameManager : MonoBehaviour
             CheckPoint lastCheckPoint = checkPointManager.GetClosestCheckPoint();
 
             // camera is shaking
-            player.MovePosition(lastCheckPoint.GetCheckPointPosition());
+            playerRigidbody.MovePosition(lastCheckPoint.GetCheckPointPosition());
 
             // Reset the player's velocity and looking angle.
-            player.velocity = Vector3.zero;
+            playerRigidbody.velocity = Vector3.zero;
             playerControl.SetCameraRotation(new Vector2(lastCheckPoint.playerRotation, 0f));
 
             // Turn off time warp.
-            ResetTimeWarp();
+            playerControl.ResetTimeWarp();
+
+            // Reset dash counters.
+            playerControl.ResetDash();
+
+            // Remove all existing bullets.
+            GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
+            foreach (GameObject bullet in bullets)
+            {
+                Destroy(bullet);
+            }
         }
         else
         {
