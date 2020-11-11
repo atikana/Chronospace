@@ -7,6 +7,7 @@ public class TurretBullet : MonoBehaviour
     private float timer = 0f;
     GameManager gameManager;
     private bool isActive;
+    public GameObject hitEffect;
     
     void Start()
     {
@@ -32,14 +33,38 @@ public class TurretBullet : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            Debug.Log("player hit");
             isActive = false;
             Destroy(this.gameObject);
             gameManager.KillPlayer();
         }
-        else
-        {
+
+        else if (!other.CompareTag("Untagged"))
+        {   
+            Debug.Log(other.tag);
             isActive = false;
             Destroy(this.gameObject);
+        }
+    }
+
+    private void OnCollisionEnter(Collision co)
+    {   
+        Collider other = co.collider;
+        ContactPoint contact = co.contacts[0];
+        Quaternion rot = Quaternion.FromToRotation (Vector3.up, contact.normal);
+        Vector3 pos = contact.point;
+
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log(other.tag);
+            Debug.Log("hit effect");
+            var hit = Instantiate(hitEffect, pos, rot);
+        }
+        else if (!other.CompareTag("Untagged"))
+        {
+            Debug.Log(other.tag);
+            Debug.Log("hit effect");
+            var hit = Instantiate(hitEffect, pos, rot);
         }
     }
 }
