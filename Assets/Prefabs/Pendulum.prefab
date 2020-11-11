@@ -61,6 +61,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c0c8286e3004a448f609d043be39cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationSpeed: 4
+  bullet: {fileID: 3180358562747466990, guid: bf15f6907408b4daf8ab5a45064ec9bb, type: 3}
 --- !u!65 &5849355359834435194
 BoxCollider:
   m_ObjectHideFlags: 0

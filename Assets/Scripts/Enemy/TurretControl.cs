@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class TurretControl : MonoBehaviour
 {
-
     private GameObject target;
     private bool targetLocked;
     public GameObject TurretMovable;
@@ -16,7 +15,6 @@ public class TurretControl : MonoBehaviour
     private float delayTimer = 0.4f;  // Used to be 1.
     private PlayerControl playerScript;
 
-    // Start is called before the first frame update
     void Start()
     {
         playerScript = FindObjectOfType<PlayerControl>();
@@ -25,7 +23,6 @@ public class TurretControl : MonoBehaviour
         StartCoroutine(delay());
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (targetLocked)
@@ -92,6 +89,15 @@ public class TurretControl : MonoBehaviour
         {
             target = other.gameObject;
             targetLocked = true;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        // Stop shooting at the player when they're far away.
+        if (other.tag == "Player")
+        {
+            targetLocked = false;
         }
     }
 }

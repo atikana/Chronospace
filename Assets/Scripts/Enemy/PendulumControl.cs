@@ -17,6 +17,11 @@ public class PendulumControl : MonoBehaviour
     // Offset used for timing for playing the pendulum swing sound.
     private float pendulumSoundTimingOffset = 0.5f;
 
+    private Transform playerTransform;
+
+    // If player is within this distance of a pendulum, it will play a sound.
+    private const float pendulumSoundThreshold = 50f;
+
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
@@ -27,6 +32,8 @@ public class PendulumControl : MonoBehaviour
 
         // timePassed should be initialized randomly.
         timePassed = Random.Range(0f, 2 * Mathf.PI);
+
+        playerTransform = FindObjectOfType<PlayerControl>().transform;
     }
 
     void FixedUpdate()
@@ -45,10 +52,14 @@ public class PendulumControl : MonoBehaviour
         }
 
         // Play the pendulum sound once per swing.
-        if ((prevTimePassed < pendulumSoundTimingOffset && timePassed > pendulumSoundTimingOffset) ||
-            (prevTimePassed < pendulumSoundTimingOffset + Mathf.PI && timePassed > pendulumSoundTimingOffset + Mathf.PI))
+        if (Vector3.Distance(playerTransform.position, transform.position) < pendulumSoundThreshold)
         {
-            soundManager.PlayPendulumSound(transform.position - new Vector3(0, 30f, 0));
+            if ((prevTimePassed < pendulumSoundTimingOffset && timePassed > pendulumSoundTimingOffset) ||
+            (prevTimePassed < pendulumSoundTimingOffset + Mathf.PI && timePassed > pendulumSoundTimingOffset + Mathf.PI))
+            {
+                // Play the pendulum sound coming from below the top of the pendulum (at approximately the player's level).
+                soundManager.PlayPendulumSound(transform.position - new Vector3(0, 25f, 0));
+            }
         }
     }
 

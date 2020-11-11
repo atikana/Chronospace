@@ -3178,9 +3178,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61db0c1697b1a458cb7ef67d9e0e3794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volume: 0
-  soundEffectsAudioSource: {fileID: 0}
-  musicAudioSource: {fileID: 0}
 --- !u!4 &374585081
 Transform:
   m_ObjectHideFlags: 0
@@ -3298,7 +3295,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 374585079}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 2bbf43d6e9293455795c9415a917c2f1, type: 3}
@@ -10249,7 +10246,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &761135923
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13591,7 +13588,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1091031297
 Transform:
   m_ObjectHideFlags: 0
@@ -24986,7 +24983,7 @@ MonoBehaviour:
   pauseMenu: {fileID: 180776422}
   levelStats: {fileID: 736850038}
   checkPointManager: {fileID: 1616474973}
-  player: {fileID: 1811659950}
+  playerRigidbody: {fileID: 1811659950}
   cameraTransform: {fileID: 2039982407}
 --- !u!4 &1404047974
 Transform:
@@ -32338,7 +32335,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1811659944}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 3
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1

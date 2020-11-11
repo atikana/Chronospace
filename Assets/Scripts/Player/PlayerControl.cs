@@ -62,7 +62,15 @@ public class PlayerControl : MonoBehaviour
 
     private bool running = false;
 
-    private int numTimeWarps = 5;
+    // Number of seconds time warp lasts.
+    private float timeWarpLength = 5f;
+
+    // Number of seconds for time warp cooldown.
+    private float timeWarpCooldownLength = 10f;
+
+    private float timeWarpCounter = 0f;
+    private float timeWarpCooldownCounter = 0f;
+    private bool timeWarpAvailable = true;
 
     private bool grappleShoot = false;
     private bool grappleToggle = false;
@@ -137,17 +145,58 @@ public class PlayerControl : MonoBehaviour
     }
 
     /**
+     * Reset variables related to time warp.
+     */
+    public void ResetTimeWarp()
+    {
+        gameManager.SetTimeWarpEnabled(false);
+        timeWarpAvailable = true;
+        timeWarpCounter = 0f;
+        timeWarpCooldownCounter = 0f;
+    }
+
+    /**
+     * Called every FixedUpdate.  Updates variables related to time warp.
+     */
+    private void MaintainTimeWarp()
+    {
+        if (timeWarpCounter > 0)
+        {
+            timeWarpCounter -= Time.fixedUnscaledDeltaTime;
+        }
+
+        timeWarpCounter = Mathf.Max(timeWarpCounter, 0f);
+        if (timeWarpCounter == 0 && gameManager.GetTimeWarpEnabled())
+        {
+            gameManager.SetTimeWarpEnabled(false);
+            timeWarpCooldownCounter = timeWarpCooldownLength;
+        }
+
+        if (timeWarpCooldownCounter > 0)
+        {
+            timeWarpCooldownCounter -= Time.fixedUnscaledDeltaTime;
+        }
+
+        timeWarpCooldownCounter = Mathf.Max(timeWarpCooldownCounter, 0f);
+        if (timeWarpCooldownCounter == 0 && !gameManager.GetTimeWarpEnabled())
+        {
+            timeWarpAvailable = true;
+        }
+    }
+
+    /**
      * Start a time warp.
      */
     private void TimeWarp()
     {
         // Can't time warp while time is already slowed down.
-        if (numTimeWarps > 0 && !gameManager.GetTimeWarpEnabled())
+        if (timeWarpAvailable && !gameManager.GetTimeWarpEnabled())
         {
+            timeWarpAvailable = false;
             handsAnimator.SetTrigger("TimeWarp");
-            numTimeWarps--;
             soundManager.PlayTimeWarpSound();
-            gameManager.SetTimeWarp();
+            gameManager.SetTimeWarpEnabled(true);
+            timeWarpCounter = timeWarpLength;
         }
     }
 
@@ -211,8 +260,6 @@ public class PlayerControl : MonoBehaviour
         {
             dashAvailable = true;
         }
-
-       // Debug.Log(dashCooldownCounter);
     }
 
     private void OnCollisionStay(Collision other)
@@ -452,18 +499,21 @@ public class PlayerControl : MonoBehaviour
     }
 
     /**
-     * Return how many time warps the player has available.
+     * Resets variables associated with dash ability.
      */
-    public int GetNumTimeWarps()
+    public void ResetDash()
     {
-        return numTimeWarps;
+        dashCounter = 0;
+        dashCooldownCounter = 0;
+        dashAvailable = true;
+        dashing = false;
     }
 
     private void FixedUpdate()
     {
         MaintainDash();
+        MaintainTimeWarp();
         Move();
-        
     }
 
     private void Update()

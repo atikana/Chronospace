@@ -46,7 +46,5 @@ public class LevelStats : MonoBehaviour
         // Update the number of deaths text.
         // TODO:  Fix this!
         //numDeathsText.text = "Deaths:  " + playerControl.GetNumDeaths();
-
-        timeWarpText.text = "Time Warps:  " + playerControl.GetNumTimeWarps();
     }
 }
