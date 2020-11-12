@@ -221,15 +221,18 @@ public class PlayerControl : MonoBehaviour
     {
         if (numDashes > 0)
         {
-            preDashVelocity = rigidBody.velocity;
+            // Set pre-dash velocity only if you aren't currently dashing.
+            if (!dashing)
+            {
+                preDashVelocity = rigidBody.velocity;
+            }
+
             dashing = true;
             numDashes--;
             dashCounter = dashLength;
             levelStats.StartDashGaugeAnimation();
 
-            /* TODO:  Currently, if you dash while a dash is reloading, you will lose your progress with
-             * reloading the dash and you will use your second dash. Uncomment this line to avoid this!
-             */
+            // If you dash while a dash is reloading, you will lose your progress with reloading the dash.
             dashCooldownCounter = 0f;
             soundManager.PlayDashSound();
             movementSpeed = dashMovementSpeed;
@@ -248,7 +251,7 @@ public class PlayerControl : MonoBehaviour
      * Called every FixedUpdate.  Updates the dash counter
      * and dash cooldown counter to function.
      */
-            private void MaintainDash()
+    private void MaintainDash()
     {
         if (dashCounter > 0)
         {
@@ -278,7 +281,7 @@ public class PlayerControl : MonoBehaviour
         dashCooldownCounter = Mathf.Max(dashCooldownCounter, 0f);
         if (dashCooldownCounter == 0 && !dashing && numDashes < dashCapacity)
         {
-            numDashes++;
+            numDashes = dashCapacity;
             dashCooldownCounter = dashCooldownLength;
         }
     }
@@ -528,6 +531,11 @@ public class PlayerControl : MonoBehaviour
         dashCooldownCounter = 0;
         numDashes = 2;
         dashing = false;
+        levelStats.StopDashGaugeAnimation();
+        if (cameraParticleSystem)
+        {
+            cameraParticleSystem.Stop();
+        }
     }
 
     private void FixedUpdate()

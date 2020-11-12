@@ -25,6 +25,7 @@ public class LevelStats : MonoBehaviour
     void Start()
     {
         dashGaugeAnimator.ResetTrigger("Dashing");
+        dashGaugeAnimator.ResetTrigger("StopDashing");
         ResetTimer();
     }
 
@@ -36,6 +37,11 @@ public class LevelStats : MonoBehaviour
     public void StartDashGaugeAnimation()
     {
         dashGaugeAnimator.SetTrigger("Dashing");
+    }
+
+    public void StopDashGaugeAnimation()
+    {
+        dashGaugeAnimator.SetTrigger("StopDashing");
     }
 
     void Update()
