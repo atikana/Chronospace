@@ -33,6 +33,8 @@ public class TurretBullet : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            Vector3 pos = this.transform.position;
+            var hit = Instantiate(hitEffect, pos, Quaternion.identity);
             Debug.Log("player hit");
             isActive = false;
             Destroy(this.gameObject);
@@ -40,13 +42,16 @@ public class TurretBullet : MonoBehaviour
         }
 
         else if (!other.CompareTag("Untagged"))
-        {   
+        {
+            Vector3 pos = this.transform.position;
+            var hit = Instantiate(hitEffect, pos, Quaternion.identity);
             Debug.Log(other.tag);
             isActive = false;
             Destroy(this.gameObject);
         }
     }
 
+    /*
     private void OnCollisionEnter(Collision co)
     {   
         Collider other = co.collider;
@@ -67,4 +72,5 @@ public class TurretBullet : MonoBehaviour
             var hit = Instantiate(hitEffect, pos, rot);
         }
     }
+    */
 }
