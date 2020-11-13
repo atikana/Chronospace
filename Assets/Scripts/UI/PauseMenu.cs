@@ -20,7 +20,7 @@ public class PauseMenu : MonoBehaviour
     private void Awake()
     {
         menu = transform.GetChild(0).gameObject;
-        Debug.Log(gameObject.name);
+        Debug.Log(menu.name);
         pauseMenu = transform.GetChild(0).GetChild(0).gameObject;
         Debug.Log(pauseMenu.name);
         optionMenu = transform.GetChild(0).GetChild(1).gameObject;
@@ -40,7 +40,7 @@ public class PauseMenu : MonoBehaviour
 
             PauseGame();
         }
-        else if (menu.activeInHierarchy)
+        else
         {
             if (optionMenu.activeInHierarchy)
             {

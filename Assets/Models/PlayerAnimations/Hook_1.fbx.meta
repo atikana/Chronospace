@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 515d0897855d44fa288c1c90c16bde55
+guid: 054e1edf79498413d8e9ac84908ab368
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable:
   - first:
-      74: 6705347614087686681
-    second: Hook_1-2_test
+      74: 7754370514577160331
+    second: Hook_1-fixed02
   externalObjects:
   - first:
       type: UnityEngine:Material

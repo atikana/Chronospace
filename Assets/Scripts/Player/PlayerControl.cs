@@ -95,6 +95,7 @@ public class PlayerControl : MonoBehaviour
         // Reset animation triggers to prevent them running at start.
         handsAnimator.ResetTrigger("TimeWarp");
         handsAnimator.ResetTrigger("Grappling");
+        handsAnimator.ResetTrigger("StopGrappling");
 
         // Set up player input.
         input = new PlayerInput();

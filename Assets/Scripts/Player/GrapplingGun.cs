@@ -17,12 +17,17 @@ public class GrapplingGun : MonoBehaviour
 
     private bool pulling = false;
 
+    // Use a counter to shoot the rope after the grappling animation.
+    private float ropeShootCounter = 0f;
+    private const float ropeShootLength = 0.45f;
+
     public Transform cameraTransform;
     private Transform playerTransform;
     private Rigidbody playerBody;
     private float maxDistance = 100f;
 
     private SpringJoint joint;
+    private RaycastHit grappleHit;
 
     // The player's current state - either normal or grappling.
     private GrapplingState grapplingState = GrapplingState.Normal;
@@ -43,7 +48,7 @@ public class GrapplingGun : MonoBehaviour
     {
         cameraFov = transform.parent.GetComponentInChildren<CameraFov>();
         lr = GetComponent<LineRenderer>();
-        handsAnimator = FindObjectOfType<Animator>();
+        handsAnimator = transform.parent.GetComponentInChildren<Animator>();
         soundManager = FindObjectOfType<SoundManager>();
         playerControl = transform.parent.GetComponent<PlayerControl>();
         cameraParticleSystem = transform.parent.GetComponentInChildren<ParticleSystem>();
@@ -53,48 +58,12 @@ public class GrapplingGun : MonoBehaviour
 
     void Update()
     {
-        /*if (Input.GetAxis("Fire1") == 1)
-        {
-            if (!joint) { StartGrapple(); }
-
-        }
-        else if (Input.GetAxis("Fire1") == 0)
-        {
-            if (pulling)
-            {
-                ResetRope();
-            }
-
-            if (joint)
-            {
-                StopGrapple();
-            }
-        }
-
-        if (Input.GetAxis("Fire2") == 1)
-        {
-            if (joint)
-            {
-                PullRope();
-
-            }
-        }
-        else if (Input.GetAxis("Fire2") == 0)
-        {
-            if (joint && pulling)
-            {
-                ResetRope();
-
-            }
-        }*/
-
         if (playerControl.GetGrappleShoot())
         {
             if (!joint)
             {
                 StartGrapple();
             }
-
         }
         else
         {
@@ -123,11 +92,11 @@ public class GrapplingGun : MonoBehaviour
                 ResetRope();
             }
         }
-
     }
 
     void LateUpdate()
     {
+        WaitToGrapple();
 
         if (pulling)
         {
@@ -148,40 +117,62 @@ public class GrapplingGun : MonoBehaviour
 
     void StartGrapple()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, maxDistance, whatIsGrappleable))
+        if (grapplingState == GrapplingState.Normal &&
+            Physics.Raycast(cameraTransform.position, cameraTransform.forward, out grappleHit, maxDistance, whatIsGrappleable))
         {
-            // Only animate the hands if you shoot the grappling gun.
-            handsAnimator.SetTrigger("Grappling");
-            soundManager.PlayGrapplingSound();
             grapplingState = GrapplingState.Grappling;
 
-            grapplePoint = hit.point;
-            joint = playerTransform.gameObject.AddComponent<SpringJoint>();
-            joint.autoConfigureConnectedAnchor = false;
-            joint.connectedAnchor = grapplePoint;
+            // Wait for the counter to hit zero before the grapple takes place.
+            ropeShootCounter = ropeShootLength;
 
-            float distanceFromPoint = Vector3.Distance(playerTransform.position, grapplePoint);
-
-            //The distance the grapple will try to keep from the point
-            joint.maxDistance = distanceFromPoint * 0.5f;
-            joint.minDistance = 0f;
-
-            //Change these value to fit the gameplay
-            joint.spring = 4.5f;
-            joint.damper = 7f;
-            joint.massScale = 4.5f;
-
-            lr.positionCount = 2;
+            // Only animate the hands if you shoot the grappling gun.
+            handsAnimator.ResetTrigger("StopGrappling");
+            handsAnimator.SetTrigger("Grappling");
+            soundManager.PlayGrapplingSound();
         }
+    }
+
+    private void WaitToGrapple()
+    {
+        // Start grappling once the counter gets to zero.
+        if (ropeShootCounter > 0)
+        {
+            ropeShootCounter -= Time.unscaledDeltaTime;
+            if (ropeShootCounter <= 0)
+            {
+                ropeShootCounter = 0f;
+                ShootGrapple();
+            }
+        }
+    }
+
+    private void ShootGrapple()
+    {
+        grapplePoint = grappleHit.point;
+        joint = playerTransform.gameObject.AddComponent<SpringJoint>();
+        joint.autoConfigureConnectedAnchor = false;
+        joint.connectedAnchor = grapplePoint;
+
+        float distanceFromPoint = Vector3.Distance(playerTransform.position, grapplePoint);
+
+        //The distance the grapple will try to keep from the point
+        joint.maxDistance = distanceFromPoint * 0.5f;
+        joint.minDistance = 0f;
+
+        //Change these value to fit the gameplay
+        joint.spring = 4.5f;
+        joint.damper = 7f;
+        joint.massScale = 4.5f;
+
+        lr.positionCount = 2;
     }
 
     void DrawRope()
     {
         if (!joint) return;
+
         lr.SetPosition(0, transform.position);
         lr.SetPosition(1, grapplePoint);
-
     }
 
     void StopGrapple()
@@ -189,6 +180,8 @@ public class GrapplingGun : MonoBehaviour
         grapplingState = GrapplingState.Normal;
         lr.positionCount = 0;
         Destroy(joint);
+        handsAnimator.ResetTrigger("Grappling");
+        handsAnimator.SetTrigger("StopGrappling");
     }
 
     void PullRope()
