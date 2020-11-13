@@ -77,6 +77,10 @@ public class GameManager : MonoBehaviour
             // Reset dash counters.
             playerControl.ResetDash();
 
+
+            levelStats.setDeath(GetNumDeaths());
+
+
             // Remove all existing bullets.
             GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
             foreach (GameObject bullet in bullets)

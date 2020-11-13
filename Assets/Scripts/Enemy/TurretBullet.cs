@@ -35,7 +35,7 @@ public class TurretBullet : MonoBehaviour
         {
             Vector3 pos = this.transform.position;
             var hit = Instantiate(hitEffect, pos, Quaternion.identity);
-            Debug.Log("player hit");
+           // Debug.Log("player hit");
             isActive = false;
             Destroy(this.gameObject);
             gameManager.KillPlayer();
@@ -45,7 +45,7 @@ public class TurretBullet : MonoBehaviour
         {
             Vector3 pos = this.transform.position;
             var hit = Instantiate(hitEffect, pos, Quaternion.identity);
-            Debug.Log(other.tag);
+           // Debug.Log(other.tag);
             isActive = false;
             Destroy(this.gameObject);
         }

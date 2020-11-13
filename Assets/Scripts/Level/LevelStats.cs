@@ -14,6 +14,8 @@ public class LevelStats : MonoBehaviour
 
     public PlayerControl playerControl;
 
+    int deathCount = 0;
+
     private void Awake()
     {
         dashGaugeAnimator = GetComponentInChildren<Animator>();
@@ -55,9 +57,25 @@ public class LevelStats : MonoBehaviour
 
             levelTimerText.text = "Time: " + string.Format("{0,1:0}:{1,2:00}", timeSpan.Minutes, timeSpan.Seconds);
         }
+        
 
         // Update the number of deaths text.
         // TODO:  Fix this!
         //numDeathsText.text = "Deaths:  " + playerControl.GetNumDeaths();
     }
+
+    public void setDeath(int i)
+    {
+        deathCount = i;
+
+        numDeathsText.text = "Death Count: " + deathCount.ToString();
+
+        if (!numDeathsText.gameObject.activeInHierarchy)
+        {
+            numDeathsText.gameObject.SetActive(true);
+        }
+    }
+
+
+    
 }
