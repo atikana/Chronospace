@@ -13,7 +13,7 @@ public class SoundManager : MonoBehaviour
     {
         AudioSource[] audioSources = GetComponents<AudioSource>();
         soundEffectsAudioSource = audioSources[0];
-        musicAudioSource = audioSources[1];
+        // musicAudioSource = audioSources[1];
 
         jumpClip = Resources.Load<AudioClip>("JUMP_2");
         doubleJumpClip = Resources.Load<AudioClip>("JUMP_1");
@@ -36,7 +36,7 @@ public class SoundManager : MonoBehaviour
         volume = newVolume;
 
         // Manually set the music audioSource volume.
-        musicAudioSource.volume = 0.5f * newVolume;
+        soundEffectsAudioSource.volume = 0.5f * newVolume;
     }
 
     public void PlayJumpSound()
