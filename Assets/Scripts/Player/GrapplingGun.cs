@@ -23,6 +23,8 @@ public class GrapplingGun : MonoBehaviour
     private const float ropeShootLength = 0.45f;
 
     public Transform cameraTransform;
+    public float sphereRadius;
+    public Transform sphere;
     private Transform playerTransform;
     private Rigidbody playerBody;
     private float maxDistance = 100f;
@@ -35,6 +37,10 @@ public class GrapplingGun : MonoBehaviour
 
     // For animating the hands when the player grapples.
     private Animator handsAnimator;
+
+    private GameObject lastGrapple;
+
+    bool autoaim = false;
 
     /**
      * Enumeration of grappling states.
@@ -54,11 +60,15 @@ public class GrapplingGun : MonoBehaviour
         playerControl = transform.parent.GetComponent<PlayerControl>();
         cameraParticleSystem = transform.parent.GetComponentInChildren<ParticleSystem>();
         playerTransform = transform.parent;
+      
         playerBody = transform.parent.GetComponent<Rigidbody>();
     }
 
     void Update()
     {
+
+        findGrapplePoint();
+
         if (playerControl.GetGrappleShoot())
         {
             if (!joint)
@@ -118,19 +128,41 @@ public class GrapplingGun : MonoBehaviour
 
     void StartGrapple()
     {
-        if (grapplingState == GrapplingState.Normal &&
-            Physics.Raycast(cameraTransform.position, cameraTransform.forward, out grappleHit, maxDistance, whatIsGrappleable))
+        if (grapplingState == GrapplingState.Normal)
         {
-            grapplingState = GrapplingState.Grappling;
+            GameObject close;
 
-            // Wait for the counter to hit zero before the grapple takes place.
-            ropeShootCounter = ropeShootLength;
+            if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out grappleHit, maxDistance, whatIsGrappleable))
+            {
+                StartGrappleHelper(grappleHit.collider.gameObject);
+                Debug.Log("Hook myself");
 
-            // Only animate the hands if you shoot the grappling gun.
-            handsAnimator.ResetTrigger("StopGrappling");
-            handsAnimator.SetTrigger("Grappling");
-            soundManager.PlayGrapplingSound();
+                autoaim = false;
+      
+            }
+            else if ((close = findGrapplePoint()) != null)
+            {
+                // should i make it actually shoot to the player
+                autoaim = true;
+                StartGrappleHelper(close.gameObject);
+
+              
+            }
         }
+    }
+
+    void StartGrappleHelper(GameObject g)
+    {
+        grapplingState = GrapplingState.Grappling;
+
+        // Wait for the counter to hit zero before the grapple takes place.
+        ropeShootCounter = ropeShootLength;
+
+        // Only animate the hands if you shoot the grappling gun.
+        handsAnimator.ResetTrigger("StopGrappling");
+        handsAnimator.SetTrigger("Grappling");
+        soundManager.PlayGrapplingSound();
+        lastGrapple = g;
     }
 
     private void WaitToGrapple()
@@ -149,7 +181,14 @@ public class GrapplingGun : MonoBehaviour
 
     private void ShootGrapple()
     {
-        grapplePoint = grappleHit.point;
+        if (!autoaim)
+        {
+            grapplePoint = grappleHit.point;
+        }
+        else
+        {
+            grapplePoint = lastGrapple.transform.position;
+        }
         joint = playerTransform.gameObject.AddComponent<SpringJoint>();
         joint.autoConfigureConnectedAnchor = false;
         joint.connectedAnchor = grapplePoint;
@@ -226,5 +265,62 @@ public class GrapplingGun : MonoBehaviour
 
     }
 
+    GameObject findGrapplePoint()
+    {
 
+        
+        Collider[] hits = Physics.OverlapSphere(sphere.position, sphereRadius);
+        float temp = float.MaxValue;
+
+        GameObject closeGrapplable = null;
+
+        GameObject secondClose = null;
+
+
+        foreach (var hit in hits)
+        {
+            if (hit.gameObject.layer == LayerMask.NameToLayer("grapple"))
+            {
+
+                if (lastGrapple != null && lastGrapple.name.CompareTo(hit.name) == 0 && lastGrapple.name.CompareTo("pCube1") == 0 && lastGrapple.transform.parent == hit.transform.parent && playerControl.GetGroundStatus())
+                {
+                    secondClose = hit.gameObject;
+                    continue;
+                }
+                 
+                // find the smallest grappling point that is not the one detecting
+                float distance = (cameraTransform.position - hit.transform.position).sqrMagnitude;
+
+                if (distance< temp)
+                {
+                    temp = distance;
+                    closeGrapplable = hit.gameObject;
+
+                   
+                }
+            }
+        }
+
+        if (closeGrapplable != null)
+        {
+            //Debug.Log("Next target" + closeGrapplable.name + "of" + closeGrapplable.transform.parent.name);
+        }
+        else if (secondClose != null)
+        {
+            closeGrapplable = secondClose;
+            //Debug.Log("Doesn't have anything to grab" + secondClose.name);
+        }
+
+
+        return closeGrapplable;
+        
+
+    }
+
+    void OnDrawGizmos()
+    {
+        // Draw a yellow sphere at the transform's position
+       // Gizmos.color = Color.yellow;
+        //Gizmos.DrawSphere(sphere.position, sphereRadius);
+    }
 }

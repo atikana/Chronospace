@@ -551,4 +551,9 @@ public class PlayerControl : MonoBehaviour
     {
         AdjustCamera();
     }
+
+    public bool GetGroundStatus()
+    {
+        return grounded;
+    }
 }
