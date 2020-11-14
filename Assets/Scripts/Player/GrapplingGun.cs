@@ -16,6 +16,7 @@ public class GrapplingGun : MonoBehaviour
     private ParticleSystem cameraParticleSystem;
 
     private bool pulling = false;
+    public float pullingMomentumMultiplier = 0.5f;
 
     // Use a counter to shoot the rope after the grappling animation.
     private float ropeShootCounter = 0f;
@@ -209,7 +210,7 @@ public class GrapplingGun : MonoBehaviour
     {
         Debug.Log("Reset Rope");
 
-        playerBody.velocity = Vector3.zero;
+        playerBody.velocity = playerBody.velocity * pullingMomentumMultiplier;
 
         pulling = false;
 
