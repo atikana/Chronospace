@@ -264,7 +264,6 @@ public class GrapplingGun : MonoBehaviour
 
     GameObject findGrapplePoint()
     {
-        Debug.Log("are we fucking running");
         
         Collider[] hits = Physics.OverlapSphere(sphere.position, sphereRadius);
         float temp = float.MaxValue;
@@ -278,13 +277,28 @@ public class GrapplingGun : MonoBehaviour
         {
             if (hit.gameObject.layer == LayerMask.NameToLayer("grapple"))
             {
-
+                RaycastHit hitObject;
+                if (Physics.Raycast(playerTransform.position, hit.transform.position, out hitObject, 100))
+                {
+                    Debug.DrawRay(playerTransform.position, hit.transform.position);
+                    // if it not small platform and not hitting itself
+                    if (!(hit.name.CompareTo("pCube1") == 0 && hitObject.collider.transform.parent != hit.transform.parent))
+                    {
+                        continue;
+                    }
+                 
                 
+                   
+                }
+                
+                // so u dont hit the same target, unless u have to or u r already on the ground.
                 if (lastGrapple != null && lastGrapple.name.CompareTo(hit.name) == 0 && lastGrapple.name.CompareTo("pCube1") == 0 && lastGrapple.transform.parent == hit.transform.parent && !playerControl.GetGroundStatus())
                 {
                     secondClose = hit.gameObject;
                     continue;
                 }
+
+
                  
                 // find the smallest grappling point that is not the one detecting
                 float distance = (cameraTransform.position - hit.transform.position).sqrMagnitude;
@@ -319,7 +333,7 @@ public class GrapplingGun : MonoBehaviour
     void OnDrawGizmos()
     {
         // Draw a yellow sphere at the transform's position
-       // Gizmos.color = Color.yellow;
-        //Gizmos.DrawSphere(sphere.position, sphereRadius);
+       //Gizmos.color = Color.yellow;
+       //Gizmos.DrawSphere(sphere.position, sphereRadius);
     }
 }
