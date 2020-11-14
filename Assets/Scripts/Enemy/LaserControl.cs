@@ -4,52 +4,50 @@ using UnityEngine;
 public class LaserControl : MonoBehaviour
 {
     public GameObject firePoint;
-    private Vector3 startPos; 
-    private Vector3 endPos;
     public LineRenderer lr;
-    private LineRenderer line;
-    private float fireTimer = 0.8f;
+    private float fireTimer = 3.0f;
+    private float enhanceTimer = 0.8f;
     private bool readyToFire;
-    public float range;
+    private bool enhanceFire;
     private GameManager gameManager;
     private PlayerControl playerControl;
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-        readyToFire = false;
+        readyToFire = true;
+        enhanceFire = false;
     }
 
 
-    void Update()
+    void FixedUpdate()
     {
         // lr.SetPosition(0, firePoint.transform.position);
         // RaycastHit hit;
         if (readyToFire)
         {
+            // Debug.Log("Laser created");
             LaserFire();
+        }
+        if (enhanceFire)
+        {
+            Transform line_ = Instantiate(lr.transform, firePoint.transform.position, Quaternion.identity);
+            line_.transform.rotation = firePoint.transform.rotation;
         }
 
     }
 
     void LaserFire()
-    {
-        if (line == null)
-        {
-            createLine();
-            line.SetPosition(0, firePoint.transform.position);
-            startPos = firePoint.transform.position;
-        }
-        else 
-        {
-            addColliderToLine();
-            line = null;
-        }
+    {   
+        Transform line = Instantiate(lr.transform, firePoint.transform.position, Quaternion.identity);
+        line.transform.rotation = firePoint.transform.rotation;
         readyToFire = false;
         StartCoroutine(FireRate());
-
+        enhanceFire = true;
+        StartCoroutine(EnhanceFireRate());
     }
 
+    /*
     private void createLine()
     {
         line = new GameObject("Line").AddComponent<LineRenderer>();
@@ -60,8 +58,9 @@ public class LaserControl : MonoBehaviour
         line.startColor = Color.gray;
         line.endColor = Color.gray;
         line.useWorldSpace = true;
-    }
+    }*/
 
+    /*
     private void addColliderToLine()
     {
         BoxCollider col = new GameObject("Collider").AddComponent<BoxCollider>();
@@ -78,7 +77,7 @@ public class LaserControl : MonoBehaviour
         }
         angle = Mathf.Rad2Deg * Mathf.Atan(angle);
         col.transform.Rotate(0, 0, angle);
-    }
+    }*/
 
 
     IEnumerator FireRate()
@@ -88,6 +87,15 @@ public class LaserControl : MonoBehaviour
 
     }
 
+    IEnumerator EnhanceFireRate()
+    {
+        yield return new WaitForSeconds(enhanceTimer);
+        enhanceFire = false;
+
+    }
+
+
+    /*
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag == "Player")
@@ -99,4 +107,5 @@ public class LaserControl : MonoBehaviour
             // Destroy(this.gameObject);
         }
     }
+    */
 }

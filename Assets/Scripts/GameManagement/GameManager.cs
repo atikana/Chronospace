@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     private PlayerControl playerControl;
     public Rigidbody playerRigidbody;
     public Transform cameraTransform;
+    private float deathDelay = 0f;
+    private bool delayPeriod;
 
     /* The speed multiplier of the moving objects in the game.
      * This allows the time warp effect to take place.
@@ -121,7 +123,27 @@ public class GameManager : MonoBehaviour
     public void KillPlayer()
     {
         // TODO:  Modify this when checkpoints are implemented!
-        AddDeath();
-        RestartLevel(true);
+        if (!delayPeriod)
+        {
+            deathDelay = 0.5f;
+            delayPeriod = true;
+            AddDeath();
+            RestartLevel(true);
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (delayPeriod)
+        {
+            if (deathDelay > 0)
+            {
+                deathDelay -= 1.0F * Time.deltaTime;
+            }
+            else 
+            {
+                delayPeriod = false;
+            }
+        }
     }
 }
