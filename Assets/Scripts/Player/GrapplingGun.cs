@@ -67,8 +67,6 @@ public class GrapplingGun : MonoBehaviour
     void Update()
     {
 
-        findGrapplePoint();
-
         if (playerControl.GetGrappleShoot())
         {
             if (!joint)
@@ -135,7 +133,6 @@ public class GrapplingGun : MonoBehaviour
             if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out grappleHit, maxDistance, whatIsGrappleable))
             {
                 StartGrappleHelper(grappleHit.collider.gameObject);
-                Debug.Log("Hook myself");
 
                 autoaim = false;
       
@@ -267,7 +264,7 @@ public class GrapplingGun : MonoBehaviour
 
     GameObject findGrapplePoint()
     {
-
+        Debug.Log("are we fucking running");
         
         Collider[] hits = Physics.OverlapSphere(sphere.position, sphereRadius);
         float temp = float.MaxValue;
@@ -282,7 +279,8 @@ public class GrapplingGun : MonoBehaviour
             if (hit.gameObject.layer == LayerMask.NameToLayer("grapple"))
             {
 
-                if (lastGrapple != null && lastGrapple.name.CompareTo(hit.name) == 0 && lastGrapple.name.CompareTo("pCube1") == 0 && lastGrapple.transform.parent == hit.transform.parent && playerControl.GetGroundStatus())
+                
+                if (lastGrapple != null && lastGrapple.name.CompareTo(hit.name) == 0 && lastGrapple.name.CompareTo("pCube1") == 0 && lastGrapple.transform.parent == hit.transform.parent && !playerControl.GetGroundStatus())
                 {
                     secondClose = hit.gameObject;
                     continue;
@@ -303,13 +301,14 @@ public class GrapplingGun : MonoBehaviour
 
         if (closeGrapplable != null)
         {
-            //Debug.Log("Next target" + closeGrapplable.name + "of" + closeGrapplable.transform.parent.name);
+            Debug.Log("Next target" + closeGrapplable.name + "of" + closeGrapplable.transform.parent.name);
         }
         else if (secondClose != null)
         {
             closeGrapplable = secondClose;
             //Debug.Log("Doesn't have anything to grab" + secondClose.name);
         }
+
 
 
         return closeGrapplable;
