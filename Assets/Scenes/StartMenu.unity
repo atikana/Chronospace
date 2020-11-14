@@ -404,7 +404,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &130263757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -417,7 +417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61db0c1697b1a458cb7ef67d9e0e3794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundEffectsAudioSource: {fileID: 0}
+  highPassFilter: {fileID: 0}
 --- !u!82 &130263758
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3882,6 +3882,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3080512270593612078, guid: db019c07508d5504ba5e4c48bfb81b71,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1997740696}
+    - target: {fileID: 3080512270593612078, guid: db019c07508d5504ba5e4c48bfb81b71,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_volume
       objectReference: {fileID: 0}
     - target: {fileID: 3080512270734771440, guid: db019c07508d5504ba5e4c48bfb81b71,
         type: 3}
