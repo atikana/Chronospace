@@ -10,6 +10,7 @@ public class GrapplingGun : MonoBehaviour
     private Vector3 grappleDir;
     private CameraFov cameraFov;
     public LayerMask whatIsGrappleable;
+    public GameObject aimPoint;
 
     private SoundManager soundManager;
     private PlayerControl playerControl;
@@ -68,7 +69,7 @@ public class GrapplingGun : MonoBehaviour
 
     void Update()
     {
-
+        GrappleAim();
         if (playerControl.GetGrappleShoot())
         {
             if (!joint)
@@ -124,6 +125,33 @@ public class GrapplingGun : MonoBehaviour
     public bool IsGrappling()
     {
         return grapplingState == GrapplingState.Grappling;
+    }
+
+    void GrappleAim() {
+        RaycastHit grappleAim;
+        GameObject close;
+        if (grapplingState == GrapplingState.Normal)
+        {
+            if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out grappleAim, maxDistance, whatIsGrappleable))
+            {
+
+                aimPoint.transform.position = grappleAim.point;
+                aimPoint.SetActive(true);
+            }
+            else if ((close = findGrapplePoint()) != null)
+            {
+
+                aimPoint.transform.position = close.transform.position;
+                aimPoint.SetActive(true);
+
+            }
+
+        }
+        else
+        {
+            aimPoint.SetActive(false);
+        }
+       
     }
 
     void StartGrapple()
