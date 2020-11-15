@@ -40,7 +40,9 @@ public class GrapplingGun : MonoBehaviour
 
     private GameObject lastGrapple;
 
-    bool autoaim = false;
+    bool autoAim = false;
+
+    public Crosshair crosshair;
 
     /**
      * Enumeration of grappling states.
@@ -132,15 +134,14 @@ public class GrapplingGun : MonoBehaviour
 
             if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out grappleHit, maxDistance, whatIsGrappleable))
             {
+                autoAim = false;
                 StartGrappleHelper(grappleHit.collider.gameObject);
-
-                autoaim = false;
       
             }
             else if ((close = findGrapplePoint()) != null)
             {
                 // should i make it actually shoot to the player
-                autoaim = true;
+                autoAim = true;
                 StartGrappleHelper(close.gameObject);
 
               
@@ -160,6 +161,7 @@ public class GrapplingGun : MonoBehaviour
         handsAnimator.SetTrigger("Grappling");
         soundManager.PlayGrapplingSound();
         lastGrapple = g;
+        crosshair.ChangeCrossHairColor();
     }
 
     private void WaitToGrapple()
@@ -178,7 +180,7 @@ public class GrapplingGun : MonoBehaviour
 
     private void ShootGrapple()
     {
-        if (!autoaim)
+        if (!autoAim)
         {
             grapplePoint = grappleHit.point;
         }
@@ -219,6 +221,7 @@ public class GrapplingGun : MonoBehaviour
         Destroy(joint);
         handsAnimator.ResetTrigger("Grappling");
         handsAnimator.SetTrigger("StopGrappling");
+        crosshair.RevertCrosshairColor();
     }
 
     void PullRope()
