@@ -81,6 +81,9 @@ public class PlayerControl : MonoBehaviour
     private bool grappleShoot = false;
     private bool grappleToggle = false;
 
+    // Multiplier for player's horizontal sensitivity.
+    public float additionalHorizontalSensitivity = 1.5f;
+
     /**
      * Set up stuff before the level starts.
      */
@@ -446,11 +449,19 @@ public class PlayerControl : MonoBehaviour
     }
 
     /**
+     * Returns the camera's rotation.
+     */
+    public Vector2 GetCameraRotation()
+    {
+        return cameraRotation;
+    }
+
+    /**
      * Rotate the camera based on mouse/joystick movement.
      */
     private void AdjustCamera()
     {
-        cameraRotation.x = Mathf.Repeat(cameraRotation.x + lookVector.x * gameManager.GetSensitivity() * Time.deltaTime, 360);
+        cameraRotation.x = Mathf.Repeat(cameraRotation.x + lookVector.x * additionalHorizontalSensitivity * gameManager.GetSensitivity() * Time.deltaTime, 360);
         cameraRotation.y = Mathf.Clamp(cameraRotation.y - lookVector.y * gameManager.GetSensitivity() * Time.deltaTime, -maxYAngle, maxYAngle);
         cameraTransform.rotation = Quaternion.Euler(cameraRotation.y, cameraRotation.x, 0);
 

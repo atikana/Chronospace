@@ -18,7 +18,6 @@ public class OptionMenu : MonoBehaviour
 
     public void SetMouseSensitivity(float sensitivity)
     {
-      // gameManager.SetSensitivity(sensitivity);
-    }        
-
+        gameManager.SetSensitivity(sensitivity);
+    }
 }

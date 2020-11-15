@@ -34403,7 +34403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 2039982407}
   jumpForce: 550
-  onAirControl: 5
+  onAirControl: 2
   maxSpeed: 30
   counterMovement: 0.175
   groundMask:
@@ -34414,6 +34414,7 @@ MonoBehaviour:
     m_Bits: 2048
   doubleJumpWindow: 0.25
   dashMultiplier: 10
+  additionalHorizontalSensitivity: 1.5
 --- !u!54 &1811659950
 Rigidbody:
   m_ObjectHideFlags: 0
