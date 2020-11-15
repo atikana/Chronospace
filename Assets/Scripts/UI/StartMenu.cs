@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class StartMenu : MonoBehaviour
 {
+
+    
     public void LoadLvl1()
     {
         SceneManager.LoadScene("Level1");
@@ -22,10 +24,15 @@ public class StartMenu : MonoBehaviour
     }
 
 
+    void Awake()
+    {
+        
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-            
+
     }
 
     // Update is called once per frame
