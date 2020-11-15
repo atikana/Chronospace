@@ -7,7 +7,7 @@ public class CheckPoint : MonoBehaviour
 
     Transform front;
     Transform back;
-    Color original;
+    Color original = new Color(255, 255, 255);
     Color neonGreen = new Color(7, 299, 3);
 
 
@@ -16,7 +16,6 @@ public class CheckPoint : MonoBehaviour
     {
         front = transform.GetChild(0);
         back = transform.GetChild(1);
-
 
         if (name.CompareTo("1") == 0)
         {
@@ -40,8 +39,9 @@ public class CheckPoint : MonoBehaviour
 
     void ChangeColor(Color c)
     {
-        front.GetComponent<Renderer>().material.color = c;
-        back.GetComponent<Renderer>().material.color = c;
+
+        front.GetComponent<Renderer>().material.SetColor("_EmissionColor", c * 0.005f);
+        back.GetComponent<Renderer>().material.SetColor("_EmissionColor", c * 0.005f);
     }
 
     public void RevertColor()
