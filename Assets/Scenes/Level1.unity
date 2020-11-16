@@ -21387,6 +21387,7 @@ MonoBehaviour:
   checkPointManager: {fileID: 1616474973}
   playerRigidbody: {fileID: 1811659950}
   cameraTransform: {fileID: 2039982407}
+  countdown: 1
   countdownDisplay: {fileID: 2050022802}
 --- !u!4 &1404047974
 Transform:

@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public Transform cameraTransform;
     private float deathDelay = 0f;
     private bool delayPeriod;
-    private int countdown = 3;
+    public int countdown;
     public Text countdownDisplay;
 
     /* The speed multiplier of the moving objects in the game.
@@ -162,16 +162,18 @@ public class GameManager : MonoBehaviour
 
     IEnumerator CountdownTo()
     {
+        int countdown_;
+        countdown_ = countdown;
         countdownDisplay.gameObject.SetActive(true);
         playerControl.input.Disable();
         cameraTransform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-        while (countdown > 0)
+        while (countdown_ > 0)
         {
-            countdownDisplay.text = countdown.ToString();
+            countdownDisplay.text = countdown_.ToString();
 
             yield return new WaitForSecondsRealtime(1f);
 
-            countdown--;
+            countdown_--;
         }
 
         countdownDisplay.text = "START";
@@ -181,6 +183,5 @@ public class GameManager : MonoBehaviour
         //Time.timeScale = 1f;
         playerControl.input.Enable();
         countdownDisplay.gameObject.SetActive(false);
-        countdown = 3;
     }
 }
