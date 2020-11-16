@@ -52,6 +52,6 @@ public class CameraControl : MonoBehaviour
         cameraBobDistance = Mathf.Sin(bobbingTime) * cameraBobSpeed;
 
         // Set the camera at the top of the player, and offset it vertically using cameraBobDistance.
-        transform.localPosition = new Vector3(0, 1 + cameraBobDistance, 0);
+        transform.localPosition = new Vector3(0, 1, 0);
     }
 }

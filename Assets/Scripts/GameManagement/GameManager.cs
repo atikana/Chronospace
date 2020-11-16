@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public LevelStats levelStats;
     public CheckPointManager checkPointManager;
     private PlayerControl playerControl;
+    private GrapplingGun grapplingGun;
     public Rigidbody playerRigidbody;
     public Transform cameraTransform;
     private float deathDelay = 0f;
@@ -24,12 +25,14 @@ public class GameManager : MonoBehaviour
     // Look joystick/mouse sensitivity.
     private float sensitivity = 7;
 
-    private float mouseSensitivityMultiplier = 15f;
+    private const float baseSensitivity = 50f;
+    private const float sensitivityMultiplier = 8f;
 
 
     void Start()
     {
         playerControl = FindObjectOfType<PlayerControl>();
+        grapplingGun = playerControl.gameObject.GetComponentInChildren<GrapplingGun>();
     }
 
     public void PauseGame()
@@ -71,7 +74,7 @@ public class GameManager : MonoBehaviour
 
             // Reset the player's velocity and looking angle.
             playerRigidbody.velocity = Vector3.zero;
-            playerControl.SetCameraRotation(new Vector2(lastCheckPoint.playerRotation, 0f));
+            playerControl.SetCameraRotation(new Vector2(lastCheckPoint.GetPlayerRotation(), 0f));
 
             // Turn off time warp.
             playerControl.ResetTimeWarp();
@@ -79,9 +82,13 @@ public class GameManager : MonoBehaviour
             // Reset dash counters.
             playerControl.ResetDash();
 
+            // Reset hands animation.
+            playerControl.ResetAnimations();
+
+            // Reset grappling gun.
+            grapplingGun.StopGrapple();
 
             levelStats.setDeath(GetNumDeaths());
-
 
             // Remove all existing bullets.
             GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
@@ -117,7 +124,7 @@ public class GameManager : MonoBehaviour
      */
     public float GetSensitivity()
     {
-        return mouseSensitivityMultiplier * sensitivity;
+        return baseSensitivity + sensitivityMultiplier * sensitivity;
     }
 
     public void KillPlayer()
@@ -138,7 +145,7 @@ public class GameManager : MonoBehaviour
         {
             if (deathDelay > 0)
             {
-                deathDelay -= 1.0F * Time.deltaTime;
+                deathDelay -= Time.deltaTime;
             }
             else 
             {

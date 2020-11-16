@@ -20,9 +20,7 @@ public class PlayerControl : MonoBehaviour
     private bool cancellingGrounded = false;
     public float onAirControl = 2f; // change this value to adjust player's ability to move left/right in mid-air
 
-    private float movementSpeed;
-    private float normalMovementSpeed = 4500f;
-    private float dashMovementSpeed;
+    private float movementSpeed = 4500f;
 
     public float maxSpeed = 30f;
     public float counterMovement = 0.175f;
@@ -41,7 +39,7 @@ public class PlayerControl : MonoBehaviour
     public float doubleJumpWindow = 0.25f;
 
     // Dash speed multiplier.
-    public float dashMultiplier = 10f;
+    public float dashMultiplier = 1.5f;
 
     // Number of seconds dash lasts for.
     private float dashLength = 0.2f;
@@ -55,7 +53,6 @@ public class PlayerControl : MonoBehaviour
     private int dashCapacity = 2;
     private int numDashes;
     private float dashCounter = 0f;
-    private Vector3 preDashVelocity;
 
     private Vector2 moveVector;
     private Vector2 lookVector;
@@ -81,6 +78,9 @@ public class PlayerControl : MonoBehaviour
     private bool grappleShoot = false;
     private bool grappleToggle = false;
 
+    // Multiplier for player's horizontal sensitivity.
+    public float additionalHorizontalSensitivity = 1.3f;
+
     /**
      * Set up stuff before the level starts.
      */
@@ -94,15 +94,21 @@ public class PlayerControl : MonoBehaviour
         levelStats = FindObjectOfType<LevelStats>();
 
         // Reset animation triggers to prevent them running at start.
-        handsAnimator.ResetTrigger("TimeWarp");
-        handsAnimator.ResetTrigger("Grappling");
-        handsAnimator.ResetTrigger("StopGrappling");
+        ResetAnimations();
 
         // Set up player input.
         input = new PlayerInput();
         input.Enable();
 
-        input.Player.Move.performed += context => moveVector = context.ReadValue<Vector2>();
+        input.Player.Move.performed += context =>
+        {
+            // Set animation trigger if player is starting to run.
+            if (handsAnimator && moveVector == Vector2.zero)
+            {
+                handsAnimator.SetTrigger("StartRunning");
+            }
+            moveVector = context.ReadValue<Vector2>();
+        };
         input.Player.Move.canceled += context => moveVector = Vector2.zero;
 
         input.Player.Look.performed += context => lookVector = context.ReadValue<Vector2>();
@@ -138,8 +144,6 @@ public class PlayerControl : MonoBehaviour
 
         rippleCameraEffect = cameraTransform.GetComponent<RippleEffect>();
 
-        dashMovementSpeed = normalMovementSpeed * dashMultiplier;
-        movementSpeed = normalMovementSpeed;
         numDashes = dashCapacity;
 
         // Initialize look vector and camera rotation to (0, 0).
@@ -223,10 +227,23 @@ public class PlayerControl : MonoBehaviour
     {
         if (numDashes > 0)
         {
-            // Set pre-dash velocity only if you aren't currently dashing.
-            if (!dashing)
+            if (!dashing && (rigidBody.velocity.x > 0 || rigidBody.velocity.z > 0))
             {
-                preDashVelocity = rigidBody.velocity;
+                Vector2 horizontalVelocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.z);
+                Vector2 dashVectorForward = new Vector2(transform.forward.x, transform.forward.z) * moveVector.y;
+                Vector2 dashVectorRight = new Vector2(transform.right.x, transform.right.z) * moveVector.x;
+                Vector2 dashVector = (dashVectorForward + dashVectorRight).normalized;
+                if (Vector2.Angle(horizontalVelocity, dashVector) < 90)
+                {
+                    // Add to the player's velocity.
+                    Vector2 addedVelocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.z).normalized * maxSpeed * dashMultiplier;
+                    rigidBody.velocity += new Vector3(addedVelocity.x, 0, addedVelocity.y);
+                }
+                else
+                {
+                    // Change the player's direction completely.
+                    rigidBody.velocity = new Vector3(dashVector.x * maxSpeed * dashMultiplier, rigidBody.velocity.y, dashVector.y * maxSpeed * dashMultiplier);
+                }
             }
 
             dashing = true;
@@ -237,7 +254,6 @@ public class PlayerControl : MonoBehaviour
             // If you dash while a dash is reloading, you will lose your progress with reloading the dash.
             dashCooldownCounter = 0f;
             soundManager.PlayDashSound();
-            movementSpeed = dashMovementSpeed;
             if (cameraParticleSystem)
             {
                 cameraParticleSystem.Play();
@@ -255,6 +271,11 @@ public class PlayerControl : MonoBehaviour
      */
     private void MaintainDash()
     {
+        Vector2 horizontalVelocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.z);
+        Vector2 dashVectorForward = new Vector2(transform.forward.x * moveVector.y, transform.forward.z * moveVector.y);
+        Vector2 dashVectorRight = new Vector2(transform.right.x * moveVector.x, transform.right.z * moveVector.x);
+        Vector2 dashVector = (dashVectorForward + dashVectorRight).normalized;
+        //Debug.Log(Vector2.Angle(horizontalVelocity, dashVector));
         if (dashCounter > 0)
         {
             dashCounter -= Time.fixedUnscaledDeltaTime;
@@ -265,9 +286,8 @@ public class PlayerControl : MonoBehaviour
         {
             // After the delay, stop the dash.
             dashing = false;
-            rigidBody.velocity = preDashVelocity;
+            rigidBody.velocity = new Vector3(rigidBody.velocity.x / dashMultiplier, rigidBody.velocity.y, rigidBody.velocity.z / dashMultiplier);
             dashCooldownCounter = dashCooldownLength;
-            movementSpeed = normalMovementSpeed;
 
             if (cameraParticleSystem)
             {
@@ -421,11 +441,11 @@ public class PlayerControl : MonoBehaviour
 
         if (Mathf.Abs(mag.x) > counterMovementThreshold && Mathf.Abs(x) < 0.05f || (mag.x < -counterMovementThreshold && x > 0) || (mag.x > counterMovementThreshold && x < 0))
         {
-            rigidBody.AddForce(normalMovementSpeed * transform.right * Time.deltaTime * -mag.x * counterMovement);
+            rigidBody.AddForce(movementSpeed * transform.right * Time.deltaTime * -mag.x * counterMovement);
         }
         if (Mathf.Abs(mag.y) > counterMovementThreshold && Mathf.Abs(y) < 0.05f || (mag.y < -counterMovementThreshold && y > 0) || (mag.y > counterMovementThreshold && y < 0))
         {
-            rigidBody.AddForce(normalMovementSpeed * transform.forward * Time.deltaTime * -mag.y * counterMovement);
+            rigidBody.AddForce(movementSpeed * transform.forward * Time.deltaTime * -mag.y * counterMovement);
         }
 
         if (Mathf.Sqrt((Mathf.Pow(rigidBody.velocity.x, 2) + Mathf.Pow(rigidBody.velocity.z, 2))) > maxSpeed)
@@ -446,11 +466,19 @@ public class PlayerControl : MonoBehaviour
     }
 
     /**
+     * Returns the camera's rotation.
+     */
+    public Vector2 GetCameraRotation()
+    {
+        return cameraRotation;
+    }
+
+    /**
      * Rotate the camera based on mouse/joystick movement.
      */
     private void AdjustCamera()
     {
-        cameraRotation.x = Mathf.Repeat(cameraRotation.x + lookVector.x * gameManager.GetSensitivity() * Time.deltaTime, 360);
+        cameraRotation.x = Mathf.Repeat(cameraRotation.x + lookVector.x * additionalHorizontalSensitivity * gameManager.GetSensitivity() * Time.deltaTime, 360);
         cameraRotation.y = Mathf.Clamp(cameraRotation.y - lookVector.y * gameManager.GetSensitivity() * Time.deltaTime, -maxYAngle, maxYAngle);
         cameraTransform.rotation = Quaternion.Euler(cameraRotation.y, cameraRotation.x, 0);
 
@@ -469,12 +497,6 @@ public class PlayerControl : MonoBehaviour
         //velocity relative to where player is looking
         Vector2 mag = VelRelativeToLook();
         float xMag = mag.x, yMag = mag.y;
-
-        // If dash is enabled and your joystick isn't as far out as it could be, you should still go the same dash speed.
-        if (dashCounter > 0)
-        {
-            moveVector.Normalize();
-        }
 
         float x = moveVector.x, y = moveVector.y;
 
@@ -540,6 +562,14 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
+    public void ResetAnimations()
+    {
+        handsAnimator.ResetTrigger("TimeWarp");
+        handsAnimator.ResetTrigger("Grappling");
+        handsAnimator.ResetTrigger("StopGrappling");
+        handsAnimator.SetBool("Running", false);
+    }
+
     private void FixedUpdate()
     {
         MaintainDash();
@@ -550,5 +580,10 @@ public class PlayerControl : MonoBehaviour
     private void Update()
     {
         AdjustCamera();
+    }
+
+    public bool GetGroundStatus()
+    {
+        return grounded;
     }
 }
