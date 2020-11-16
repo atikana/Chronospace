@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public LevelStats levelStats;
     public CheckPointManager checkPointManager;
     private PlayerControl playerControl;
+    private GrapplingGun grapplingGun;
     public Rigidbody playerRigidbody;
     public Transform cameraTransform;
     private float deathDelay = 0f;
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         playerControl = FindObjectOfType<PlayerControl>();
+        grapplingGun = playerControl.gameObject.GetComponentInChildren<GrapplingGun>();
     }
 
     public void PauseGame()
@@ -83,9 +85,10 @@ public class GameManager : MonoBehaviour
             // Reset hands animation.
             playerControl.ResetAnimations();
 
+            // Reset grappling gun.
+            grapplingGun.StopGrapple();
 
             levelStats.setDeath(GetNumDeaths());
-
 
             // Remove all existing bullets.
             GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");

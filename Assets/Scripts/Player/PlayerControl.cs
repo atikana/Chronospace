@@ -127,7 +127,11 @@ public class PlayerControl : MonoBehaviour
         };
 
         input.Player.Dash.performed += context => Dash();
-        input.Player.TimeWarp.performed += context => TimeWarp();
+        input.Player.TimeWarp.performed += context =>
+        {
+            transform.position = new Vector3(-5f, 6f, 428f);
+            TimeWarp();
+        };
         input.Player.RestartLevel.performed += context => gameManager.RestartLevel();
 
         input.Player.Pause.performed += context => gameManager.PauseGame();
@@ -572,26 +576,6 @@ public class PlayerControl : MonoBehaviour
 
     private void Update()
     {
-        if (handsAnimator.GetCurrentAnimatorStateInfo(0).IsName("Amulet_3_baked"))
-        {
-            Debug.Log("Amulet_3_baked");
-        }
-        else if (handsAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run_baked_Loop"))
-        {
-            Debug.Log("Run_baked_Loop");
-        }
-        else if (handsAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run_backed_Intro"))
-        {
-            Debug.Log("Run_backed_Intro");
-        }
-        else if (handsAnimator.GetCurrentAnimatorStateInfo(0).IsName("fixed02"))
-        {
-            Debug.Log("Hook_1-fixed02");
-        }
-        else
-        {
-            Debug.Log("Unknown state");
-        }
         AdjustCamera();
     }
 

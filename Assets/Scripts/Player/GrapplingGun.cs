@@ -242,7 +242,7 @@ public class GrapplingGun : MonoBehaviour
         lr.SetPosition(1, grapplePoint);
     }
 
-    void StopGrapple()
+    public void StopGrapple()
     {
         grapplingState = GrapplingState.Normal;
         lr.positionCount = 0;
