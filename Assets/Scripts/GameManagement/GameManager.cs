@@ -23,7 +23,8 @@ public class GameManager : MonoBehaviour
      */
     private const float timeWarpMultiplier = 0.5f;
 
-    private bool timeWarpEnabled = false;
+    private bool timeWarpEnabled;
+    private bool autoAim;
 
     private int numPlayerDeaths = 0;
 
@@ -153,7 +154,7 @@ public class GameManager : MonoBehaviour
             {
                 deathDelay -= Time.deltaTime;
             }
-            else 
+            else
             {
                 delayPeriod = false;
             }
@@ -184,4 +185,23 @@ public class GameManager : MonoBehaviour
         playerControl.input.Enable();
         countdownDisplay.gameObject.SetActive(false);
     }
+
+    public void SetAutoAim()
+    {
+        if (autoAim)
+        {
+            autoAim = false;
+        }
+        else
+        {
+            autoAim = true;
+        }
+       
+    }
+
+    public bool GetAutoAimStatus()
+    {
+        return autoAim;
+    }
 }
+

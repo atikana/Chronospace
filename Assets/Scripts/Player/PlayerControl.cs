@@ -586,4 +586,9 @@ public class PlayerControl : MonoBehaviour
     {
         return grounded;
     }
+
+    public bool GetGrapplingAutoAimStatus()
+    {
+        return gameManager.GetAutoAimStatus();
+    }
 }
