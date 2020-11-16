@@ -41,7 +41,7 @@ public class PlayerControl : MonoBehaviour
     public float doubleJumpWindow = 0.25f;
 
     // Dash speed multiplier.
-    public float dashMultiplier = 10f;
+    public float dashMultiplier = 2f;
 
     // Number of seconds dash lasts for.
     private float dashLength = 0.2f;
@@ -55,7 +55,6 @@ public class PlayerControl : MonoBehaviour
     private int dashCapacity = 2;
     private int numDashes;
     private float dashCounter = 0f;
-    private Vector3 preDashVelocity;
 
     private Vector2 moveVector;
     private Vector2 lookVector;
@@ -97,15 +96,21 @@ public class PlayerControl : MonoBehaviour
         levelStats = FindObjectOfType<LevelStats>();
 
         // Reset animation triggers to prevent them running at start.
-        handsAnimator.ResetTrigger("TimeWarp");
-        handsAnimator.ResetTrigger("Grappling");
-        handsAnimator.ResetTrigger("StopGrappling");
+        ResetAnimations();
 
         // Set up player input.
         input = new PlayerInput();
         input.Enable();
 
-        input.Player.Move.performed += context => moveVector = context.ReadValue<Vector2>();
+        input.Player.Move.performed += context =>
+        {
+            // Set animation trigger if player is starting to run.
+            if (moveVector == Vector2.zero)
+            {
+                handsAnimator.SetTrigger("StartRunning");
+            }
+            moveVector = context.ReadValue<Vector2>();
+        };
         input.Player.Move.canceled += context => moveVector = Vector2.zero;
 
         input.Player.Look.performed += context => lookVector = context.ReadValue<Vector2>();
@@ -226,10 +231,9 @@ public class PlayerControl : MonoBehaviour
     {
         if (numDashes > 0)
         {
-            // Set pre-dash velocity only if you aren't currently dashing.
             if (!dashing)
             {
-                preDashVelocity = rigidBody.velocity;
+                rigidBody.velocity = new Vector3(rigidBody.velocity.x * dashMultiplier, rigidBody.velocity.y, rigidBody.velocity.z * dashMultiplier);
             }
 
             dashing = true;
@@ -240,7 +244,7 @@ public class PlayerControl : MonoBehaviour
             // If you dash while a dash is reloading, you will lose your progress with reloading the dash.
             dashCooldownCounter = 0f;
             soundManager.PlayDashSound();
-            movementSpeed = dashMovementSpeed;
+            //movementSpeed = dashMovementSpeed;
             if (cameraParticleSystem)
             {
                 cameraParticleSystem.Play();
@@ -268,9 +272,9 @@ public class PlayerControl : MonoBehaviour
         {
             // After the delay, stop the dash.
             dashing = false;
-            rigidBody.velocity = preDashVelocity;
+            rigidBody.velocity = new Vector3(rigidBody.velocity.x / dashMultiplier, rigidBody.velocity.y, rigidBody.velocity.z / dashMultiplier);
             dashCooldownCounter = dashCooldownLength;
-            movementSpeed = normalMovementSpeed;
+            //movementSpeed = normalMovementSpeed;
 
             if (cameraParticleSystem)
             {
@@ -551,6 +555,14 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
+    public void ResetAnimations()
+    {
+        handsAnimator.ResetTrigger("TimeWarp");
+        handsAnimator.ResetTrigger("Grappling");
+        handsAnimator.ResetTrigger("StopGrappling");
+        handsAnimator.SetBool("Running", false);
+    }
+
     private void FixedUpdate()
     {
         MaintainDash();
@@ -560,6 +572,26 @@ public class PlayerControl : MonoBehaviour
 
     private void Update()
     {
+        if (handsAnimator.GetCurrentAnimatorStateInfo(0).IsName("Amulet_3_baked"))
+        {
+            Debug.Log("Amulet_3_baked");
+        }
+        else if (handsAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run_baked_Loop"))
+        {
+            Debug.Log("Run_baked_Loop");
+        }
+        else if (handsAnimator.GetCurrentAnimatorStateInfo(0).IsName("Run_backed_Intro"))
+        {
+            Debug.Log("Run_backed_Intro");
+        }
+        else if (handsAnimator.GetCurrentAnimatorStateInfo(0).IsName("fixed02"))
+        {
+            Debug.Log("Hook_1-fixed02");
+        }
+        else
+        {
+            Debug.Log("Unknown state");
+        }
         AdjustCamera();
     }
 

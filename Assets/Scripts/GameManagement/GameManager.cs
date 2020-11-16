@@ -80,6 +80,9 @@ public class GameManager : MonoBehaviour
             // Reset dash counters.
             playerControl.ResetDash();
 
+            // Reset hands animation.
+            playerControl.ResetAnimations();
+
 
             levelStats.setDeath(GetNumDeaths());
 

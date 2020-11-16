@@ -21,7 +21,7 @@ public class GrapplingGun : MonoBehaviour
 
     // Use a counter to shoot the rope after the grappling animation.
     private float ropeShootCounter = 0f;
-    private const float ropeShootLength = 0.45f;
+    private const float ropeShootLength = 0.25f;
 
     public Transform cameraTransform;
     public float sphereRadius;
