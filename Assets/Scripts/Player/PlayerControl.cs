@@ -20,9 +20,7 @@ public class PlayerControl : MonoBehaviour
     private bool cancellingGrounded = false;
     public float onAirControl = 2f; // change this value to adjust player's ability to move left/right in mid-air
 
-    private float movementSpeed;
-    private float normalMovementSpeed = 4500f;
-    private float dashMovementSpeed;
+    private float movementSpeed = 4500f;
 
     public float maxSpeed = 30f;
     public float counterMovement = 0.175f;
@@ -127,11 +125,7 @@ public class PlayerControl : MonoBehaviour
         };
 
         input.Player.Dash.performed += context => Dash();
-        input.Player.TimeWarp.performed += context =>
-        {
-            transform.position = new Vector3(-5f, 6f, 428f);
-            TimeWarp();
-        };
+        input.Player.TimeWarp.performed += context => TimeWarp();
         input.Player.RestartLevel.performed += context => gameManager.RestartLevel();
 
         input.Player.Pause.performed += context => gameManager.PauseGame();
@@ -150,8 +144,6 @@ public class PlayerControl : MonoBehaviour
 
         rippleCameraEffect = cameraTransform.GetComponent<RippleEffect>();
 
-        dashMovementSpeed = normalMovementSpeed * dashMultiplier;
-        movementSpeed = normalMovementSpeed;
         numDashes = dashCapacity;
 
         // Initialize look vector and camera rotation to (0, 0).
@@ -248,7 +240,6 @@ public class PlayerControl : MonoBehaviour
             // If you dash while a dash is reloading, you will lose your progress with reloading the dash.
             dashCooldownCounter = 0f;
             soundManager.PlayDashSound();
-            //movementSpeed = dashMovementSpeed;
             if (cameraParticleSystem)
             {
                 cameraParticleSystem.Play();
@@ -278,7 +269,6 @@ public class PlayerControl : MonoBehaviour
             dashing = false;
             rigidBody.velocity = new Vector3(rigidBody.velocity.x / dashMultiplier, rigidBody.velocity.y, rigidBody.velocity.z / dashMultiplier);
             dashCooldownCounter = dashCooldownLength;
-            //movementSpeed = normalMovementSpeed;
 
             if (cameraParticleSystem)
             {
@@ -432,11 +422,11 @@ public class PlayerControl : MonoBehaviour
 
         if (Mathf.Abs(mag.x) > counterMovementThreshold && Mathf.Abs(x) < 0.05f || (mag.x < -counterMovementThreshold && x > 0) || (mag.x > counterMovementThreshold && x < 0))
         {
-            rigidBody.AddForce(normalMovementSpeed * transform.right * Time.deltaTime * -mag.x * counterMovement);
+            rigidBody.AddForce(movementSpeed * transform.right * Time.deltaTime * -mag.x * counterMovement);
         }
         if (Mathf.Abs(mag.y) > counterMovementThreshold && Mathf.Abs(y) < 0.05f || (mag.y < -counterMovementThreshold && y > 0) || (mag.y > counterMovementThreshold && y < 0))
         {
-            rigidBody.AddForce(normalMovementSpeed * transform.forward * Time.deltaTime * -mag.y * counterMovement);
+            rigidBody.AddForce(movementSpeed * transform.forward * Time.deltaTime * -mag.y * counterMovement);
         }
 
         if (Mathf.Sqrt((Mathf.Pow(rigidBody.velocity.x, 2) + Mathf.Pow(rigidBody.velocity.z, 2))) > maxSpeed)
