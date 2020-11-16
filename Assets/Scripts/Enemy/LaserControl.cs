@@ -31,8 +31,11 @@ public class LaserControl : MonoBehaviour
         }
         if (enhanceFire)
         {
-            Transform line_ = Instantiate(lr.transform, firePoint.transform.position, Quaternion.identity);
-            line_.transform.rotation = firePoint.transform.rotation;
+            if (Random.Range(0.0f, 1.0f) >= 0.5f)
+            {
+                Transform line_ = Instantiate(lr.transform, firePoint.transform.position, Quaternion.identity);
+                line_.transform.rotation = firePoint.transform.rotation;
+            }
         }
 
     }

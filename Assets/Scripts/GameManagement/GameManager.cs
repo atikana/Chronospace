@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +15,8 @@ public class GameManager : MonoBehaviour
     public Transform cameraTransform;
     private float deathDelay = 0f;
     private bool delayPeriod;
+    private int countdown = 3;
+    public Text countdownDisplay;
 
     /* The speed multiplier of the moving objects in the game.
      * This allows the time warp effect to take place.
@@ -64,7 +69,6 @@ public class GameManager : MonoBehaviour
      */
     public void RestartLevel(bool dead = false)
     {
-     
         if (dead)
         {
             CheckPoint lastCheckPoint = checkPointManager.GetClosestCheckPoint();
@@ -96,10 +100,12 @@ public class GameManager : MonoBehaviour
             {
                 Destroy(bullet);
             }
+            StartCoroutine(CountdownTo());
         }
         else
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            StartCoroutine(CountdownTo());
         }
     }
 
@@ -152,5 +158,29 @@ public class GameManager : MonoBehaviour
                 delayPeriod = false;
             }
         }
+    }
+
+    IEnumerator CountdownTo()
+    {
+        countdownDisplay.gameObject.SetActive(true);
+        playerControl.input.Disable();
+        cameraTransform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        while (countdown > 0)
+        {
+            countdownDisplay.text = countdown.ToString();
+
+            yield return new WaitForSecondsRealtime(1f);
+
+            countdown--;
+        }
+
+        countdownDisplay.text = "START";
+
+        yield return new WaitForSecondsRealtime(0.2f);
+
+        //Time.timeScale = 1f;
+        playerControl.input.Enable();
+        countdownDisplay.gameObject.SetActive(false);
+        countdown = 3;
     }
 }

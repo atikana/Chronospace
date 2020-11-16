@@ -8,7 +8,7 @@ public class PlayerControl : MonoBehaviour
     public Transform cameraTransform;
     private Rigidbody rigidBody;
     private Animator handsAnimator;
-    private PlayerInput input;
+    public PlayerInput input;
     private GameManager gameManager;
     private SoundManager soundManager;
     private ParticleSystem cameraParticleSystem;
