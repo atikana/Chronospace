@@ -39,7 +39,7 @@ public class PlayerControl : MonoBehaviour
     public float doubleJumpWindow = 0.25f;
 
     // Dash speed multiplier.
-    public float dashMultiplier = 2f;
+    public float dashMultiplier = 1.5f;
 
     // Number of seconds dash lasts for.
     private float dashLength = 0.2f;
@@ -79,7 +79,7 @@ public class PlayerControl : MonoBehaviour
     private bool grappleToggle = false;
 
     // Multiplier for player's horizontal sensitivity.
-    public float additionalHorizontalSensitivity = 1.5f;
+    public float additionalHorizontalSensitivity = 1.3f;
 
     /**
      * Set up stuff before the level starts.
@@ -103,7 +103,7 @@ public class PlayerControl : MonoBehaviour
         input.Player.Move.performed += context =>
         {
             // Set animation trigger if player is starting to run.
-            if (moveVector == Vector2.zero)
+            if (handsAnimator && moveVector == Vector2.zero)
             {
                 handsAnimator.SetTrigger("StartRunning");
             }
@@ -227,9 +227,23 @@ public class PlayerControl : MonoBehaviour
     {
         if (numDashes > 0)
         {
-            if (!dashing)
+            if (!dashing && (rigidBody.velocity.x > 0 || rigidBody.velocity.z > 0))
             {
-                rigidBody.velocity = new Vector3(rigidBody.velocity.x * dashMultiplier, rigidBody.velocity.y, rigidBody.velocity.z * dashMultiplier);
+                Vector2 horizontalVelocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.z);
+                Vector2 dashVectorForward = new Vector2(transform.forward.x, transform.forward.z) * moveVector.y;
+                Vector2 dashVectorRight = new Vector2(transform.right.x, transform.right.z) * moveVector.x;
+                Vector2 dashVector = (dashVectorForward + dashVectorRight).normalized;
+                if (Vector2.Angle(horizontalVelocity, dashVector) < 90)
+                {
+                    // Add to the player's velocity.
+                    Vector2 addedVelocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.z).normalized * maxSpeed * dashMultiplier;
+                    rigidBody.velocity += new Vector3(addedVelocity.x, 0, addedVelocity.y);
+                }
+                else
+                {
+                    // Change the player's direction completely.
+                    rigidBody.velocity = new Vector3(dashVector.x * maxSpeed * dashMultiplier, rigidBody.velocity.y, dashVector.y * maxSpeed * dashMultiplier);
+                }
             }
 
             dashing = true;
@@ -257,6 +271,11 @@ public class PlayerControl : MonoBehaviour
      */
     private void MaintainDash()
     {
+        Vector2 horizontalVelocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.z);
+        Vector2 dashVectorForward = new Vector2(transform.forward.x * moveVector.y, transform.forward.z * moveVector.y);
+        Vector2 dashVectorRight = new Vector2(transform.right.x * moveVector.x, transform.right.z * moveVector.x);
+        Vector2 dashVector = (dashVectorForward + dashVectorRight).normalized;
+        //Debug.Log(Vector2.Angle(horizontalVelocity, dashVector));
         if (dashCounter > 0)
         {
             dashCounter -= Time.fixedUnscaledDeltaTime;
@@ -478,12 +497,6 @@ public class PlayerControl : MonoBehaviour
         //velocity relative to where player is looking
         Vector2 mag = VelRelativeToLook();
         float xMag = mag.x, yMag = mag.y;
-
-        // If dash is enabled and your joystick isn't as far out as it could be, you should still go the same dash speed.
-        if (dashCounter > 0)
-        {
-            moveVector.Normalize();
-        }
 
         float x = moveVector.x, y = moveVector.y;
 
