@@ -20,4 +20,10 @@ public class OptionMenu : MonoBehaviour
     {
         gameManager.SetSensitivity(sensitivity);
     }
+
+    public void SetAutoAim()
+    {
+        gameManager.SetAutoAim();
+    }
+
 }

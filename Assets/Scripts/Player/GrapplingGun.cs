@@ -69,7 +69,6 @@ public class GrapplingGun : MonoBehaviour
 
     void Update()
     {
-        GrappleAim();
         if (playerControl.GetGrappleShoot())
         {
             if (!joint)
@@ -127,35 +126,6 @@ public class GrapplingGun : MonoBehaviour
         return grapplingState == GrapplingState.Grappling;
     }
 
-    void GrappleAim() {
-        RaycastHit grappleAim;
-        GameObject close;
-        if (grapplingState == GrapplingState.Normal)
-        {
-            if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out grappleAim, maxDistance, whatIsGrappleable))
-            {
-
-                aimPoint.transform.position = grappleAim.point;
-                aimPoint.SetActive(true);
-            }
-            else if ((close = findGrapplePoint()) != null)
-            {
-
-                aimPoint.transform.position = close.transform.position;
-                aimPoint.SetActive(true);
-
-            }
-            else {
-                aimPoint.SetActive(false);
-            }
-
-        }
-        else
-        {
-            aimPoint.SetActive(false);
-        }
-       
-    }
 
     void StartGrapple()
     {
@@ -166,17 +136,25 @@ public class GrapplingGun : MonoBehaviour
             if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out grappleHit, maxDistance, whatIsGrappleable))
             {
                 autoAim = false;
+                aimPoint.transform.position = grappleHit.point;
+                aimPoint.SetActive(true);
                 StartGrappleHelper(grappleHit.collider.gameObject);
-      
+
             }
-            else if ((close = findGrapplePoint()) != null)
+            else if (playerControl.GetGrapplingAutoAimStatus() && (close = findGrapplePoint()) != null)
             {
                 // should i make it actually shoot to the player
                 autoAim = true;
+                aimPoint.transform.position = close.transform.position;
+                aimPoint.SetActive(true);
                 StartGrappleHelper(close.gameObject);
 
               
             }
+        }
+        else
+        {
+            aimPoint.SetActive(false);
         }
     }
 
