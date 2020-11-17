@@ -145,6 +145,9 @@ public class GrapplingGun : MonoBehaviour
                 aimPoint.SetActive(true);
 
             }
+            else {
+                aimPoint.SetActive(false);
+            }
 
         }
         else
