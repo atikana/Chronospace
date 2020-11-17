@@ -9,6 +9,9 @@ public class SoundManager : MonoBehaviour
     // High pass filter to be applied during time warp.
     public AudioHighPassFilter highPassFilter;
 
+    // Low pass filter to be applied during pause.
+    public AudioLowPassFilter lowPassFilter;
+
     void Start()
     {
         AudioSource[] audioSources = GetComponents<AudioSource>();
@@ -29,6 +32,11 @@ public class SoundManager : MonoBehaviour
     public void SetHighPassFilterEnabled(bool enabled)
     {
         highPassFilter.enabled = enabled;
+    }
+
+    public void SetLowPassFilterEnabled(bool enabled)
+    {
+        lowPassFilter.enabled = enabled;
     }
 
     public void SetVolume(float newVolume)

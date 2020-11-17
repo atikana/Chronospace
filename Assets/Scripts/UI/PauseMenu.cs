@@ -4,9 +4,11 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
 
-    GameObject menu;
-    GameObject pauseMenu;
-    GameObject optionMenu;
+    private GameObject menu;
+    private GameObject pauseMenu;
+    private GameObject optionMenu;
+
+    private SoundManager soundManager;
  
 
     /* Time scale from before the game was paused.  This is necessary so that if
@@ -22,6 +24,7 @@ public class PauseMenu : MonoBehaviour
         menu = transform.GetChild(0).gameObject;
         pauseMenu = transform.GetChild(0).GetChild(0).gameObject;
         optionMenu = transform.GetChild(0).GetChild(1).gameObject;
+        soundManager = FindObjectOfType<SoundManager>();
     }
     void Start()
     {   
@@ -59,6 +62,7 @@ public class PauseMenu : MonoBehaviour
 
     public void PauseGame()
     {
+        soundManager.SetLowPassFilterEnabled(true);
         menu.SetActive(true);
         pauseMenu.SetActive(true);
         originalTimeScale = Time.timeScale;
@@ -71,7 +75,7 @@ public class PauseMenu : MonoBehaviour
 
     public void ResumeGame()
     {
-        
+        soundManager.SetLowPassFilterEnabled(false);
         pauseMenu.SetActive(false);
         menu.SetActive(false);
         Time.timeScale = originalTimeScale;
