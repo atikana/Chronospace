@@ -23,13 +23,13 @@ public class TutorialTextControl : MonoBehaviour
         if (playerTransform.position.z > 120 && !timeWarpTextShown)
         {
             timeWarpTextShown = true;
-            text.text = "Press B (Xbox) or T (keyboard) for time warp";
+            text.text = "Press X (Xbox) or Shift (keyboard) to use dash";
             textCounter = 200;
         }
         else if (playerTransform.position.z > 250 && !dashTextShown)
         {
             dashTextShown = true;
-            text.text = "Press X (Xbox) or Shift (keyboard) to use dash";
+            text.text = "Press B (Xbox) or Q (keyboard) for time warp";
             textCounter = 200;
         }
         else if (playerTransform.position.z > 420 && !grappleTextShown)

@@ -174,7 +174,7 @@ public class GrapplingGun : MonoBehaviour
             {
                 showRope = true;
                 lr.positionCount = 2;
-                autoAim = false;
+                //autoAim = false;
                 StartGrappleHelper(grappleHit.collider.gameObject);
                 grapplePoint = grappleHit.point;
             }
@@ -183,9 +183,10 @@ public class GrapplingGun : MonoBehaviour
                 // should i make it actually shoot to the player
                 showRope = true;
                 lr.positionCount = 2;
-                autoAim = true;
+                //autoAim = true;
                 StartGrappleHelper(close.gameObject);
-                grapplePoint = lastGrapple.transform.position;
+                //grapplePoint = lastGrapple.transform.position;
+                grapplePoint = close.GetComponent<Renderer>().bounds.center;
             }
         }
     }
@@ -260,6 +261,8 @@ public class GrapplingGun : MonoBehaviour
     {
         joint = playerTransform.gameObject.AddComponent<SpringJoint>();
         joint.autoConfigureConnectedAnchor = false;
+
+
         joint.connectedAnchor = grapplePoint;
 
         float distanceFromPoint = Vector3.Distance(playerTransform.position, grapplePoint);
@@ -372,7 +375,7 @@ public class GrapplingGun : MonoBehaviour
                 {
                     Debug.DrawRay(playerTransform.position, hit.transform.position);
                     // if it not small platform and not hitting itself
-                    if (!(hit.name.CompareTo("pCube1") == 0 && hitObject.collider.transform.parent != hit.transform.parent))
+                    if (!(hit.name.CompareTo("pCube3") == 0 && hitObject.collider.transform.parent != hit.transform.parent))
                     {
                         continue;
                     }
@@ -382,7 +385,7 @@ public class GrapplingGun : MonoBehaviour
                 }
                 
                 // so u dont hit the same target, unless u have to or u r already on the ground.
-                if (lastGrapple != null && lastGrapple.name.CompareTo(hit.name) == 0 && lastGrapple.name.CompareTo("pCube1") == 0 && lastGrapple.transform.parent == hit.transform.parent && !playerControl.GetGroundStatus())
+                if (lastGrapple != null && lastGrapple.name.CompareTo(hit.name) == 0 && lastGrapple.name.CompareTo("pCube3") == 0 && lastGrapple.transform.parent == hit.transform.parent && !playerControl.GetGroundStatus())
                 {
                     secondClose = hit.gameObject;
                     continue;
