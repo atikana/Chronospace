@@ -43,6 +43,7 @@ public class CheckPoint : MonoBehaviour
         {
             transform.parent.GetComponent<CheckPointManager>().AddCheckPoint(this);
             ChangeColor(neonGreen);
+            playerControl.ResetPositions();
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using WaterRippleForScreens;
 
@@ -92,6 +93,11 @@ public class PlayerControl : MonoBehaviour
     // Multiplier for player's horizontal sensitivity.
     public float additionalHorizontalSensitivity = 1.3f;
 
+    private List<Vector3> previousPositions;
+    private float rewindPeriod = 0.0f;
+    public float rewindStep = 0.1f;
+    private bool isRewinding;
+
     /**
      * Set up stuff before the level starts.
      */
@@ -104,6 +110,8 @@ public class PlayerControl : MonoBehaviour
         cameraParticleSystem = GetComponentInChildren<ParticleSystem>();
         levelStats = FindObjectOfType<LevelStats>();
         playerCapsuleCollider = GetComponent<CapsuleCollider>();
+        previousPositions = new List<Vector3>();
+        isRewinding = false;
 
         // Reset animation triggers to prevent them running at start.
         ResetAnimations();
@@ -229,7 +237,7 @@ public class PlayerControl : MonoBehaviour
             gameManager.SetTimeWarpEnabled(true);
             timeWarpCounter = timeWarpLength;
             rippleCameraEffect.SetNewRipplePosition(new Vector2(Screen.width / 2, (Screen.height / 2) + 35f));
-        }
+        } 
     }
 
     /**
@@ -658,11 +666,70 @@ public class PlayerControl : MonoBehaviour
         MaintainTimeWarp();
         MaintainClimb();
         Move();
+        if (isRewinding)
+        {
+            // Rewind();
+        }
+        else
+        {
+            RecordPositions();
+        }
     }
 
     private void Update()
     {
         AdjustCamera();
+        if (isRewinding)
+        {
+            if (rewindPeriod > rewindStep)
+            {
+                Rewind();
+                rewindPeriod = 0;
+            }
+            rewindPeriod += UnityEngine.Time.deltaTime;
+        }
+
+    }
+
+    private void Rewind()
+    {
+        if (previousPositions.Count > 0)
+        {
+            rigidBody.isKinematic = true;
+            rigidBody.transform.position = previousPositions[0];
+            previousPositions.RemoveAt(0);
+        }
+        else 
+        { 
+            isRewinding = false;
+            rigidBody.isKinematic = false;
+        }
+    }
+
+    public void StartRewind() 
+    {
+        if (previousPositions.Count != 0)
+        {
+            isRewinding = true;
+            rewindStep = 3.0f / previousPositions.Count;
+        }
+    }
+
+    public void StopRewind()
+    {
+        isRewinding = false;
+        ResetPositions();
+        rigidBody.isKinematic = false;
+    }
+
+    public void ResetPositions()
+    {
+        previousPositions = new List<Vector3>();
+    }
+
+    private void RecordPositions()
+    {
+        previousPositions.Insert(0, rigidBody.transform.position);
     }
 
     public bool GetGroundStatus()

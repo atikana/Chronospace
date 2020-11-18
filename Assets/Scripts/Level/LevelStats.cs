@@ -38,6 +38,11 @@ public class LevelStats : MonoBehaviour
         startTimer = true;
     }
 
+    public void PauseTimer()
+    {
+        startTimer = false;
+    }
+
     public void ResetTimer()
     {
         timer = 0f;
