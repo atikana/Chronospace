@@ -37,11 +37,11 @@ public class MusicManager : MonoBehaviour
     {
         if (musicIn)
         {   
-            if (!musicStarted) 
+           if (!musicStarted) 
             { 
-                audioSource.Play();
                 musicStarted = true;
-            }      
+                audioSource.Play();
+            }
             playMusic();
         }
     }
@@ -67,7 +67,7 @@ public class MusicManager : MonoBehaviour
 
     void playMusic()
     {
-        if (audioSource.time == audioClips[index].length)
+        if (!audioSource.isPlaying)
         {
             index++;
 
@@ -77,10 +77,13 @@ public class MusicManager : MonoBehaviour
             }
 
             SetSong(audioClips[index]);
+            audioSource.Play();
 
         }
 
         songLength.value = audioSource.time;
+       
+
 
     }
 
@@ -90,7 +93,6 @@ public class MusicManager : MonoBehaviour
         audioSource.clip = audioClips[index];
         songLength.minValue = 0;
         songLength.maxValue = audioClip.length;
-        // audioSource.Play();
     }
 
 
