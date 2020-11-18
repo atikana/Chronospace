@@ -17,7 +17,10 @@ public class GameManager : MonoBehaviour
     private bool delayPeriod;
     public int countdown;
     public Text countdownDisplay;
+    public Text rewindDisplay;
     private bool counted;
+    private bool isRewinding;
+    public bool RewindEnabled;
 
     /* The speed multiplier of the moving objects in the game.
      * This allows the time warp effect to take place.
@@ -41,6 +44,7 @@ public class GameManager : MonoBehaviour
         playerControl = FindObjectOfType<PlayerControl>();
         grapplingGun = playerControl.gameObject.GetComponentInChildren<GrapplingGun>();
         counted = false;
+        isRewinding = false;
     }
 
     public void PauseGame()
@@ -76,6 +80,8 @@ public class GameManager : MonoBehaviour
         {
             CheckPoint lastCheckPoint = checkPointManager.GetClosestCheckPoint();
 
+            playerControl.ResetPositions();
+            // Debug.Log("level restarted");
             // camera is shaking
             playerRigidbody.MovePosition(lastCheckPoint.GetCheckPointPosition());
 
@@ -103,12 +109,10 @@ public class GameManager : MonoBehaviour
             {
                 Destroy(bullet);
             }
-            // StartCoroutine(CountdownTo());
         }
         else
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            // StartCoroutine(CountdownTo());
         }
     }
 
@@ -139,12 +143,22 @@ public class GameManager : MonoBehaviour
     public void KillPlayer()
     {
         // TODO:  Modify this when checkpoints are implemented!
-        if (!delayPeriod)
+        if (!isRewinding)
         {
-            deathDelay = 0.5f;
-            delayPeriod = true;
-            AddDeath();
-            RestartLevel(true);
+            if (!delayPeriod)
+            {
+                deathDelay = 0.5f;
+                delayPeriod = true;
+                if (RewindEnabled)
+                {
+                    StartCoroutine(Rewinding());
+                }
+                else 
+                {
+                    AddDeath();
+                    RestartLevel(true);
+                }
+            }
         }
     }
 
@@ -168,6 +182,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    IEnumerator Rewinding()
+    {
+        FindObjectOfType<SoundManager>().PlayRewindSound();
+        levelStats.PauseTimer();
+        isRewinding = true;
+        rewindDisplay.gameObject.SetActive(true);
+        playerControl.input.Disable();
+        playerControl.StartRewind();
+
+        yield return new WaitForSeconds(3f);
+
+        playerControl.StopRewind();
+        playerControl.input.Enable();
+        rewindDisplay.gameObject.SetActive(false);
+        levelStats.StartTimer();
+        AddDeath();
+        RestartLevel(true);
+        isRewinding = false;
+    }
+
     IEnumerator CountdownTo()
     {
         FindObjectOfType<SoundManager>().PlayCountdownSound();
@@ -189,7 +223,6 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(0.2f);
 
-        //Time.timeScale = 1f;
         playerControl.input.Enable();
         levelStats.StartTimer();
         FindObjectOfType<MusicManager>().StartMusic();

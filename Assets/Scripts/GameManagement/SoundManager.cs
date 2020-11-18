@@ -4,7 +4,7 @@ public class SoundManager : MonoBehaviour
 {
     private float volume = 0.5f;
     private AudioSource soundEffectsAudioSource, musicAudioSource;
-    private AudioClip doubleJumpClip, jumpClip, dashClip, timeWarpClip, pendulumClip, grapplingClip, countDownClip;
+    private AudioClip doubleJumpClip, jumpClip, dashClip, timeWarpClip, pendulumClip, grapplingClip, countDownClip, rewindClip;
 
     // High pass filter to be applied during time warp.
     public AudioHighPassFilter highPassFilter;
@@ -25,6 +25,7 @@ public class SoundManager : MonoBehaviour
         pendulumClip = Resources.Load<AudioClip>("PENDULUM");
         grapplingClip = Resources.Load<AudioClip>("HOOKSHOT");
         countDownClip = Resources.Load<AudioClip>("COUNTDOWN");
+        rewindClip = Resources.Load<AudioClip>("DEATH_REWIND");
 
         // Default volume when game starts.
         SetVolume(volume);
@@ -104,6 +105,14 @@ public class SoundManager : MonoBehaviour
         if (soundEffectsAudioSource && countDownClip)
         {
             soundEffectsAudioSource.PlayOneShot(countDownClip, volume);
+        }
+    }
+
+    public void PlayRewindSound()
+    {
+        if (soundEffectsAudioSource && rewindClip)
+        {
+            soundEffectsAudioSource.PlayOneShot(rewindClip, 1.2f);
         }
     }
 
