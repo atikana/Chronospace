@@ -74,6 +74,7 @@ public class GrapplingGun : MonoBehaviour
 
     void Update()
     {
+        GrappleAim();
         if (playerControl.GetGrappleShoot())
         {
             if (!joint)
@@ -129,6 +130,35 @@ public class GrapplingGun : MonoBehaviour
     public bool IsGrappling()
     {
         return grapplingState == GrapplingState.Grappling;
+    }
+
+    void GrappleAim()
+    {
+        if (grapplingState == GrapplingState.Normal)
+        {
+            GameObject close;
+
+            if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out grappleHit, maxDistance, whatIsGrappleable))
+            {
+              
+                autoAim = false;
+                aimPoint.transform.position = grappleHit.point;
+                aimPoint.SetActive(true);
+                grapplePoint = grappleHit.point;
+            }
+            else if (playerControl.GetGrapplingAutoAimStatus() && (close = FindGrapplePoint()) != null)
+            {
+                // should i make it actually shoot to the player
+              
+                aimPoint.transform.position = close.transform.position;
+                aimPoint.SetActive(true);
+            }
+            else
+            {
+                aimPoint.SetActive(false);
+            }
+        }
+       
     }
 
 
