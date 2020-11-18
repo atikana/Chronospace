@@ -11,6 +11,7 @@ public class LevelStats : MonoBehaviour
 
     private float timer;
     public PauseMenu pauseMenu;
+    private bool startTimer;
 
     public PlayerControl playerControl;
 
@@ -29,6 +30,12 @@ public class LevelStats : MonoBehaviour
         dashGaugeAnimator.ResetTrigger("Dashing");
         dashGaugeAnimator.ResetTrigger("StopDashing");
         ResetTimer();
+        startTimer = false;
+    }
+
+    public void StartTimer()
+    {
+        startTimer = true;
     }
 
     public void ResetTimer()
@@ -49,13 +56,16 @@ public class LevelStats : MonoBehaviour
     void Update()
     {
         // Update the level timer and set the text.
-        if (!pauseMenu.CheckPaused())
+        if (startTimer)
         {
-            timer += Time.unscaledDeltaTime;
+            if (!pauseMenu.CheckPaused())
+            {
+                timer += Time.unscaledDeltaTime;
 
-            TimeSpan timeSpan = TimeSpan.FromSeconds(timer);
+                TimeSpan timeSpan = TimeSpan.FromSeconds(timer);
 
-            levelTimerText.text = "Time: " + string.Format("{0,1:0}:{1,2:00}", timeSpan.Minutes, timeSpan.Seconds);
+                levelTimerText.text = "Time: " + string.Format("{0,1:0}:{1,2:00}", timeSpan.Minutes, timeSpan.Seconds);
+            }
         }
         
 

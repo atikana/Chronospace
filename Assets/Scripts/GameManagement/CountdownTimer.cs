@@ -5,36 +5,48 @@ using UnityEngine.UI;
 
 public class CountdownTimer : MonoBehaviour
 {
-    private int countdown = 3;
+    public int countdown = 3;
     public Text countdownDisplay;
+    public Transform cameraTransform;
+    public PlayerControl playerControl;
 
     // Start is called before the first frame update
     void Start()
     {
+        // playerControl = FindObjectOfType<PlayerControl>().GetComponent(PlayerControl); 
         // StartCoroutine(CountdownTo());
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     IEnumerator CountdownTo()
     {
-        while (countdown > 0) 
+        Debug.Log("start countdown");
+        int countdown_;
+        countdown_ = countdown;
+        countdownDisplay.gameObject.SetActive(true);
+        playerControl.input.Disable();
+        cameraTransform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        while (countdown_ > 0)
         {
-            countdownDisplay.text = countdown.ToString();
+            Debug.Log("counting");
+            countdownDisplay.text = countdown_.ToString();
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSecondsRealtime(1f);
 
-            countdown--;
+            countdown_--;
         }
-
+        Debug.Log("exit countdown");
         countdownDisplay.text = "START";
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSecondsRealtime(0.2f);
 
+        //Time.timeScale = 1f;
+        playerControl.input.Enable();
         countdownDisplay.gameObject.SetActive(false);
     }
 }

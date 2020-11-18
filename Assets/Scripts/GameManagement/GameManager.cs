@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     private bool delayPeriod;
     public int countdown;
     public Text countdownDisplay;
+    private bool counted;
 
     /* The speed multiplier of the moving objects in the game.
      * This allows the time warp effect to take place.
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour
     {
         playerControl = FindObjectOfType<PlayerControl>();
         grapplingGun = playerControl.gameObject.GetComponentInChildren<GrapplingGun>();
+        counted = false;
     }
 
     public void PauseGame()
@@ -101,12 +103,12 @@ public class GameManager : MonoBehaviour
             {
                 Destroy(bullet);
             }
-            StartCoroutine(CountdownTo());
+            // StartCoroutine(CountdownTo());
         }
         else
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            StartCoroutine(CountdownTo());
+            // StartCoroutine(CountdownTo());
         }
     }
 
@@ -159,10 +161,17 @@ public class GameManager : MonoBehaviour
                 delayPeriod = false;
             }
         }
+
+        if (!counted) 
+        {
+            StartCoroutine(CountdownTo());
+        }
     }
 
     IEnumerator CountdownTo()
     {
+        FindObjectOfType<SoundManager>().PlayCountdownSound();
+        counted = true;
         int countdown_;
         countdown_ = countdown;
         countdownDisplay.gameObject.SetActive(true);
@@ -176,13 +185,14 @@ public class GameManager : MonoBehaviour
 
             countdown_--;
         }
-
         countdownDisplay.text = "START";
 
         yield return new WaitForSecondsRealtime(0.2f);
 
         //Time.timeScale = 1f;
         playerControl.input.Enable();
+        levelStats.StartTimer();
+        FindObjectOfType<MusicManager>().StartMusic();
         countdownDisplay.gameObject.SetActive(false);
     }
 

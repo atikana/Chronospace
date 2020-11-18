@@ -12,6 +12,8 @@ public class MusicManager : MonoBehaviour
     List<AudioClip> audioClips = new List<AudioClip>();
     Text songName;
     Slider songLength;
+    private bool musicIn;
+    private bool musicStarted;
     int index = 0;
     // Start is called before the first frame update
 
@@ -21,7 +23,8 @@ public class MusicManager : MonoBehaviour
         songName = transform.GetChild(0).GetComponent<Text>();
         songLength = transform.GetChild(2).GetComponent<Slider>();
         getAllMusic();
-
+        musicIn = false;
+        musicStarted = false;
 
     }
     void Start()
@@ -32,9 +35,20 @@ public class MusicManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        playMusic();
+        if (musicIn)
+        {   
+            if (!musicStarted) 
+            { 
+                audioSource.Play();
+                musicStarted = true;
+            }      
+            playMusic();
+        }
+    }
 
-
+    public void StartMusic() 
+    {
+        musicIn = true;
     }
 
     void getAllMusic()
@@ -76,7 +90,7 @@ public class MusicManager : MonoBehaviour
         audioSource.clip = audioClips[index];
         songLength.minValue = 0;
         songLength.maxValue = audioClip.length;
-        audioSource.Play();
+        // audioSource.Play();
     }
 
 
