@@ -13,6 +13,7 @@ public class PlayerControl : MonoBehaviour
     private SoundManager soundManager;
     private ParticleSystem cameraParticleSystem;
     private LevelStats levelStats;
+    private CapsuleCollider playerCapsuleCollider;
 
     public float jumpForce = 550f;
     private bool ableToDoubleJump = false;
@@ -35,11 +36,18 @@ public class PlayerControl : MonoBehaviour
     private bool firstJump = true;
     private bool readyToJump = true;
 
+    private bool climbingPlatform = false;
+    private float climbingSpeed = 15f;
+    private float endClimbingSpeed = 5f;
+    private float climbingAngleThreshold = 25f;
+    private Vector2 climbingPlatformNormal;
+    private float climbingPlatformTop;
+
     private float jumpCooldown = 0.25f;
     public float doubleJumpWindow = 0.25f;
 
     // Dash speed multiplier.
-    public float dashMultiplier = 1.5f;
+    public float dashMultiplier = 5f;
 
     // Number of seconds dash lasts for.
     private float dashLength = 0.2f;
@@ -92,6 +100,7 @@ public class PlayerControl : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
         cameraParticleSystem = GetComponentInChildren<ParticleSystem>();
         levelStats = FindObjectOfType<LevelStats>();
+        playerCapsuleCollider = GetComponent<CapsuleCollider>();
 
         // Reset animation triggers to prevent them running at start.
         ResetAnimations();
@@ -103,7 +112,7 @@ public class PlayerControl : MonoBehaviour
         input.Player.Move.performed += context =>
         {
             // Set animation trigger if player is starting to run.
-            if (handsAnimator && moveVector == Vector2.zero)
+            if (handsAnimator && moveVector == Vector2.zero && grounded)
             {
                 handsAnimator.SetTrigger("StartRunning");
             }
@@ -126,7 +135,7 @@ public class PlayerControl : MonoBehaviour
 
         input.Player.Dash.performed += context => Dash();
         input.Player.TimeWarp.performed += context => TimeWarp();
-        input.Player.RestartLevel.performed += context => gameManager.RestartLevel();
+        //input.Player.RestartLevel.performed += context => gameManager.RestartLevel();
 
         input.Player.Pause.performed += context => gameManager.PauseGame();
 
@@ -227,16 +236,18 @@ public class PlayerControl : MonoBehaviour
     {
         if (numDashes > 0)
         {
-            if (!dashing && (rigidBody.velocity.x > 0 || rigidBody.velocity.z > 0))
+            Vector2 horizontalVelocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.z);
+            if (!dashing && horizontalVelocity.magnitude > 0)
             {
-                Vector2 horizontalVelocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.z);
+                // dashVector is the player's joystick direction, relative to the world.
                 Vector2 dashVectorForward = new Vector2(transform.forward.x, transform.forward.z) * moveVector.y;
                 Vector2 dashVectorRight = new Vector2(transform.right.x, transform.right.z) * moveVector.x;
                 Vector2 dashVector = (dashVectorForward + dashVectorRight).normalized;
+
                 if (Vector2.Angle(horizontalVelocity, dashVector) < 90)
                 {
                     // Add to the player's velocity.
-                    Vector2 addedVelocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.z).normalized * maxSpeed * dashMultiplier;
+                    Vector2 addedVelocity = horizontalVelocity.normalized * maxSpeed * dashMultiplier;
                     rigidBody.velocity += new Vector3(addedVelocity.x, 0, addedVelocity.y);
                 }
                 else
@@ -271,11 +282,6 @@ public class PlayerControl : MonoBehaviour
      */
     private void MaintainDash()
     {
-        Vector2 horizontalVelocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.z);
-        Vector2 dashVectorForward = new Vector2(transform.forward.x * moveVector.y, transform.forward.z * moveVector.y);
-        Vector2 dashVectorRight = new Vector2(transform.right.x * moveVector.x, transform.right.z * moveVector.x);
-        Vector2 dashVector = (dashVectorForward + dashVectorRight).normalized;
-        //Debug.Log(Vector2.Angle(horizontalVelocity, dashVector));
         if (dashCounter > 0)
         {
             dashCounter -= Time.fixedUnscaledDeltaTime;
@@ -308,6 +314,28 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
+    /**
+     * Allows the player to climb up a platform.
+     * To be called in the FixedUpdate method.
+     */
+    private void MaintainClimb()
+    {
+        if (!climbingPlatform)
+        {
+            return;
+        }
+
+        rigidBody.velocity = new Vector3(0f, climbingSpeed, 0f);
+
+        float playerBottom = playerCapsuleCollider.bounds.min.y;
+        if (playerBottom > climbingPlatformTop)
+        {
+            // Finished climbing, so move forward slightly.
+            climbingPlatform = false;
+            rigidBody.velocity = new Vector3(climbingPlatformNormal.x, 0f, climbingPlatformNormal.y) * -5f;
+        }
+    }
+
     private void OnCollisionStay(Collision other)
     {
         // Make sure we are only checking for walkable layers.
@@ -330,6 +358,26 @@ public class PlayerControl : MonoBehaviour
 
                     CancelInvoke(nameof(StopGrounded));
                 }
+                // Player hit the side of a platform.
+                else if (IsNotBottom(normal))
+                {
+                    Vector2 playerForward = new Vector2(transform.forward.x, transform.forward.z);
+                    Vector2 normal2d = new Vector2(normal.x, normal.z);
+                    float playerPlatformAngle = Vector2.Angle(playerForward, -normal2d);
+
+                    // Start climbing if the player is facing the platform and moving.
+                    // TODO:  Include a condition to make sure the player doesn't start too low.
+                    if (!climbingPlatform && playerPlatformAngle < climbingAngleThreshold && moveVector.magnitude > 0)
+                    {
+                        climbingPlatform = true;
+                        rigidBody.velocity = new Vector3(0f, climbingSpeed, 0f);
+                        climbingPlatformNormal = normal2d;
+                        climbingPlatformTop = other.collider.bounds.max.y;
+
+                        // TODO:  Check if the player isn't too high.
+                        handsAnimator.SetTrigger("Climbing");
+                    }
+                }
             }
 
             float delay = 3f;
@@ -341,7 +389,6 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
- 
     private void FirstJump()
     {
         // TODO:  Added "&& rigidBody" because FirstJump() was being called when rigidBody was null.  Figure out why this happens!
@@ -391,12 +438,23 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
+    /**
+     * Returns whether the vector represents the normal vector to a floor.
+     */
     private bool IsFloor(Vector3 v)
     {
         float angle = Vector3.Angle(Vector3.up, v);
         return angle < maxSlopeAngle;
     }
 
+    /**
+     * Returns whether the vector represents the normal vector to the bottom of a platform.
+     */
+    private bool IsNotBottom(Vector3 v)
+    {
+        float angle = Vector3.Angle(Vector3.down, v);
+        return angle >= maxSlopeAngle;
+    }
 
     private void StopGrounded()
     {
@@ -478,6 +536,12 @@ public class PlayerControl : MonoBehaviour
      */
     private void AdjustCamera()
     {
+        // Only rotate the camera left and right if the player isn't climbing up a platform.
+        if (climbingPlatform)
+        {
+            lookVector = new Vector2(0f, lookVector.y);
+        }
+
         cameraRotation.x = Mathf.Repeat(cameraRotation.x + lookVector.x * additionalHorizontalSensitivity * gameManager.GetSensitivity() * Time.deltaTime, 360);
         cameraRotation.y = Mathf.Clamp(cameraRotation.y - lookVector.y * gameManager.GetSensitivity() * Time.deltaTime, -maxYAngle, maxYAngle);
         cameraTransform.rotation = Quaternion.Euler(cameraRotation.y, cameraRotation.x, 0);
@@ -567,6 +631,8 @@ public class PlayerControl : MonoBehaviour
         handsAnimator.ResetTrigger("TimeWarp");
         handsAnimator.ResetTrigger("Grappling");
         handsAnimator.ResetTrigger("StopGrappling");
+        handsAnimator.ResetTrigger("Climbing");
+        handsAnimator.ResetTrigger("StartRunning");
         handsAnimator.SetBool("Running", false);
     }
 
@@ -574,6 +640,7 @@ public class PlayerControl : MonoBehaviour
     {
         MaintainDash();
         MaintainTimeWarp();
+        MaintainClimb();
         Move();
     }
 

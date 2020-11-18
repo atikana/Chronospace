@@ -11848,6 +11848,12 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!4 &722628067 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4228883424257184916, guid: 724e5968d51354200bac36b1af52c3a7,
+    type: 3}
+  m_PrefabInstance: {fileID: 5517978681985521704}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &736850033
 GameObject:
   m_ObjectHideFlags: 0
@@ -35072,6 +35078,11 @@ PrefabInstance:
       propertyPath: aimPoint
       value: 
       objectReference: {fileID: 500072609}
+    - target: {fileID: 5517978683038504852, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: playerWristTransform
+      value: 
+      objectReference: {fileID: 722628067}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 724e5968d51354200bac36b1af52c3a7, type: 3}
 --- !u!1001 &6480818425910644475

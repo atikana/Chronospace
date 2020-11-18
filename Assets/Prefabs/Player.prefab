@@ -455,7 +455,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   doubleJumpWindow: 0.25
-  dashMultiplier: 10
+  dashMultiplier: 5
   additionalHorizontalSensitivity: 1.5
 --- !u!136 &5517978682659398785
 CapsuleCollider:
@@ -5381,6 +5381,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   aimPoint: {fileID: 0}
+  playerWristTransform: {fileID: 0}
   pullingMomentumMultiplier: 0.5
   cameraTransform: {fileID: 5517978682363965807}
   sphereRadius: 100

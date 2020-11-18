@@ -12,6 +12,9 @@ public class GrapplingGun : MonoBehaviour
     public LayerMask whatIsGrappleable;
     public GameObject aimPoint;
 
+    // The grapple rope shoots out of the player's left wrist.
+    public Transform playerWristTransform;
+
     private SoundManager soundManager;
     private PlayerControl playerControl;
     private ParticleSystem cameraParticleSystem;
@@ -21,7 +24,7 @@ public class GrapplingGun : MonoBehaviour
 
     // Use a counter to shoot the rope after the grappling animation.
     private float ropeShootCounter = 0f;
-    private const float ropeShootLength = 0.25f;
+    private const float ropeShootLength = 0.3f;
 
     public Transform cameraTransform;
     public float sphereRadius;
@@ -40,6 +43,7 @@ public class GrapplingGun : MonoBehaviour
     private Animator handsAnimator;
 
     private GameObject lastGrapple;
+    private bool showRope = false;
 
     bool autoAim = false;
 
@@ -63,7 +67,7 @@ public class GrapplingGun : MonoBehaviour
         playerControl = transform.parent.GetComponent<PlayerControl>();
         cameraParticleSystem = transform.parent.GetComponentInChildren<ParticleSystem>();
         playerTransform = transform.parent;
-      
+
         playerBody = transform.parent.GetComponent<Rigidbody>();
     }
 
@@ -135,21 +139,24 @@ public class GrapplingGun : MonoBehaviour
 
             if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out grappleHit, maxDistance, whatIsGrappleable))
             {
+                showRope = true;
+                lr.positionCount = 2;
                 autoAim = false;
                 aimPoint.transform.position = grappleHit.point;
                 aimPoint.SetActive(true);
                 StartGrappleHelper(grappleHit.collider.gameObject);
-
+                grapplePoint = grappleHit.point;
             }
-            else if (playerControl.GetGrapplingAutoAimStatus() && (close = findGrapplePoint()) != null)
+            else if (playerControl.GetGrapplingAutoAimStatus() && (close = FindGrapplePoint()) != null)
             {
                 // should i make it actually shoot to the player
+                showRope = true;
+                lr.positionCount = 2;
                 autoAim = true;
                 aimPoint.transform.position = close.transform.position;
                 aimPoint.SetActive(true);
                 StartGrappleHelper(close.gameObject);
-
-              
+                grapplePoint = lastGrapple.transform.position;
             }
         }
         else
@@ -189,14 +196,6 @@ public class GrapplingGun : MonoBehaviour
 
     private void ShootGrapple()
     {
-        if (!autoAim)
-        {
-            grapplePoint = grappleHit.point;
-        }
-        else
-        {
-            grapplePoint = lastGrapple.transform.position;
-        }
         joint = playerTransform.gameObject.AddComponent<SpringJoint>();
         joint.autoConfigureConnectedAnchor = false;
         joint.connectedAnchor = grapplePoint;
@@ -211,20 +210,34 @@ public class GrapplingGun : MonoBehaviour
         joint.spring = 4.5f;
         joint.damper = 7f;
         joint.massScale = 4.5f;
-
-        lr.positionCount = 2;
     }
 
+    /**
+     * Set up the grappling rope.
+     */
     void DrawRope()
     {
-        if (!joint) return;
+        if (!showRope)
+        {
+            return;
+        }
 
-        lr.SetPosition(0, transform.position);
-        lr.SetPosition(1, grapplePoint);
+        lr.SetPosition(0, playerWristTransform.position);
+        if (ropeShootCounter > 0)
+        {
+            Vector3 ropeEndpoint = (ropeShootLength - ropeShootCounter) * grapplePoint + ropeShootCounter * playerWristTransform.position;
+            ropeEndpoint /= ropeShootLength;
+            lr.SetPosition(1, ropeEndpoint);
+        }
+        else
+        {
+            lr.SetPosition(1, grapplePoint);
+        }
     }
 
     public void StopGrapple()
     {
+        showRope = false;
         grapplingState = GrapplingState.Normal;
         lr.positionCount = 0;
         Destroy(joint);
@@ -274,9 +287,8 @@ public class GrapplingGun : MonoBehaviour
 
     }
 
-    GameObject findGrapplePoint()
+    GameObject FindGrapplePoint()
     {
-        
         Collider[] hits = Physics.OverlapSphere(sphere.position, sphereRadius);
         float temp = float.MaxValue;
 
