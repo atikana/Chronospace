@@ -8,6 +8,7 @@ public class GrapplingGun : MonoBehaviour
     private LineRenderer lr;
     private Vector3 grapplePoint;
     private Vector3 grappleDir;
+    private GrappleHolder holder;
     private CameraFov cameraFov;
     public LayerMask whatIsGrappleable;
     public GameObject aimPoint;
@@ -177,6 +178,14 @@ public class GrapplingGun : MonoBehaviour
         handsAnimator.SetTrigger("Grappling");
         soundManager.PlayGrapplingSound();
         lastGrapple = g;
+
+        holder = g.GetComponent<GrappleHolder>();
+
+        if (holder)
+        { 
+            holder.ChangeColour(); 
+        }
+
         crosshair.ChangeCrossHairColor();
     }
 

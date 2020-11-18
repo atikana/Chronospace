@@ -30,6 +30,7 @@ public class PlayerControl : MonoBehaviour
 
     public LayerMask groundMask;
     public LayerMask pendulumMask;
+    public LayerMask grappleMask;
 
     private bool dashing = false;
     private bool jumping = false;
@@ -355,7 +356,9 @@ public class PlayerControl : MonoBehaviour
     {
         // Make sure we are only checking for walkable layers.
         int layer = other.gameObject.layer;
-        if (groundMask == (groundMask | (1 << layer)))
+        bool isGround = groundMask == (groundMask | (1 << layer));
+        bool isGrapple = grappleMask == (grappleMask | (1 << layer));
+        if (isGround || isGrapple)
         {
             for (int i = 0; i < other.contactCount; i++)
             {
@@ -374,7 +377,7 @@ public class PlayerControl : MonoBehaviour
                     CancelInvoke(nameof(StopGrounded));
                 }
                 // Player hit the side of a platform.
-                else if (IsNotBottom(normal))
+                else if ((IsNotBottom(normal)) && isGround)
                 {
                     Vector2 playerForward = new Vector2(transform.forward.x, transform.forward.z);
                     Vector2 normal2d = new Vector2(normal.x, normal.z);
