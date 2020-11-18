@@ -315,7 +315,10 @@ public class GrapplingGun : MonoBehaviour
         handsAnimator.ResetTrigger("Grappling");
         handsAnimator.SetTrigger("StopGrappling");
         crosshair.RevertCrosshairColor();
-        lastGrapple.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", original * 0.005f);
+        if (lastGrapple != null)
+        {
+            lastGrapple.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", original * 0.005f);
+        }
     }
 
     void PullRope()
