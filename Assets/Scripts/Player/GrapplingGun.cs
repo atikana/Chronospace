@@ -45,6 +45,8 @@ public class GrapplingGun : MonoBehaviour
 
     private GameObject lastGrapple;
     private bool showRope = false;
+    private Color original = new Color(229, 237, 229);
+    private Color neonGreen = new Color(7, 299, 3);
 
     bool autoAim = false;
 
@@ -74,7 +76,7 @@ public class GrapplingGun : MonoBehaviour
 
     void Update()
     {
-        GrappleAim();
+        //GrappleAim();
         if (playerControl.GetGrappleShoot())
         {
             if (!joint)
@@ -173,6 +175,33 @@ public class GrapplingGun : MonoBehaviour
                 showRope = true;
                 lr.positionCount = 2;
                 autoAim = false;
+                StartGrappleHelper(grappleHit.collider.gameObject);
+                grapplePoint = grappleHit.point;
+            }
+            else if (playerControl.GetGrapplingAutoAimStatus() && (close = FindGrapplePoint()) != null)
+            {
+                // should i make it actually shoot to the player
+                showRope = true;
+                lr.positionCount = 2;
+                autoAim = true;
+                StartGrappleHelper(close.gameObject);
+                grapplePoint = lastGrapple.transform.position;
+            }
+        }
+    }
+
+
+  /*  void StartGrapple()
+    {
+        if (grapplingState == GrapplingState.Normal)
+        {
+            GameObject close;
+
+            if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out grappleHit, maxDistance, whatIsGrappleable))
+            {
+                showRope = true;
+                lr.positionCount = 2;
+                autoAim = false;
                 aimPoint.transform.position = grappleHit.point;
                 aimPoint.SetActive(true);
                 StartGrappleHelper(grappleHit.collider.gameObject);
@@ -194,7 +223,7 @@ public class GrapplingGun : MonoBehaviour
         {
             aimPoint.SetActive(false);
         }
-    }
+    } */
 
     void StartGrappleHelper(GameObject g)
     {
@@ -208,13 +237,16 @@ public class GrapplingGun : MonoBehaviour
         handsAnimator.SetTrigger("Grappling");
         soundManager.PlayGrapplingSound();
         lastGrapple = g;
+        g.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", neonGreen * 0.005f);
 
-        holder = g.GetComponent<GrappleHolder>();
+        // change the 
 
-        if (holder)
-        { 
-            holder.ChangeColour(); 
-        }
+        /* holder = g.GetComponent<GrappleHolder>();
+
+         if (holder)
+         { 
+             holder.ChangeColour(); 
+         } */
 
         crosshair.ChangeCrossHairColor();
     }
@@ -283,6 +315,7 @@ public class GrapplingGun : MonoBehaviour
         handsAnimator.ResetTrigger("Grappling");
         handsAnimator.SetTrigger("StopGrappling");
         crosshair.RevertCrosshairColor();
+        lastGrapple.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", original * 0.005f);
     }
 
     void PullRope()
