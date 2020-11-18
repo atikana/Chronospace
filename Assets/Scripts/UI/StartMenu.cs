@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class StartMenu : MonoBehaviour
 {
+    public PlayerInput input;
 
-    
     public void LoadLvl1()
     {
         SceneManager.LoadScene("Level1");
@@ -32,7 +32,8 @@ public class StartMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        input = new PlayerInput();
+        input.Enable();
     }
 
     // Update is called once per frame

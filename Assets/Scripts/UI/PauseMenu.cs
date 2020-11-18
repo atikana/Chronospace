@@ -40,8 +40,9 @@ public class PauseMenu : MonoBehaviour
             PauseGame();
         }
         else
-        {
-            if (optionMenu.activeInHierarchy)
+        {   
+
+            if (optionMenu != null)
             {
                 optionMenu.SetActive(false);
                 pauseMenu.SetActive(true);
