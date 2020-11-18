@@ -142,7 +142,7 @@ public class GrapplingGun : MonoBehaviour
 
             if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out grappleHit, maxDistance, whatIsGrappleable))
             {
-              
+
                 autoAim = false;
                 aimPoint.transform.position = grappleHit.point;
                 aimPoint.SetActive(true);

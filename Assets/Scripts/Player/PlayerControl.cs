@@ -356,7 +356,7 @@ public class PlayerControl : MonoBehaviour
         {
             // Finished climbing, so move forward slightly.
             climbingPlatform = false;
-            rigidBody.velocity = new Vector3(climbingPlatformNormal.x, 0f, climbingPlatformNormal.y) * -5f;
+            rigidBody.velocity = new Vector3(climbingPlatformNormal.x, 0f, climbingPlatformNormal.y) * -endClimbingSpeed;
         }
     }
 

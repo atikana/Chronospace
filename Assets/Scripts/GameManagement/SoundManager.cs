@@ -3,10 +3,13 @@
 public class SoundManager : MonoBehaviour
 {
     private float volume = 0.5f;
-    private AudioSource soundEffectsAudioSource, highPitchSoundEffectsAudioSource;
-    private AudioClip doubleJumpClip, jumpClip, jumpLandingClip, dashClip, timeWarpClip, pendulumClip,
+    private AudioSource soundEffectsAudioSource, highPitchSoundEffectsAudioSource, laserAudioSource;
+    private AudioClip jumpClip, jumpLandingClip, dashClip, timeWarpClip, pendulumClip, laserClip,
         grapplingClip, countDownClip, rewindClip, checkpointClip, bulletClip1, bulletClip2, bulletClip3;
 
+    // Keep track of how many lasers are playing a sound, so that the sound turns off at the right point in time.
+    private int numLasersPlayingSound = 0;
+    
     // High pass filter to be applied during time warp.
     public AudioHighPassFilter highPassFilter;
 
@@ -18,7 +21,7 @@ public class SoundManager : MonoBehaviour
         AudioSource[] audioSources = GetComponents<AudioSource>();
         soundEffectsAudioSource = audioSources[0];
         highPitchSoundEffectsAudioSource = audioSources[1];
-        Debug.Log("Pitches:  " + soundEffectsAudioSource.pitch + " " + highPitchSoundEffectsAudioSource.pitch);
+        laserAudioSource = audioSources[2];
 
         jumpClip = Resources.Load<AudioClip>("JUMP");
         jumpLandingClip = Resources.Load<AudioClip>("LAND");
@@ -53,6 +56,8 @@ public class SoundManager : MonoBehaviour
 
         // Manually set the music audioSource volume.
         soundEffectsAudioSource.volume = 0.5f * newVolume;
+        highPitchSoundEffectsAudioSource.volume = 0.5f * newVolume;
+        laserAudioSource.volume = 0.5f * newVolume;
     }
 
     public void PlayJumpSound()
@@ -66,9 +71,9 @@ public class SoundManager : MonoBehaviour
     public void PlayDoubleJumpSound()
     {
         // Play the jump sound with a higher pitch.
-        if (highPitchSoundEffectsAudioSource && doubleJumpClip)
+        if (highPitchSoundEffectsAudioSource && jumpClip)
         {
-            highPitchSoundEffectsAudioSource.PlayOneShot(doubleJumpClip, volume);
+            highPitchSoundEffectsAudioSource.PlayOneShot(jumpClip, volume);
         }
     }
 
@@ -143,6 +148,7 @@ public class SoundManager : MonoBehaviour
     {
         if (soundEffectsAudioSource && bulletClip1 && bulletClip2 && bulletClip3)
         {
+            // Play a random bullet noise.
             int clipNumber = Random.Range(0, 3);
             switch (clipNumber)
             {
@@ -156,6 +162,30 @@ public class SoundManager : MonoBehaviour
                     soundEffectsAudioSource.PlayOneShot(bulletClip3, volume);
                     break;
             }
+        }
+    }
+
+    /**
+     * Only play the laser sound if this is the first laser.
+     */
+    public void StartLaserSound()
+    {
+        if (numLasersPlayingSound == 0)
+        {
+            laserAudioSource.Play();
+        }
+        numLasersPlayingSound++;
+    }
+
+    /**
+     * Only stop the laser sound if there are no more lasers left.
+     */
+    public void StopLaserSound()
+    {
+        numLasersPlayingSound--;
+        if (numLasersPlayingSound == 0)
+        {
+            laserAudioSource.Stop();
         }
     }
 }
