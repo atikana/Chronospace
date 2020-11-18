@@ -213,7 +213,7 @@ public class GrapplingGun : MonoBehaviour
 
         if (holder)
         { 
-            holder.ChangeColour(); 
+            holder.ChangeColour();
         }
 
         crosshair.ChangeCrossHairColor();
@@ -283,6 +283,10 @@ public class GrapplingGun : MonoBehaviour
         handsAnimator.ResetTrigger("Grappling");
         handsAnimator.SetTrigger("StopGrappling");
         crosshair.RevertCrosshairColor();
+        if (holder)
+        {
+            holder.ChangeColour();
+        }
     }
 
     void PullRope()
