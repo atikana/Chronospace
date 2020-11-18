@@ -396,7 +396,7 @@ public class GrapplingGun : MonoBehaviour
     void OnDrawGizmos()
     {
         // Draw a yellow sphere at the transform's position
-       //Gizmos.color = Color.yellow;
-       //Gizmos.DrawSphere(sphere.position, sphereRadius);
+      // Gizmos.color = Color.yellow;
+      // Gizmos.DrawSphere(sphere.position, sphereRadius);
     }
 }
