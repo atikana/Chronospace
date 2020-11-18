@@ -35,9 +35,8 @@ public class PauseMenu : MonoBehaviour
 
     public void PressPause()
     {
-        if (!menu.activeInHierarchy)
+        if (menu && !menu.activeInHierarchy)
         {
-
             PauseGame();
         }
         else

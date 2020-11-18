@@ -42,6 +42,8 @@ public class PlayerControl : MonoBehaviour
     private float climbingAngleThreshold = 25f;
     private Vector2 climbingPlatformNormal;
     private float climbingPlatformTop;
+    private float beforeClimbCounter = 0f;
+    public float beforeClimbTime = 0.5f;
 
     private float jumpCooldown = 0.25f;
     public float doubleJumpWindow = 0.25f;
@@ -325,6 +327,19 @@ public class PlayerControl : MonoBehaviour
             return;
         }
 
+        if (beforeClimbCounter > 0)
+        {
+            beforeClimbCounter -= Time.fixedDeltaTime;
+            beforeClimbCounter = Mathf.Max(beforeClimbCounter, 0f);
+
+            if (beforeClimbCounter > 0)
+            {
+                // TODO:  Set the player's velocity so that after half a second of falling, their hands are at the top of the platform.
+                rigidBody.velocity = new Vector3(0f, -1f, 0f);
+                return;
+            }
+        }
+
         rigidBody.velocity = new Vector3(0f, climbingSpeed, 0f);
 
         float playerBottom = playerCapsuleCollider.bounds.min.y;
@@ -370,11 +385,9 @@ public class PlayerControl : MonoBehaviour
                     if (!climbingPlatform && playerPlatformAngle < climbingAngleThreshold && moveVector.magnitude > 0)
                     {
                         climbingPlatform = true;
-                        rigidBody.velocity = new Vector3(0f, climbingSpeed, 0f);
                         climbingPlatformNormal = normal2d;
                         climbingPlatformTop = other.collider.bounds.max.y;
-
-                        // TODO:  Check if the player isn't too high.
+                        beforeClimbCounter = beforeClimbTime;
                         handsAnimator.SetTrigger("Climbing");
                     }
                 }
