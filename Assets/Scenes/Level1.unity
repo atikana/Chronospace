@@ -13732,6 +13732,18 @@ MonoBehaviour:
   bullet: {fileID: 0}
   muzzle1: {fileID: 0}
   muzzle2: {fileID: 0}
+--- !u!114 &964936381 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8224987664668297478, guid: 9a02249437dbd6e45b5dad114580951b,
+    type: 3}
+  m_PrefabInstance: {fileID: 150394393}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &968191130
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19445,10 +19457,10 @@ MonoBehaviour:
   checkPointManager: {fileID: 1616474973}
   playerRigidbody: {fileID: 1811659950}
   cameraTransform: {fileID: 2039982407}
-  countdown: 1
+  countdown: 3
   countdownDisplay: {fileID: 2050022802}
-  rewindDisplay: {fileID: 0}
-  RewindEnabled: 0
+  rewindDisplay: {fileID: 964936381}
+  RewindEnabled: 1
 --- !u!4 &1404047974
 Transform:
   m_ObjectHideFlags: 0
