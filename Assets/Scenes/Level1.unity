@@ -19620,7 +19620,7 @@ MonoBehaviour:
   checkPointManager: {fileID: 1616474973}
   playerRigidbody: {fileID: 1811659950}
   cameraTransform: {fileID: 2039982407}
-  countdown: 1
+  countdown: 3
   countdownDisplay: {fileID: 2050022802}
   rewindDisplay: {fileID: 0}
   RewindEnabled: 0
