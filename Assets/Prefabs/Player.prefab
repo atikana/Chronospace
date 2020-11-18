@@ -454,6 +454,7 @@ MonoBehaviour:
   pendulumMask:
     serializedVersion: 2
     m_Bits: 2048
+  beforeClimbTime: 0.5
   doubleJumpWindow: 0.25
   dashMultiplier: 5
   additionalHorizontalSensitivity: 1.5
@@ -5505,6 +5506,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -3.5929065
+      objectReference: {fileID: 0}
+    - target: {fileID: 351077607734511856, guid: 18ff8072c46b745638cce716da663a09,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 426475752699714489, guid: 18ff8072c46b745638cce716da663a09,
         type: 3}

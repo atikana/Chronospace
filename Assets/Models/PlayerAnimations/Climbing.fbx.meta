@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 4ec3c99a89b4d4ca8b7e0166c7ab9397
+guid: 72ea22bfec0dc4cf2b07250a9c997475
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable:
   - first:
-      74: 9167603836089189422
-    second: climb_2
+      74: -8994686434931223129
+    second: climb_3
   externalObjects:
   - first:
       type: UnityEngine:Material
