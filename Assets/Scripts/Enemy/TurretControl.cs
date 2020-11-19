@@ -14,10 +14,15 @@ public class TurretControl : MonoBehaviour
     private bool readyToShoot2;
     private float delayTimer = 0.4f;  // Used to be 1.
     private PlayerControl playerScript;
+    private SoundManager soundManager;
+
+    // If player is within this distance of a turret, bullets will play a sound.
+    private const float bulletSoundThreshold = 50f;
 
     void Start()
     {
         playerScript = FindObjectOfType<PlayerControl>();
+        soundManager = FindObjectOfType<SoundManager>();
         readyToShoot = true;
         readyToShoot2 = false;
         StartCoroutine(delay());
@@ -46,13 +51,22 @@ public class TurretControl : MonoBehaviour
         }
     }
 
+    private void PlayBulletSound(Vector3 muzzleLocation)
+    {
+        // Only play bullet sound if the player is near the turret.
+        if (Vector3.Distance(playerScript.transform.position, muzzleLocation) < bulletSoundThreshold)
+        {
+            soundManager.PlayBulletSound(muzzleLocation);
+        }
+    }
+
     void Shoot()
     {
         Transform _bullet = Instantiate(bullet.transform, muzzle1.transform.position, Quaternion.identity);
         _bullet.transform.rotation = TurretMovable.transform.rotation;
         readyToShoot = false;
         StartCoroutine(FireRate());
-
+        PlayBulletSound(muzzle1.transform.position);
     }
 
     void Shoot2()
@@ -61,7 +75,7 @@ public class TurretControl : MonoBehaviour
         _bullet.transform.rotation = TurretMovable.transform.rotation;
         readyToShoot2 = false;
         StartCoroutine(FireRate2());
-
+        PlayBulletSound(muzzle2.transform.position);
     }
 
     IEnumerator FireRate()
@@ -99,5 +113,10 @@ public class TurretControl : MonoBehaviour
         {
             targetLocked = false;
         }
+    }
+
+    public void ResetTurret()
+    {
+        targetLocked = false;
     }
 }

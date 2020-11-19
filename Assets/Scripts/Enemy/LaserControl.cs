@@ -9,12 +9,19 @@ public class LaserControl : MonoBehaviour
     private float enhanceTimer = 0.8f;
     private bool readyToFire;
     private bool enhanceFire;
-    private GameManager gameManager;
-    private PlayerControl playerControl;
+    private SoundManager soundManager;
+
+    private Transform playerTransform;
+
+    private bool laserBeamSoundOn = false;
+
+    // If player is within this distance of a laser, it will play a sound.
+    private const float laserSoundThreshold = 50f;
 
     void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        playerTransform = FindObjectOfType<PlayerControl>().transform;
+        soundManager = FindObjectOfType<SoundManager>();
         readyToFire = true;
         enhanceFire = false;
     }
@@ -38,6 +45,23 @@ public class LaserControl : MonoBehaviour
             }
         }
 
+        // Play the laser sound, if necessary.
+        if (Vector3.Distance(playerTransform.position, transform.position) < laserSoundThreshold)
+        {
+            if (!laserBeamSoundOn)
+            {
+                soundManager.StartLaserSound(transform.position);
+            }
+            laserBeamSoundOn = true;
+        }
+        else
+        {
+            if (laserBeamSoundOn)
+            {
+                soundManager.StopLaserSound(transform.position);
+            }
+            laserBeamSoundOn = false;
+        }
     }
 
     void LaserFire()

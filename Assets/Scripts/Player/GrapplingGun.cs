@@ -142,7 +142,7 @@ public class GrapplingGun : MonoBehaviour
 
             if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out grappleHit, maxDistance, whatIsGrappleable))
             {
-              
+
                 autoAim = false;
                 aimPoint.transform.position = grappleHit.point;
                 aimPoint.SetActive(true);
@@ -240,13 +240,6 @@ public class GrapplingGun : MonoBehaviour
         lastGrapple = g;
         g.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", neonGreen * 0.005f);
 
-        /* holder = g.GetComponent<GrappleHolder>();
-
-         if (holder)
-         { 
-             holder.ChangeColour(); 
-         } */
-
         crosshair.ChangeCrossHairColor();
     }
 
@@ -343,9 +336,14 @@ public class GrapplingGun : MonoBehaviour
 
     }
 
-    void ResetRope()
+    public void ResetRope()
     {
         Debug.Log("Reset Rope");
+
+        if (!pulling)
+        {
+            return;
+        }
 
         playerBody.velocity = playerBody.velocity * pullingMomentumMultiplier;
 

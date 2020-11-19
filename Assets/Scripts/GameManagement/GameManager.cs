@@ -100,8 +100,16 @@ public class GameManager : MonoBehaviour
 
             // Reset grappling gun.
             grapplingGun.StopGrapple();
+            grapplingGun.ResetRope();
 
             levelStats.setDeath(GetNumDeaths());
+
+            // Reset all turrets so they aren't locked onto the player.
+            TurretControl[] turrets = FindObjectsOfType<TurretControl>();
+            foreach (TurretControl turret in turrets)
+            {
+                turret.ResetTurret();
+            }
 
             // Remove all existing bullets.
             GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");

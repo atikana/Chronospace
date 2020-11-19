@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class LaserBeamControl : MonoBehaviour
 {
     private float timer = 0f;
     private bool isActive;
-    GameManager gameManager;
+    private GameManager gameManager;
     public GameObject hitEffect;
 
     // Start is called before the first frame update
