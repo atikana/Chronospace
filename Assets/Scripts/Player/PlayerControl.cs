@@ -248,7 +248,7 @@ public class PlayerControl : MonoBehaviour
         if (numDashes > 0)
         {
             Vector2 horizontalVelocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.z);
-            if (!dashing && horizontalVelocity.magnitude > 0)
+            if (!dashing && horizontalVelocity.magnitude > 0.1f)
             {
                 // dashVector is the player's joystick direction, relative to the world.
                 Vector2 dashVectorForward = new Vector2(transform.forward.x, transform.forward.z) * moveVector.y;
@@ -374,6 +374,11 @@ public class PlayerControl : MonoBehaviour
                 //FLOOR
                 if (IsFloor(normal))
                 {
+                    if (!grounded)
+                    {
+                        soundManager.PlayJumpLandingSound();
+                    }
+
                     grounded = true;
                     if (!firstJump)
                     {

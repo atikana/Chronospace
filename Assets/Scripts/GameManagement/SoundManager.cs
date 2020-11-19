@@ -1,14 +1,16 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
     private float volume = 0.5f;
     private AudioSource soundEffectsAudioSource, highPitchSoundEffectsAudioSource, laserAudioSource;
-    private AudioClip jumpClip, jumpLandingClip, dashClip, timeWarpClip, pendulumClip, laserClip,
-        grapplingClip, countDownClip, rewindClip, checkpointClip, bulletClip1, bulletClip2, bulletClip3;
+    private AudioClip jumpClip, jumpLandingClip, dashClip, timeWarpClip, pendulumClip,
+        grapplingClip, countDownClip, rewindClip, checkpointClip;
+    private AudioClip[] bulletClips;
 
-    // Keep track of how many lasers are playing a sound, so that the sound turns off at the right point in time.
-    private int numLasersPlayingSound = 0;
+    // Keep track of which lasers are playing a sound, so that the sound turns off at the right point in time.
+    private List<Vector3> lasersPlayingSound;
     
     // High pass filter to be applied during time warp.
     public AudioHighPassFilter highPassFilter;
@@ -16,12 +18,20 @@ public class SoundManager : MonoBehaviour
     // Low pass filter to be applied during pause.
     public AudioLowPassFilter lowPassFilter;
 
+    private Transform playerTransform;
+
+    // If player is within this distance of a laser, it will play a sound.
+    private const float laserSoundThreshold = 50f;
+
     void Start()
     {
+        playerTransform = FindObjectOfType<PlayerControl>().transform;
         AudioSource[] audioSources = GetComponents<AudioSource>();
         soundEffectsAudioSource = audioSources[0];
         highPitchSoundEffectsAudioSource = audioSources[1];
         laserAudioSource = audioSources[2];
+
+        lasersPlayingSound = new List<Vector3>();
 
         jumpClip = Resources.Load<AudioClip>("JUMP");
         jumpLandingClip = Resources.Load<AudioClip>("LAND");
@@ -32,9 +42,11 @@ public class SoundManager : MonoBehaviour
         countDownClip = Resources.Load<AudioClip>("COUNTDOWN");
         rewindClip = Resources.Load<AudioClip>("DEATH_REWIND");
         checkpointClip = Resources.Load<AudioClip>("CHECKPOINT");
-        bulletClip1 = Resources.Load<AudioClip>("TURRET_BULLET_1");
-        bulletClip2 = Resources.Load<AudioClip>("TURRET_BULLET_2");
-        bulletClip3 = Resources.Load<AudioClip>("TURRET_BULLET_3");
+        bulletClips = new AudioClip[] {
+            Resources.Load<AudioClip>("TURRET_BULLET_1"),
+            Resources.Load<AudioClip>("TURRET_BULLET_2"),
+            Resources.Load<AudioClip>("TURRET_BULLET_3")
+        };
 
         // Default volume when game starts.
         SetVolume(volume);
@@ -144,46 +156,59 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlayBulletSound()
+    public void PlayBulletSound(Vector3 turretPosition)
     {
-        if (soundEffectsAudioSource && bulletClip1 && bulletClip2 && bulletClip3)
+        if (bulletClips == null || bulletClips.Length <= 0)
         {
-            // Play a random bullet noise.
-            int clipNumber = Random.Range(0, 3);
-            switch (clipNumber)
-            {
-                case 0:
-                    soundEffectsAudioSource.PlayOneShot(bulletClip1, volume);
-                    break;
-                case 1:
-                    soundEffectsAudioSource.PlayOneShot(bulletClip2, volume);
-                    break;
-                case 2:
-                    soundEffectsAudioSource.PlayOneShot(bulletClip3, volume);
-                    break;
-            }
+            return;
         }
+
+        // Play a random bullet noise.
+        int clipNumber = Random.Range(0, bulletClips.Length);
+        AudioSource.PlayClipAtPoint(bulletClips[clipNumber], turretPosition, volume);
+    }
+
+    /**
+     * Sets the laser AudioSource volume depending on the distance between the player and the closest laser.
+     */
+    private void UpdateLaserVolume()
+    {
+        // Sound volume is proportional to how far away the player is.
+        float minLaserPlayerDistance = float.MaxValue;
+        foreach (Vector3 laserPosition in lasersPlayingSound)
+        {
+            float playerLaserDistance = Vector3.Distance(laserPosition, playerTransform.position);
+            minLaserPlayerDistance = Mathf.Min(playerLaserDistance, minLaserPlayerDistance);
+        }
+        float laserSoundVolume = volume * ((laserSoundThreshold - minLaserPlayerDistance) / laserSoundThreshold);
+        laserAudioSource.volume = laserSoundVolume;
+    }
+
+    private void FixedUpdate()
+    {
+        UpdateLaserVolume();
     }
 
     /**
      * Only play the laser sound if this is the first laser.
      */
-    public void StartLaserSound()
+    public void StartLaserSound(Vector3 laserPosition)
     {
-        if (numLasersPlayingSound == 0)
+        if (lasersPlayingSound.Count == 0)
         {
+            UpdateLaserVolume();
             laserAudioSource.Play();
         }
-        numLasersPlayingSound++;
+        lasersPlayingSound.Add(laserPosition);
     }
 
     /**
      * Only stop the laser sound if there are no more lasers left.
      */
-    public void StopLaserSound()
+    public void StopLaserSound(Vector3 laserPosition)
     {
-        numLasersPlayingSound--;
-        if (numLasersPlayingSound == 0)
+        lasersPlayingSound.Remove(laserPosition);
+        if (lasersPlayingSound.Count == 0)
         {
             laserAudioSource.Stop();
         }

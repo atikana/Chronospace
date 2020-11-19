@@ -336,9 +336,14 @@ public class GrapplingGun : MonoBehaviour
 
     }
 
-    void ResetRope()
+    public void ResetRope()
     {
         Debug.Log("Reset Rope");
+
+        if (!pulling)
+        {
+            return;
+        }
 
         playerBody.velocity = playerBody.velocity * pullingMomentumMultiplier;
 

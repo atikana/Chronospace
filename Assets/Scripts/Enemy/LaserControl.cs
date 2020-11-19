@@ -50,7 +50,7 @@ public class LaserControl : MonoBehaviour
         {
             if (!laserBeamSoundOn)
             {
-                soundManager.StartLaserSound();
+                soundManager.StartLaserSound(transform.position);
             }
             laserBeamSoundOn = true;
         }
@@ -58,7 +58,7 @@ public class LaserControl : MonoBehaviour
         {
             if (laserBeamSoundOn)
             {
-                soundManager.StopLaserSound();
+                soundManager.StopLaserSound(transform.position);
             }
             laserBeamSoundOn = false;
         }
