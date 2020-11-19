@@ -35,7 +35,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: TimeWarp
+    m_ConditionEvent: TimeWarping
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 939320603946444985}
@@ -60,7 +60,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: StopTimeWarp
+    m_ConditionEvent: StopTimeWarping
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -9206809331615144383}
@@ -71,7 +71,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 0.9833518
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -85,13 +85,13 @@ AnimatorController:
   m_Name: TimeWarpGauge
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: TimeWarp
+  - m_Name: TimeWarping
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 1
     m_Controller: {fileID: 0}
-  - m_Name: StopTimeWarp
+  - m_Name: StopTimeWarping
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0

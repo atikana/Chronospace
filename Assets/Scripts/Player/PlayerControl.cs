@@ -273,7 +273,13 @@ public class PlayerControl : MonoBehaviour
             dashing = true;
             numDashes--;
             dashCounter = dashLength;
-            levelStats.StartDashGaugeAnimation();
+            if (numDashes == 1)
+            {
+                levelStats.StartDashGaugeAnimation1();
+            } else
+            {
+                levelStats.StartDashGaugeAnimation2();
+            }
 
             // If you dash while a dash is reloading, you will lose your progress with reloading the dash.
             dashCooldownCounter = 0f;
@@ -650,7 +656,7 @@ public class PlayerControl : MonoBehaviour
         dashCooldownCounter = 0;
         numDashes = 2;
         dashing = false;
-        levelStats.StopDashGaugeAnimation();
+        levelStats.ResetDashGaugeAnimation();
         if (cameraParticleSystem)
         {
             cameraParticleSystem.Stop();
