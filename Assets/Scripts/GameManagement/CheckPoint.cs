@@ -5,10 +5,13 @@ public class CheckPoint : MonoBehaviour
     // Player's rotation when starting at this checkpoint.
     private float playerRotation = 0f;
     private PlayerControl playerControl;
+    private SoundManager soundManager;
+    private bool activated = false;
 
     private void Start()
     {
         playerControl = FindObjectOfType<PlayerControl>();
+        soundManager = FindObjectOfType<SoundManager>();
     }
 
     Transform front;
@@ -21,7 +24,7 @@ public class CheckPoint : MonoBehaviour
         front = transform.GetChild(0);
         back = transform.GetChild(1);
 
-        if (name.CompareTo("1") == 0)
+        if (IsStartCheckpoint())
         {
             ChangeColor(neonGreen);
         }
@@ -44,7 +47,19 @@ public class CheckPoint : MonoBehaviour
             transform.parent.GetComponent<CheckPointManager>().AddCheckPoint(this);
             ChangeColor(neonGreen);
             playerControl.ResetPositions();
+
+            // Play the checkpoint sound if this is the first time we hit it and it isn't the first checkpoint.
+            if (!activated && !IsStartCheckpoint())
+            {
+                soundManager.PlayCheckpointSound();
+            }
+            activated = true;
         }
+    }
+
+    private bool IsStartCheckpoint()
+    {
+        return name.CompareTo("1") == 0;
     }
 
     private void OnTriggerStay(Collider other)

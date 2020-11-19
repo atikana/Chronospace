@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +14,6 @@ public class MusicManager : MonoBehaviour
     private bool musicIn;
     private bool musicStarted;
     int index = 0;
-    // Start is called before the first frame update
 
     private void Awake()
     {
@@ -27,12 +25,7 @@ public class MusicManager : MonoBehaviour
         musicStarted = false;
 
     }
-    void Start()
-    {
 
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if (musicIn)
