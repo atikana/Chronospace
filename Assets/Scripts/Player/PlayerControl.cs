@@ -190,6 +190,7 @@ public class PlayerControl : MonoBehaviour
         timeWarpCounter = 0f;
         timeWarpCooldownCounter = 0f;
         rippleCameraEffect.StopAllEffects();
+        levelStats.StopTimeWarpGaugeAnimation();
     }
 
     /**
@@ -232,6 +233,7 @@ public class PlayerControl : MonoBehaviour
         {
             timeWarpAvailable = false;
             handsAnimator.SetTrigger("TimeWarp");
+            levelStats.StartTimeWarpGaugeAnimation();
             soundManager.PlayTimeWarpSound();
             soundManager.SetHighPassFilterEnabled(true);
             gameManager.SetTimeWarpEnabled(true);

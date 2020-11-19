@@ -23,6 +23,11 @@ public class SoundManager : MonoBehaviour
     // If player is within this distance of a laser, it will play a sound.
     private const float laserSoundThreshold = 50f;
 
+    void Awake()
+    {
+        lasersPlayingSound = new List<Vector3>();
+    }
+
     void Start()
     {
         playerTransform = FindObjectOfType<PlayerControl>().transform;
@@ -30,8 +35,6 @@ public class SoundManager : MonoBehaviour
         soundEffectsAudioSource = audioSources[0];
         highPitchSoundEffectsAudioSource = audioSources[1];
         laserAudioSource = audioSources[2];
-
-        lasersPlayingSound = new List<Vector3>();
 
         jumpClip = Resources.Load<AudioClip>("JUMP");
         jumpLandingClip = Resources.Load<AudioClip>("LAND");
