@@ -6,9 +6,6 @@ public class TutorialTextControl : MonoBehaviour
     public Transform playerTransform;
     private Text text;
     private int textCounter = 0;
-    private bool dashTextShown = false,
-                 timeWarpTextShown = false,
-                 grappleTextShown = false;
 
     // Start is called before the first frame update
     void Start()
@@ -20,23 +17,40 @@ public class TutorialTextControl : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (playerTransform.position.z > 120 && !timeWarpTextShown)
+        if (playerTransform.position.z > 70 && playerTransform.position.z < 95)
         {
-            timeWarpTextShown = true;
+            text.text = "Left joystick to walk (Xbox) or WASD (keyboard) to use move";
+            textCounter = 300;
+        }
+        else if (playerTransform.position.z > 95 && playerTransform.position.z < 130)
+        {
+            text.text = "Right joystick to look (Xbox) or Move the mouse to look (PC)";
+            textCounter = 300;
+        }
+        else if (playerTransform.position.z > 130 && playerTransform.position.z < 160)
+        {
+            text.text = "Walk over the checkpoint to activate it";
+            textCounter = 300;
+        }
+        else if (playerTransform.position.z > 160 && playerTransform.position.z < 240)
+        {
             text.text = "Press X (Xbox) or Shift (keyboard) to use dash";
-            textCounter = 200;
+            textCounter = 300;
         }
-        else if (playerTransform.position.z > 250 && !dashTextShown)
+        else if (playerTransform.position.z > 250 && playerTransform.position.z < 295)
         {
-            dashTextShown = true;
             text.text = "Press B (Xbox) or Q (keyboard) for time warp";
-            textCounter = 200;
+            textCounter = 300;
         }
-        else if (playerTransform.position.z > 420 && !grappleTextShown)
+        else if (playerTransform.position.z > 300 && playerTransform.position.z < 325)
         {
-            grappleTextShown = true;
-            text.text = "Press RT (Xbox) or left-click (keyboard) to shoot the grapple";
-            textCounter = 200;
+            text.text = "Hold RT (Xbox) or left-click (mouse) to shoot the grapple";
+            textCounter = 300;
+        }
+        else if (playerTransform.position.z > 400 && playerTransform.position.z < 440)
+        {
+            text.text = "Hold LT or right-click to pull while grapple is attached";
+            textCounter = 300;
         }
         else
         {
