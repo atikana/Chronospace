@@ -30887,7 +30887,7 @@ PrefabInstance:
     - target: {fileID: 1844023837909348342, guid: 0541aa77c6b4f0149a35c306a2d9f437,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 122.8
+      value: 98.7
       objectReference: {fileID: 0}
     - target: {fileID: 1844023837909348342, guid: 0541aa77c6b4f0149a35c306a2d9f437,
         type: 3}
@@ -31980,6 +31980,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517978682363965793, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517978682363965793, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: dashFov
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517978682363965793, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: dashFovSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517978682363965806, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: m_ClearFlags
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517978682363965806, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: far clip plane
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517978682363965806, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: field of view
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 5517978682659398784, guid: 724e5968d51354200bac36b1af52c3a7,
         type: 3}
