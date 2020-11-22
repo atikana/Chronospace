@@ -28,8 +28,11 @@ public class LevelStats : MonoBehaviour
 
     void Start()
     {
-        dashGaugeAnimator.ResetTrigger("Dashing");
-        dashGaugeAnimator.ResetTrigger("StopDashing");
+        dashGaugeAnimator.ResetTrigger("Dashing1");
+        dashGaugeAnimator.ResetTrigger("Dashing2");
+        dashGaugeAnimator.ResetTrigger("Recharging1");
+        dashGaugeAnimator.ResetTrigger("Recharging2");
+        dashGaugeAnimator.ResetTrigger("ResetGauge");
         timeWarpGaugeAnimator.ResetTrigger("TimeWarping");
         timeWarpGaugeAnimator.ResetTrigger("StopTimeWarping");
 
@@ -52,24 +55,31 @@ public class LevelStats : MonoBehaviour
         timer = 0f;
     }
 
-    public void StartDashGaugeAnimation()
+    public void StartDashGaugeAnimation1()
     {
-        dashGaugeAnimator.SetTrigger("Dashing");
+        dashGaugeAnimator.SetTrigger("Dashing1");
     }
 
-    public void StopDashGaugeAnimation()
+    public void StartDashGaugeAnimation2()
     {
-        dashGaugeAnimator.SetTrigger("StopDashing");
+        dashGaugeAnimator.SetTrigger("Dashing2");
+    }
+
+    public void ResetDashGaugeAnimation()
+    {
+        dashGaugeAnimator.SetTrigger("ResetGauge");
     }
 
     public void StartTimeWarpGaugeAnimation()
     {
-        timeWarpGaugeAnimator.SetTrigger("StopTimeWarping");
+        timeWarpGaugeAnimator.ResetTrigger("StopTimeWarping");
+        timeWarpGaugeAnimator.SetTrigger("TimeWarping");
     }
 
     public void StopTimeWarpGaugeAnimation()
     {
-        timeWarpGaugeAnimator.SetTrigger("TimeWarping");
+        timeWarpGaugeAnimator.ResetTrigger("TimeWarping");
+        timeWarpGaugeAnimator.SetTrigger("StopTimeWarping");
     }
 
     void Update()

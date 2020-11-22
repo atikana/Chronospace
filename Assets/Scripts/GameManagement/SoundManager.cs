@@ -147,7 +147,7 @@ public class SoundManager : MonoBehaviour
     {
         if (soundEffectsAudioSource && rewindClip)
         {
-            soundEffectsAudioSource.PlayOneShot(rewindClip, Mathf.Min(volume * 2f, 1f));
+            soundEffectsAudioSource.PlayOneShot(rewindClip, volume);
         }
     }
 
