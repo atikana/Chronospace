@@ -771,7 +771,11 @@ public class PlayerControl : MonoBehaviour
         }
         else if (previousPositions.Count > 0)
         {
-            previousPositions.Insert(0, rigidBody.transform.position);
+            if (rigidBody.transform.position != previousPositions[0])
+            {
+                Debug.Log("record position");
+                previousPositions.Insert(0, rigidBody.transform.position);
+            }
         }
         else
         {
