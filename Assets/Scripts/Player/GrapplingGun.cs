@@ -22,6 +22,7 @@ public class GrapplingGun : MonoBehaviour
 
     private bool pulling = false;
     public float pullingMomentumMultiplier = 0.5f;
+    public float maxPullingSpeed = 50f;
 
     // Use a counter to shoot the rope after the grappling animation.
     private float ropeShootCounter = 0f;
@@ -345,6 +346,10 @@ public class GrapplingGun : MonoBehaviour
             return;
         }
 
+        if (playerBody.velocity.magnitude > maxPullingSpeed)
+        {
+            playerBody.velocity = Vector3.ClampMagnitude(playerBody.velocity, maxPullingSpeed);
+        }
         playerBody.velocity = playerBody.velocity * pullingMomentumMultiplier;
 
         pulling = false;

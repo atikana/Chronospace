@@ -470,8 +470,6 @@ public class PlayerControl : MonoBehaviour
             Vector3 vel = rigidBody.velocity;
             if (rigidBody.velocity.y < 0.5f)
                 rigidBody.velocity = new Vector3(vel.x, 0, vel.z);
-            else if (rigidBody.velocity.y > 0)
-                rigidBody.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
         }
     }
 
@@ -593,7 +591,7 @@ public class PlayerControl : MonoBehaviour
     private void Move()
     {
         //Extra gravity
-        rigidBody.AddForce(Vector3.down * Time.fixedDeltaTime * 10);
+        rigidBody.AddForce(Vector3.down * Time.deltaTime * 10);
 
         //velocity relative to where player is looking
         Vector2 mag = VelRelativeToLook();
@@ -627,8 +625,8 @@ public class PlayerControl : MonoBehaviour
             multiplier = 0.4f;
             multiplierV = onAirControl;
         }
-        rigidBody.AddForce(transform.forward * y * movementSpeed * Time.fixedDeltaTime * multiplier * multiplier);
-        rigidBody.AddForce(transform.right * x * movementSpeed * Time.fixedDeltaTime * multiplier * multiplierV);
+        rigidBody.AddForce(transform.forward * y * movementSpeed * Time.deltaTime * multiplier * multiplier);
+        rigidBody.AddForce(transform.right * x * movementSpeed * Time.deltaTime * multiplier * multiplierV);
 
         running = moveVector.magnitude > 0 && grounded;
 
