@@ -199,8 +199,9 @@ public class GameManager : MonoBehaviour
         playerControl.input.Disable();
         playerControl.StartRewind();
 
-        yield return new WaitForSecondsRealtime(3f);
-
+        // yield return new WaitForSecondsRealtime(3f);
+        yield return new WaitUntil(() => playerControl.isRewinding == false);
+        Debug.Log("rewind finished");
         playerControl.StopRewind();
         TurretControl[] turrets = FindObjectsOfType<TurretControl>();
         foreach (TurretControl turret in turrets)

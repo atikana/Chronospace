@@ -96,7 +96,7 @@ public class PlayerControl : MonoBehaviour
     private List<Vector3> previousPositions;
     private float rewindPeriod = 0.0f;
     public float rewindStep = 0.1f;
-    private bool isRewinding;
+    public bool isRewinding;
 
     /**
      * Set up stuff before the level starts.
@@ -687,11 +687,6 @@ public class PlayerControl : MonoBehaviour
         {
             RecordPositions();
         }
-    }
-
-    private void Update()
-    {
-        AdjustCamera();
         if (isRewinding)
         {
             if (rewindPeriod > rewindStep)
@@ -701,7 +696,11 @@ public class PlayerControl : MonoBehaviour
             }
             rewindPeriod += UnityEngine.Time.deltaTime;
         }
+    }
 
+    private void Update()
+    {
+        AdjustCamera();
     }
 
     private void Rewind()
@@ -710,6 +709,7 @@ public class PlayerControl : MonoBehaviour
         {
             rigidBody.transform.position = previousPositions[0];
             previousPositions.RemoveAt(0);
+            //Debug.Log(previousPositions.Count);
         }
         else 
         { 
@@ -720,14 +720,15 @@ public class PlayerControl : MonoBehaviour
 
     public void StartRewind() 
     {
-        Debug.Log(previousPositions[previousPositions.Count -1]);
+        Debug.Log(previousPositions[previousPositions.Count - 1]);
         if (previousPositions.Count != 0)
-        {   
-            Debug.Log("points stored:");
+        {
+            //Debug.Log("points stored:");
             rigidBody.isKinematic = true;
-            Debug.Log(previousPositions.Count);
+            //Debug.Log(previousPositions.Count);
             isRewinding = true;
-            rewindStep = 3.0f / previousPositions.Count;
+            // rewindStep = 3.0f / previousPositions.Count;
+            rewindStep = 3.0f / 200;
         }
     }
 
@@ -741,29 +742,42 @@ public class PlayerControl : MonoBehaviour
     public void ResetPositions()
     {
         previousPositions = new List<Vector3>();
-        previousPositions.Insert(0, gameManager.checkPointManager.GetClosestCheckPoint().GetCheckPointPosition());
+        if (gameManager.checkPointManager.GetClosestCheckPoint().GetCheckPointPosition() == null)
+        {
+            Debug.Log("start position");
+            previousPositions.Insert(0, new Vector3(-4.3f, 7.0f, -40.5f));
+        }
+        else
+        {
+            previousPositions.Insert(0, gameManager.checkPointManager.GetClosestCheckPoint().GetCheckPointPosition());
+            Debug.Log(gameManager.checkPointManager.GetClosestCheckPoint().GetCheckPointPosition());
+        }
     }
 
     private void RecordPositions()
     {
         int partition = 20;
         int i = 1;
-        if (previousPositions.Count >= 201) 
+        if (previousPositions.Count >= 201)
         {
             if (i <= partition)
             {
                 previousPositions.RemoveAt(i * 10);
                 i++;
             }
-            else 
+            else
             {
                 i = 1;
                 previousPositions.RemoveAt(i * 10);
             }
         }
-        else if(previousPositions.Count > 0)
-        { 
+        else if (previousPositions.Count > 0)
+        {
             previousPositions.Insert(0, rigidBody.transform.position);
+        }
+        else
+        {
+            previousPositions.Insert(0, new Vector3(-4.3f, 7.0f, -40.5f));
         }
     }
 
