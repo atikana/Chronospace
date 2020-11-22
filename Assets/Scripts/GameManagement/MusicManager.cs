@@ -11,15 +11,18 @@ public class MusicManager : MonoBehaviour
     List<AudioClip> audioClips = new List<AudioClip>();
     Text songName;
     Slider songLength;
+    CanvasGroup canvasGroup;
     private bool musicIn;
     private bool musicStarted;
     int index = 0;
+    float currentAlpha = 1;
 
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         songName = transform.GetChild(0).GetComponent<Text>();
         songLength = transform.GetChild(2).GetComponent<Slider>();
+        canvasGroup = GetComponent<CanvasGroup>();
         getAllMusic();
         musicIn = false;
         musicStarted = false;
@@ -34,9 +37,13 @@ public class MusicManager : MonoBehaviour
             { 
                 musicStarted = true;
                 audioSource.Play();
+                currentAlpha = Mathf.MoveTowards(currentAlpha, 0, 0.3f * Time.deltaTime);
+                canvasGroup.alpha = currentAlpha;
             }
             playMusic();
         }
+
+     
     }
 
     public void StartMusic() 
@@ -72,12 +79,16 @@ public class MusicManager : MonoBehaviour
             }
 
             SetSong(audioClips[index]);
+            canvasGroup.alpha = 1;
+            currentAlpha = 1;
             audioSource.Play();
 
         }
 
         songLength.value = audioSource.time;
-       
+        currentAlpha = Mathf.MoveTowards(currentAlpha, 0, 0.3f * Time.deltaTime);
+        canvasGroup.alpha = currentAlpha;
+
 
 
     }

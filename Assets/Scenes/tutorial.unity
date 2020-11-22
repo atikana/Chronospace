@@ -9499,6 +9499,7 @@ GameObject:
   - component: {fileID: 2037069988}
   - component: {fileID: 2037069990}
   - component: {fileID: 2037069989}
+  - component: {fileID: 2037069991}
   m_Layer: 5
   m_Name: music
   m_TagString: Untagged
@@ -9644,6 +9645,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 272b85a4ba74d014da97015a90890743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &2037069991
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037069986}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!4 &2039982407 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5517978682363965807, guid: 724e5968d51354200bac36b1af52c3a7,
