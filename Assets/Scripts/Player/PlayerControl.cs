@@ -702,21 +702,24 @@ public class PlayerControl : MonoBehaviour
     {
         if (previousPositions.Count > 0)
         {
-            rigidBody.isKinematic = true;
             rigidBody.transform.position = previousPositions[0];
             previousPositions.RemoveAt(0);
         }
         else 
         { 
             isRewinding = false;
-            rigidBody.isKinematic = false;
+            
         }
     }
 
     public void StartRewind() 
     {
+        Debug.Log(previousPositions[previousPositions.Count -1]);
         if (previousPositions.Count != 0)
-        {
+        {   
+            Debug.Log("points stored:");
+            rigidBody.isKinematic = true;
+            Debug.Log(previousPositions.Count);
             isRewinding = true;
             rewindStep = 3.0f / previousPositions.Count;
         }
@@ -732,11 +735,30 @@ public class PlayerControl : MonoBehaviour
     public void ResetPositions()
     {
         previousPositions = new List<Vector3>();
+        previousPositions.Insert(0, gameManager.checkPointManager.GetClosestCheckPoint().GetCheckPointPosition());
     }
 
     private void RecordPositions()
     {
-        previousPositions.Insert(0, rigidBody.transform.position);
+        int partition = 20;
+        int i = 1;
+        if (previousPositions.Count >= 201) 
+        {
+            if (i <= partition)
+            {
+                previousPositions.RemoveAt(i * 10);
+                i++;
+            }
+            else 
+            {
+                i = 1;
+                previousPositions.RemoveAt(i * 10);
+            }
+        }
+        else if(previousPositions.Count > 0)
+        { 
+            previousPositions.Insert(0, rigidBody.transform.position);
+        }
     }
 
     public bool GetGroundStatus()

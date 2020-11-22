@@ -199,9 +199,21 @@ public class GameManager : MonoBehaviour
         playerControl.input.Disable();
         playerControl.StartRewind();
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSecondsRealtime(3f);
 
         playerControl.StopRewind();
+        TurretControl[] turrets = FindObjectsOfType<TurretControl>();
+        foreach (TurretControl turret in turrets)
+        {
+            turret.ResetTurret();
+        }
+
+        // Remove all existing bullets.
+        GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
+        foreach (GameObject bullet in bullets)
+        {
+            Destroy(bullet);
+        }
         playerControl.input.Enable();
         rewindDisplay.gameObject.SetActive(false);
         levelStats.StartTimer();

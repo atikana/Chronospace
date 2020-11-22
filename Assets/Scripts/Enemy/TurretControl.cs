@@ -118,5 +118,6 @@ public class TurretControl : MonoBehaviour
     public void ResetTurret()
     {
         targetLocked = false;
+        target = null;
     }
 }
