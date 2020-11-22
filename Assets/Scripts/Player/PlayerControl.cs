@@ -96,7 +96,7 @@ public class PlayerControl : MonoBehaviour
     private List<Vector3> previousPositions;
     private float rewindPeriod = 0.0f;
     public float rewindStep = 0.1f;
-    private bool isRewinding;
+    public bool isRewinding;
 
     /**
      * Set up stuff before the level starts.
@@ -470,8 +470,6 @@ public class PlayerControl : MonoBehaviour
             Vector3 vel = rigidBody.velocity;
             if (rigidBody.velocity.y < 0.5f)
                 rigidBody.velocity = new Vector3(vel.x, 0, vel.z);
-            else if (rigidBody.velocity.y > 0)
-                rigidBody.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
         }
     }
 
@@ -593,7 +591,7 @@ public class PlayerControl : MonoBehaviour
     private void Move()
     {
         //Extra gravity
-        rigidBody.AddForce(Vector3.down * Time.fixedDeltaTime * 10);
+        rigidBody.AddForce(Vector3.down * Time.deltaTime * 10);
 
         //velocity relative to where player is looking
         Vector2 mag = VelRelativeToLook();
@@ -627,8 +625,8 @@ public class PlayerControl : MonoBehaviour
             multiplier = 0.4f;
             multiplierV = onAirControl;
         }
-        rigidBody.AddForce(transform.forward * y * movementSpeed * Time.fixedDeltaTime * multiplier * multiplier);
-        rigidBody.AddForce(transform.right * x * movementSpeed * Time.fixedDeltaTime * multiplier * multiplierV);
+        rigidBody.AddForce(transform.forward * y * movementSpeed * Time.deltaTime * multiplier * multiplier);
+        rigidBody.AddForce(transform.right * x * movementSpeed * Time.deltaTime * multiplier * multiplierV);
 
         running = moveVector.magnitude > 0 && grounded;
 
@@ -687,11 +685,6 @@ public class PlayerControl : MonoBehaviour
         {
             RecordPositions();
         }
-    }
-
-    private void Update()
-    {
-        AdjustCamera();
         if (isRewinding)
         {
             if (rewindPeriod > rewindStep)
@@ -701,30 +694,39 @@ public class PlayerControl : MonoBehaviour
             }
             rewindPeriod += UnityEngine.Time.deltaTime;
         }
+    }
 
+    private void Update()
+    {
+        AdjustCamera();
     }
 
     private void Rewind()
     {
         if (previousPositions.Count > 0)
         {
-            rigidBody.isKinematic = true;
             rigidBody.transform.position = previousPositions[0];
             previousPositions.RemoveAt(0);
+            //Debug.Log(previousPositions.Count);
         }
         else 
         { 
             isRewinding = false;
-            rigidBody.isKinematic = false;
+            
         }
     }
 
     public void StartRewind() 
     {
+        Debug.Log(previousPositions[previousPositions.Count - 1]);
         if (previousPositions.Count != 0)
         {
+            //Debug.Log("points stored:");
+            rigidBody.isKinematic = true;
+            //Debug.Log(previousPositions.Count);
             isRewinding = true;
-            rewindStep = 3.0f / previousPositions.Count;
+            // rewindStep = 3.0f / previousPositions.Count;
+            rewindStep = 3.0f / 200;
         }
     }
 
@@ -738,11 +740,43 @@ public class PlayerControl : MonoBehaviour
     public void ResetPositions()
     {
         previousPositions = new List<Vector3>();
+        if (gameManager.checkPointManager.GetClosestCheckPoint().GetCheckPointPosition() == null)
+        {
+            Debug.Log("start position");
+            previousPositions.Insert(0, new Vector3(-4.3f, 7.0f, -40.5f));
+        }
+        else
+        {
+            previousPositions.Insert(0, gameManager.checkPointManager.GetClosestCheckPoint().GetCheckPointPosition());
+            Debug.Log(gameManager.checkPointManager.GetClosestCheckPoint().GetCheckPointPosition());
+        }
     }
 
     private void RecordPositions()
     {
-        previousPositions.Insert(0, rigidBody.transform.position);
+        int partition = 20;
+        int i = 1;
+        if (previousPositions.Count >= 201)
+        {
+            if (i <= partition)
+            {
+                previousPositions.RemoveAt(i * 10);
+                i++;
+            }
+            else
+            {
+                i = 1;
+                previousPositions.RemoveAt(i * 10);
+            }
+        }
+        else if (previousPositions.Count > 0)
+        {
+            previousPositions.Insert(0, rigidBody.transform.position);
+        }
+        else
+        {
+            previousPositions.Insert(0, new Vector3(-4.3f, 7.0f, -40.5f));
+        }
     }
 
     public bool GetGroundStatus()

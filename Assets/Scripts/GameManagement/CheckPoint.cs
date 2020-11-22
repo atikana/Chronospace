@@ -7,6 +7,7 @@ public class CheckPoint : MonoBehaviour
     private PlayerControl playerControl;
     private SoundManager soundManager;
     private bool activated = false;
+    private bool rewindReset = false;
 
     private void Start()
     {
@@ -46,8 +47,11 @@ public class CheckPoint : MonoBehaviour
         {
             transform.parent.GetComponent<CheckPointManager>().AddCheckPoint(this);
             ChangeColor(neonGreen);
-            playerControl.ResetPositions();
-
+            if (!rewindReset)
+            {
+                playerControl.ResetPositions();
+                rewindReset = true;
+            }
             // Play the checkpoint sound if this is the first time we hit it and it isn't the first checkpoint.
             if (!activated && !IsStartCheckpoint())
             {
@@ -56,6 +60,14 @@ public class CheckPoint : MonoBehaviour
             activated = true;
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            rewindReset = false;
+        }
+    }  
 
     private bool IsStartCheckpoint()
     {
