@@ -46,12 +46,14 @@ public class MusicManager : MonoBehaviour
 
     void getAllMusic()
     {
-        audioFiles = Resources.LoadAll("Music");
+        audioFiles = Resources.LoadAll("Music/Levels/");
 
         for (int i = 0; i < audioFiles.Length; i++)
         {
             audioClips.Add((AudioClip)audioFiles[i]);
         }
+
+        Shuffle();
 
         SetSong(audioClips[index]);
 
@@ -86,6 +88,18 @@ public class MusicManager : MonoBehaviour
         audioSource.clip = audioClips[index];
         songLength.minValue = 0;
         songLength.maxValue = audioClip.length;
+    }
+
+    void Shuffle()
+    {
+        int last = audioClips.Count;
+        for (int i = 0; i < last; i++)
+        {
+            int r = Random.Range(i, audioClips.Count);
+            var temp = audioClips[i];
+            audioClips[i] = audioClips[r];
+            audioClips[r] = temp;
+        }
     }
 
 
