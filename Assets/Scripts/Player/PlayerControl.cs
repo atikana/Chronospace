@@ -625,8 +625,8 @@ public class PlayerControl : MonoBehaviour
             multiplier = 0.4f;
             multiplierV = onAirControl;
         }
-        rigidBody.AddForce(transform.forward * y * movementSpeed * Time.fixedDeltaTime * multiplier * multiplier);
-        rigidBody.AddForce(transform.right * x * movementSpeed * Time.fixedDeltaTime * multiplier * multiplierV);
+        rigidBody.AddForce(transform.forward * y * movementSpeed * Time.deltaTime * multiplier * multiplier);
+        rigidBody.AddForce(transform.right * x * movementSpeed * Time.deltaTime * multiplier * multiplierV);
 
         running = moveVector.magnitude > 0 && grounded;
 
