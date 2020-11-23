@@ -17,7 +17,6 @@ public class MusicManager : MonoBehaviour
     int index = 0;
     float currentAlpha = 1;
 
-    GameSettings gameSettings;
 
     private void Awake()
     {
@@ -25,8 +24,6 @@ public class MusicManager : MonoBehaviour
         songName = transform.GetChild(0).GetComponent<Text>();
         songLength = transform.GetChild(2).GetComponent<Slider>();
         canvasGroup = GetComponent<CanvasGroup>();
-        gameSettings = FindObjectOfType<GameSettings>();
-        SetVolume(gameSettings.GetMusic());
         getAllMusic();
         musicIn = false;
         musicStarted = false;
@@ -119,7 +116,6 @@ public class MusicManager : MonoBehaviour
 
     public void SetVolume(float f)
     {
-        Debug.Log(f);
         audioSource.volume = f;
     }
 

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour
 {
     public PauseMenu pauseMenu;
+    public GameObject menu;
     public LevelStats levelStats;
     public CheckPointManager checkPointManager;
     private PlayerControl playerControl;
@@ -38,19 +39,17 @@ public class GameManager : MonoBehaviour
     private const float baseSensitivity = 50f;
     private const float sensitivityMultiplier = 8f;
 
-    GameSettings gameSettings;
+ 
 
 
     void Start()
     {
         playerControl = FindObjectOfType<PlayerControl>();
-        gameSettings = FindObjectOfType<GameSettings>();
         grapplingGun = playerControl.gameObject.GetComponentInChildren<GrapplingGun>();
         counted = false;
         isRewinding = false;
-        SetSensitivity(gameSettings.GetMouseSensitivity());
-        SetAutoAim(gameSettings.GetAutoAim());
     }
+
 
     public void PauseGame()
     {
@@ -232,6 +231,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator CountdownTo()
     {
+ 
         FindObjectOfType<SoundManager>().PlayCountdownSound();
         counted = true;
         int countdown_;
@@ -255,6 +255,12 @@ public class GameManager : MonoBehaviour
         levelStats.StartTimer();
         FindObjectOfType<MusicManager>().StartMusic();
         countdownDisplay.gameObject.SetActive(false);
+        menu.SetActive(true);
+        OptionMenu optionMenu = menu.transform.GetChild(1).GetComponent<OptionMenu>();
+        optionMenu.gameObject.SetActive(true);
+        optionMenu.SetGameSettings();  
+        optionMenu.gameObject.SetActive(false);
+        menu.SetActive(false);
     }
 
     public void SetAutoAim(bool b)

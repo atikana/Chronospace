@@ -17,8 +17,6 @@ public class GameSettings : MonoBehaviour
     private float playerScore = 0;
     private float music = 0.5f;
     private bool autoAim = false;
-
-    bool first;
     void Awake()
     {
  
@@ -46,6 +44,7 @@ public class GameSettings : MonoBehaviour
 
     public float GetVolume()
     {
+        Debug.Log(volume);
         return volume;
     }
 
@@ -66,7 +65,6 @@ public class GameSettings : MonoBehaviour
 
     public float GetMusic()
     {
-        Debug.Log(music);
         return music;
     }
 
@@ -91,19 +89,10 @@ public class GameSettings : MonoBehaviour
 
     public void SetMusic(float f)
     {
-        Debug.Log(f);
         music = f;
     }
 
-    public bool CheckStartMenu()
-    {
-        return first;
-    }
 
-    public void SetGameSettings()
-    {
-        first = true;
-    }
 
 
 }

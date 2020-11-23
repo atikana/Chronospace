@@ -7,6 +7,9 @@ public class StartMenu : MonoBehaviour
 {
     public PlayerInput input;
 
+    public GameObject optionMenu;
+
+
     public void LoadLvl1()
     {
         SceneManager.LoadScene("Level1");
@@ -39,6 +42,9 @@ public class StartMenu : MonoBehaviour
     {
         input = new PlayerInput();
         input.Enable();
+        optionMenu.SetActive(true);
+        optionMenu.GetComponent<OptionMenu>().SetMainMenuGameSettings();
+        optionMenu.SetActive(false);
     }
 
     // Update is called once per frame

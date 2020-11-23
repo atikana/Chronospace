@@ -18,12 +18,6 @@ public class OptionMenu : MonoBehaviour
 
     void Awake()
     {
-      
-
-    }
-
-    private void Start()
-    {
 
         gameSettings = FindObjectOfType<GameSettings>();
         volume = transform.GetChild(2).GetChild(0).GetComponent<Slider>();
@@ -31,35 +25,11 @@ public class OptionMenu : MonoBehaviour
         autoaim = transform.GetChild(4).GetComponent<Toggle>();
         sensitivity = transform.GetChild(5).GetChild(0).GetComponent<Slider>();
 
-        if (string.Compare(SceneManager.GetActiveScene().name, "StartMenu") != 0)
-        {
-            
+    }
 
-            gameManager = FindObjectOfType<GameManager>();
-            soundManager = FindObjectOfType<SoundManager>();
-            musicManager = FindObjectOfType<MusicManager>();
-
-        }
-        else
-        {
-            startMenuMusic = FindObjectOfType<StartMenuMusic>();
-        }
-
-
-
-        if (gameSettings.CheckStartMenu())
-        {
-
-         
-            volume.value = gameSettings.GetVolume();
-            sensitivity.value = gameSettings.GetMouseSensitivity();
-            autoaim.isOn = gameSettings.GetAutoAim();
-            music.value = gameSettings.GetMusic();
-        }
-        else
-        {
-            gameSettings.SetGameSettings();
-        }
+    private void Start()
+    {
+     
     }
 
 
@@ -115,6 +85,38 @@ public class OptionMenu : MonoBehaviour
             startMenuMusic.SetVolume(music.value);
         }
 
+    }
+
+    public void SetGameSettings()
+    {
+        gameManager = FindObjectOfType<GameManager>();
+        soundManager = FindObjectOfType<SoundManager>();
+        musicManager = FindObjectOfType<MusicManager>();
+
+
+        volume.value = gameSettings.GetVolume();
+        sensitivity.value = gameSettings.GetMouseSensitivity();
+        autoaim.isOn = gameSettings.GetAutoAim();
+        music.value = gameSettings.GetMusic();
+
+        soundManager.SetVolume(volume.value);
+        musicManager.SetVolume(music.value);
+        gameManager.SetSensitivity(sensitivity.value);
+        gameManager.SetAutoAim(autoaim.isOn);
+    }
+
+    public void SetMainMenuGameSettings()
+    {
+       
+
+        startMenuMusic = FindObjectOfType<StartMenuMusic>();
+
+        volume.value = gameSettings.GetVolume();
+        sensitivity.value = gameSettings.GetMouseSensitivity();
+        autoaim.isOn = gameSettings.GetAutoAim();
+        music.value = gameSettings.GetMusic();
+
+        startMenuMusic.SetVolume(music.value);
     }
 
 }

@@ -31,6 +31,9 @@ public class PauseMenu : MonoBehaviour
 
         // Set a default value for originalTimeScale.
         originalTimeScale = Time.timeScale;
+
+        // call menu once 
+
     }
 
     public void PressPause()

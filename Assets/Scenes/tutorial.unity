@@ -1212,7 +1212,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1308,7 +1308,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: d1e30c4d60d6a411bbca764ce9c075f9, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1404,7 +1404,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0
+  m_Volume: 0.5
   m_Pitch: 2
   Loop: 0
   Mute: 0
@@ -4879,18 +4879,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &964936381 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8224987664668297478, guid: 9a02249437dbd6e45b5dad114580951b,
-    type: 3}
-  m_PrefabInstance: {fileID: 150394393}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &984298512
 GameObject:
   m_ObjectHideFlags: 0
@@ -6168,13 +6156,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 180776422}
+  menu: {fileID: 439061991}
   levelStats: {fileID: 736850038}
   checkPointManager: {fileID: 1616474973}
   playerRigidbody: {fileID: 1811659950}
   cameraTransform: {fileID: 2039982407}
   countdown: 3
   countdownDisplay: {fileID: 2050022802}
-  rewindDisplay: {fileID: 964936381}
+  rewindAnim: {fileID: 0}
   RewindEnabled: 0
 --- !u!4 &1404047974
 Transform:
@@ -9633,7 +9622,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0

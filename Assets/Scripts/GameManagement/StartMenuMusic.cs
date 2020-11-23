@@ -5,13 +5,16 @@ using UnityEngine;
 public class StartMenuMusic : MonoBehaviour
 {
     AudioSource audioSource;
-    GameSettings gameSettings;
+
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        gameSettings = FindObjectOfType<GameSettings>();
-        SetVolume(gameSettings.GetMusic());
+    }
+
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame
