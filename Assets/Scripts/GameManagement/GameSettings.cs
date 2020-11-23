@@ -66,6 +66,7 @@ public class GameSettings : MonoBehaviour
 
     public float GetMusic()
     {
+        Debug.Log(music);
         return music;
     }
 
@@ -90,6 +91,7 @@ public class GameSettings : MonoBehaviour
 
     public void SetMusic(float f)
     {
+        Debug.Log(f);
         music = f;
     }
 

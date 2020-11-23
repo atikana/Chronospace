@@ -119,6 +119,7 @@ public class MusicManager : MonoBehaviour
 
     public void SetVolume(float f)
     {
+        Debug.Log(f);
         audioSource.volume = f;
     }
 

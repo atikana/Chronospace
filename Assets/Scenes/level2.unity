@@ -799,7 +799,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -895,7 +895,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: d1e30c4d60d6a411bbca764ce9c075f9, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -991,7 +991,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0
   m_Pitch: 2
   Loop: 0
   Mute: 0
@@ -3757,6 +3757,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'OptionMenuCanvas '
       objectReference: {fileID: 0}
+    - target: {fileID: 3080512270385096577, guid: db019c07508d5504ba5e4c48bfb81b71,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3080512270787070055, guid: db019c07508d5504ba5e4c48bfb81b71,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -5421,7 +5426,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.284
+  m_Volume: 0
   m_Pitch: 1
   Loop: 0
   Mute: 0

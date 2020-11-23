@@ -55,6 +55,7 @@ public class SoundManager : MonoBehaviour
 
         gameSettings = FindObjectOfType<GameSettings>();
         // Default volume when game starts.
+       
         SetVolume(gameSettings.GetVolume());
     }
 
