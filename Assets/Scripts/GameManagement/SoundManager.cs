@@ -23,6 +23,8 @@ public class SoundManager : MonoBehaviour
     // If player is within this distance of a laser, it will play a sound.
     private const float laserSoundThreshold = 50f;
 
+    private GameSettings gameSettings;
+
     void Awake()
     {
         lasersPlayingSound = new List<Vector3>();
@@ -51,8 +53,9 @@ public class SoundManager : MonoBehaviour
             Resources.Load<AudioClip>("TURRET_BULLET_3")
         };
 
+        gameSettings = FindObjectOfType<GameSettings>();
         // Default volume when game starts.
-        SetVolume(volume);
+        SetVolume(gameSettings.GetVolume());
     }
 
     public void SetHighPassFilterEnabled(bool enabled)

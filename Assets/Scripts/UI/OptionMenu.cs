@@ -29,23 +29,31 @@ public class OptionMenu : MonoBehaviour
 
         if (string.Compare(SceneManager.GetActiveScene().name, "StartMenu") != 0)
         {
-            Debug.Log("start");
+            
 
             gameManager = FindObjectOfType<GameManager>();
             soundManager = FindObjectOfType<SoundManager>();
 
 
+        }
+
+
+
+        if (gameSettings.CheckStartMenu())
+        {
+
             float temp = gameSettings.GetVolume();
             volume.value = temp;
-            soundManager.SetVolume(temp);
 
             temp = gameSettings.GetMouseSensitivity();
             sensitivity.value = temp;
-            gameManager.SetSensitivity(temp);
 
             bool b = gameSettings.GetAutoAim();
             autoaim.isOn = b;
-            gameManager.SetAutoAim(b);
+        }
+        else
+        {
+            gameSettings.SetGameSettings();
         }
     }
 

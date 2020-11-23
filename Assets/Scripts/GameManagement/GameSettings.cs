@@ -17,6 +17,8 @@ public class GameSettings : MonoBehaviour
     private float playerScore;
     private bool autoAim;
 
+    bool first;
+
     void Awake()
     {
  
@@ -80,5 +82,16 @@ public class GameSettings : MonoBehaviour
     {
         autoAim = b;
     }
+
+    public bool CheckStartMenu()
+    {
+        return first;
+    }
+
+    public void SetGameSettings()
+    {
+        first = true;
+    }
+
 
 }
