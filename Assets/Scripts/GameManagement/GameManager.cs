@@ -38,13 +38,18 @@ public class GameManager : MonoBehaviour
     private const float baseSensitivity = 50f;
     private const float sensitivityMultiplier = 8f;
 
+    GameSettings gameSettings;
+
 
     void Start()
     {
         playerControl = FindObjectOfType<PlayerControl>();
+        gameSettings = FindObjectOfType<GameSettings>();
         grapplingGun = playerControl.gameObject.GetComponentInChildren<GrapplingGun>();
         counted = false;
         isRewinding = false;
+        SetSensitivity(gameSettings.GetMouseSensitivity());
+        SetAutoAim(gameSettings.GetAutoAim());
     }
 
     public void PauseGame()
@@ -250,16 +255,10 @@ public class GameManager : MonoBehaviour
         countdownDisplay.gameObject.SetActive(false);
     }
 
-    public void SetAutoAim()
+    public void SetAutoAim(bool b)
     {
-        if (autoAim)
-        {
-            autoAim = false;
-        }
-        else
-        {
-            autoAim = true;
-        }
+        autoAim = b;
+
        
     }
 

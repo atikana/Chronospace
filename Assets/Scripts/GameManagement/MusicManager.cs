@@ -11,19 +11,26 @@ public class MusicManager : MonoBehaviour
     List<AudioClip> audioClips = new List<AudioClip>();
     Text songName;
     Slider songLength;
+    CanvasGroup canvasGroup;
     private bool musicIn;
     private bool musicStarted;
     int index = 0;
+    float currentAlpha = 1;
+
+    GameSettings gameSettings;
 
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         songName = transform.GetChild(0).GetComponent<Text>();
         songLength = transform.GetChild(2).GetComponent<Slider>();
+        canvasGroup = GetComponent<CanvasGroup>();
+        gameSettings = FindObjectOfType<GameSettings>();
+        SetVolume(gameSettings.GetMusic());
         getAllMusic();
         musicIn = false;
         musicStarted = false;
-
+    
     }
 
     void Update()
@@ -34,9 +41,13 @@ public class MusicManager : MonoBehaviour
             { 
                 musicStarted = true;
                 audioSource.Play();
+                currentAlpha = Mathf.MoveTowards(currentAlpha, 0, 0.3f * Time.deltaTime);
+                canvasGroup.alpha = currentAlpha;
             }
             playMusic();
         }
+
+     
     }
 
     public void StartMusic() 
@@ -46,12 +57,14 @@ public class MusicManager : MonoBehaviour
 
     void getAllMusic()
     {
-        audioFiles = Resources.LoadAll("Music");
+        audioFiles = Resources.LoadAll("Music/Levels/");
 
         for (int i = 0; i < audioFiles.Length; i++)
         {
             audioClips.Add((AudioClip)audioFiles[i]);
         }
+
+        Shuffle();
 
         SetSong(audioClips[index]);
 
@@ -70,12 +83,16 @@ public class MusicManager : MonoBehaviour
             }
 
             SetSong(audioClips[index]);
+            canvasGroup.alpha = 1;
+            currentAlpha = 1;
             audioSource.Play();
 
         }
 
         songLength.value = audioSource.time;
-       
+        currentAlpha = Mathf.MoveTowards(currentAlpha, 0, 0.3f * Time.deltaTime);
+        canvasGroup.alpha = currentAlpha;
+
 
 
     }
@@ -86,6 +103,24 @@ public class MusicManager : MonoBehaviour
         audioSource.clip = audioClips[index];
         songLength.minValue = 0;
         songLength.maxValue = audioClip.length;
+    }
+
+    void Shuffle()
+    {
+        int last = audioClips.Count;
+        for (int i = 0; i < last; i++)
+        {
+            int r = Random.Range(i, audioClips.Count);
+            var temp = audioClips[i];
+            audioClips[i] = audioClips[r];
+            audioClips[r] = temp;
+        }
+    }
+
+    public void SetVolume(float f)
+    {
+        Debug.Log(f);
+        audioSource.volume = f;
     }
 
 

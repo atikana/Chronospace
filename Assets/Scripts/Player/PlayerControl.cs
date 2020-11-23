@@ -331,6 +331,8 @@ public class PlayerControl : MonoBehaviour
             numDashes = dashCapacity;
             dashCooldownCounter = dashCooldownLength;
         }
+
+        
     }
 
     /**
@@ -792,4 +794,11 @@ public class PlayerControl : MonoBehaviour
     {
         return gameManager.GetAutoAimStatus();
     }
+
+    public bool GetDashingStatus()
+    {
+        return dashing;
+    }
+
+ 
 }
