@@ -250,16 +250,10 @@ public class GameManager : MonoBehaviour
         countdownDisplay.gameObject.SetActive(false);
     }
 
-    public void SetAutoAim()
+    public void SetAutoAim(bool b)
     {
-        if (autoAim)
-        {
-            autoAim = false;
-        }
-        else
-        {
-            autoAim = true;
-        }
+        autoAim = b;
+
        
     }
 
