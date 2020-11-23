@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     private bool delayPeriod;
     public int countdown;
     public Text countdownDisplay;
-    public Text rewindDisplay;
+    public GameObject rewindAnim;
     private bool counted;
     private bool isRewinding;
     public bool RewindEnabled;
@@ -200,7 +200,8 @@ public class GameManager : MonoBehaviour
         FindObjectOfType<SoundManager>().PlayRewindSound();
         levelStats.PauseTimer();
         isRewinding = true;
-        rewindDisplay.gameObject.SetActive(true);
+        rewindAnim.gameObject.SetActive(true);
+        rewindAnim.GetComponentInChildren<Animator>().SetBool("PlayRewind",true);
         playerControl.input.Disable();
         playerControl.StartRewind();
 
@@ -221,7 +222,8 @@ public class GameManager : MonoBehaviour
             Destroy(bullet);
         }
         playerControl.input.Enable();
-        rewindDisplay.gameObject.SetActive(false);
+        rewindAnim.GetComponentInChildren<Animator>().SetBool("PlayRewind", false);
+        rewindAnim.gameObject.SetActive(false);
         levelStats.StartTimer();
         AddDeath();
         RestartLevel(true);
