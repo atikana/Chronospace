@@ -45,7 +45,7 @@ public class PauseMenu : MonoBehaviour
         else
         {   
 
-            if (optionMenu.activeInHierarchy)
+            if (optionMenu != null && optionMenu.activeInHierarchy)
             {
                 optionMenu.SetActive(false);
                 pauseMenu.SetActive(true);
