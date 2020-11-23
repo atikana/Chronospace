@@ -8,6 +8,7 @@ public class OptionMenu : MonoBehaviour
     private SoundManager soundManager;
     private GameSettings gameSettings;
     private MusicManager musicManager;
+    private StartMenuMusic startMenuMusic;
 
 
     Slider volume;
@@ -38,6 +39,10 @@ public class OptionMenu : MonoBehaviour
             soundManager = FindObjectOfType<SoundManager>();
             musicManager = FindObjectOfType<MusicManager>();
 
+        }
+        else
+        {
+            startMenuMusic = FindObjectOfType<StartMenuMusic>();
         }
 
 
@@ -105,6 +110,11 @@ public class OptionMenu : MonoBehaviour
         {
             musicManager.SetVolume(music.value);
         }
+        else
+        {
+            startMenuMusic.SetVolume(music.value);
+        }
+
     }
 
 }
