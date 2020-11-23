@@ -73,9 +73,9 @@ public class SoundManager : MonoBehaviour
         volume = newVolume;
 
         // Manually set the music audioSource volume.
-        soundEffectsAudioSource.volume = 0.5f * newVolume;
-        highPitchSoundEffectsAudioSource.volume = 0.5f * newVolume;
-        laserAudioSource.volume = 0.5f * newVolume;
+        soundEffectsAudioSource.volume = newVolume;
+        highPitchSoundEffectsAudioSource.volume = newVolume;
+        laserAudioSource.volume = newVolume;
     }
 
     public void PlayJumpSound()

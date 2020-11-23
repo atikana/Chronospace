@@ -17,6 +17,8 @@ public class MusicManager : MonoBehaviour
     int index = 0;
     float currentAlpha = 1;
 
+    GameSettings gameSettings;
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -26,7 +28,8 @@ public class MusicManager : MonoBehaviour
         getAllMusic();
         musicIn = false;
         musicStarted = false;
-
+        gameSettings = FindObjectOfType<GameSettings>();
+        SetVolume(gameSettings.GetMusic());
     }
 
     void Update()
@@ -111,6 +114,11 @@ public class MusicManager : MonoBehaviour
             audioClips[i] = audioClips[r];
             audioClips[r] = temp;
         }
+    }
+
+    public void SetVolume(float f)
+    {
+        audioSource.volume = f;
     }
 
 

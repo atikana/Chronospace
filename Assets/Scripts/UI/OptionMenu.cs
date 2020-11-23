@@ -7,10 +7,12 @@ public class OptionMenu : MonoBehaviour
     private GameManager gameManager;
     private SoundManager soundManager;
     private GameSettings gameSettings;
+    private MusicManager musicManager;
 
 
     Slider volume;
     Slider sensitivity;
+    Slider music;
     Toggle autoaim;
 
     void Awake()
@@ -24,8 +26,9 @@ public class OptionMenu : MonoBehaviour
 
         gameSettings = FindObjectOfType<GameSettings>();
         volume = transform.GetChild(2).GetChild(0).GetComponent<Slider>();
-        sensitivity = transform.GetChild(3).GetChild(0).GetComponent<Slider>();
+        music = transform.GetChild(3).GetChild(0).GetComponent<Slider>();
         autoaim = transform.GetChild(4).GetComponent<Toggle>();
+        sensitivity = transform.GetChild(5).GetChild(0).GetComponent<Slider>();
 
         if (string.Compare(SceneManager.GetActiveScene().name, "StartMenu") != 0)
         {
@@ -33,7 +36,7 @@ public class OptionMenu : MonoBehaviour
 
             gameManager = FindObjectOfType<GameManager>();
             soundManager = FindObjectOfType<SoundManager>();
-
+            musicManager = FindObjectOfType<MusicManager>();
 
         }
 
@@ -42,14 +45,11 @@ public class OptionMenu : MonoBehaviour
         if (gameSettings.CheckStartMenu())
         {
 
-            float temp = gameSettings.GetVolume();
-            volume.value = temp;
-
-            temp = gameSettings.GetMouseSensitivity();
-            sensitivity.value = temp;
-
-            bool b = gameSettings.GetAutoAim();
-            autoaim.isOn = b;
+         
+            volume.value = gameSettings.GetVolume();
+            sensitivity.value = gameSettings.GetMouseSensitivity();
+            autoaim.isOn = gameSettings.GetAutoAim();
+            music.value = gameSettings.GetMusic();
         }
         else
         {
@@ -61,7 +61,6 @@ public class OptionMenu : MonoBehaviour
     public void SetVolume()
     {
         gameSettings.SetVolume(volume.value);
-        Debug.Log(volume.value);
         if (soundManager != null)
         {
             soundManager.SetVolume(volume.value);
@@ -71,7 +70,6 @@ public class OptionMenu : MonoBehaviour
     public void SetMouseSensitivity()
     {
         gameSettings.SetSensitivity(sensitivity.value);
-        Debug.Log(sensitivity.value);
         if (gameManager != null)
         {
             gameManager.SetSensitivity(sensitivity.value);
@@ -97,6 +95,15 @@ public class OptionMenu : MonoBehaviour
         if (gameManager != null)
         {
             gameManager.SetAutoAim(b);
+        }
+    }
+
+    public void SetMusicVolume()
+    {
+        gameSettings.SetMusic(music.value);
+        if (musicManager != null)
+        {
+            musicManager.SetVolume(music.value);
         }
     }
 

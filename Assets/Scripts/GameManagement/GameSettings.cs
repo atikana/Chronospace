@@ -12,13 +12,13 @@ public class GameSettings : MonoBehaviour
     }
 
 
-    private float volume;
-    private float mouseSensitivity;
-    private float playerScore;
-    private bool autoAim;
+    private float volume = 0.5f;
+    private float mouseSensitivity = 7f;
+    private float playerScore = 0;
+    private float music = 0.5f;
+    private bool autoAim = false;
 
     bool first;
-
     void Awake()
     {
  
@@ -64,6 +64,11 @@ public class GameSettings : MonoBehaviour
         return autoAim;
     }
 
+    public float GetMusic()
+    {
+        return music;
+    }
+
     public void SetVolume(float f)
     {
         volume = f;
@@ -81,6 +86,11 @@ public class GameSettings : MonoBehaviour
     public void SetAutoAim(bool b)
     {
         autoAim = b;
+    }
+
+    public void SetMusic(float f)
+    {
+        music = f;
     }
 
     public bool CheckStartMenu()
