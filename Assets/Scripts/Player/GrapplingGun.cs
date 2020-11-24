@@ -46,7 +46,7 @@ public class GrapplingGun : MonoBehaviour
 
     private GameObject lastGrapple;
     private bool showRope = false;
-    private Color original = new Color(229, 237, 229);
+    private Color original = new Color(255, 255, 255);
     private Color neonGreen = new Color(7, 299, 3);
 
     bool autoAim = false;
