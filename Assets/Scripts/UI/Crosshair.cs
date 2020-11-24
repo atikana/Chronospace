@@ -15,7 +15,7 @@ public class Crosshair : MonoBehaviour
 
     public void ChangeCrossHairColor()
     {
-        crosshair.color = Color.green;
+        crosshair.color = Color.magenta;
     }
 
     public void RevertCrosshairColor()
