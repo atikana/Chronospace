@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
     {
         if (dead)
         {
-            CheckPoint lastCheckPoint = checkPointManager.GetClosestCheckPoint();
+            CheckPoint lastCheckPoint = checkPointManager.GetClosestCheckPoint(playerControl.transform.position);
 
             playerControl.ResetPositions();
             // Debug.Log("level restarted");
