@@ -2030,7 +2030,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 86a01bb613450994a8f43e365328c906, type: 2}
+      objectReference: {fileID: 2100000, guid: 2863e23133ab962409e532e1145bf960, type: 2}
     - target: {fileID: 2869344807088711131, guid: c8df998c6574e0d4c83b4f468d337fb9,
         type: 3}
       propertyPath: m_CastShadows
@@ -2194,7 +2194,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 86a01bb613450994a8f43e365328c906, type: 2}
+      objectReference: {fileID: 2100000, guid: 2863e23133ab962409e532e1145bf960, type: 2}
     - target: {fileID: 2869344807088711131, guid: c8df998c6574e0d4c83b4f468d337fb9,
         type: 3}
       propertyPath: m_CastShadows
@@ -7371,7 +7371,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 86a01bb613450994a8f43e365328c906, type: 2}
+      objectReference: {fileID: 2100000, guid: 2863e23133ab962409e532e1145bf960, type: 2}
     - target: {fileID: 2869344807088711131, guid: c8df998c6574e0d4c83b4f468d337fb9,
         type: 3}
       propertyPath: m_CastShadows
@@ -8365,7 +8365,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 86a01bb613450994a8f43e365328c906, type: 2}
+      objectReference: {fileID: 2100000, guid: 2863e23133ab962409e532e1145bf960, type: 2}
     - target: {fileID: 2869344807088711131, guid: c8df998c6574e0d4c83b4f468d337fb9,
         type: 3}
       propertyPath: m_CastShadows
@@ -8996,7 +8996,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 86a01bb613450994a8f43e365328c906, type: 2}
+      objectReference: {fileID: 2100000, guid: 2863e23133ab962409e532e1145bf960, type: 2}
     - target: {fileID: 2869344807088711131, guid: c8df998c6574e0d4c83b4f468d337fb9,
         type: 3}
       propertyPath: m_CastShadows
