@@ -243,7 +243,7 @@ public class GrapplingGun : MonoBehaviour
         handsAnimator.SetTrigger("Grappling");
         soundManager.PlayGrapplingSound();
         lastGrapple = g;
-        g.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", neonGreen * 0.020f);
+        g.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", neonGreen * 0.0150f);
 
         crosshair.ChangeCrossHairColor();
     }
@@ -316,7 +316,7 @@ public class GrapplingGun : MonoBehaviour
         crosshair.RevertCrosshairColor();
         if (lastGrapple != null)
         {
-            lastGrapple.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", original * 0.020f);
+            lastGrapple.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", original * 0.0150f);
         }
     }
 
