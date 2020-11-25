@@ -86,7 +86,10 @@ public class PauseMenu : MonoBehaviour
     public void ResumeGame()
     {   
         soundManager.SetLowPassFilterEnabled(false);
-        pauseMenu.SetActive(false);
+        if (pauseMenu != null & pauseMenu.activeInHierarchy)
+        {
+            pauseMenu.SetActive(false);
+        }
         menu.SetActive(false);
         // Delay();
         Time.timeScale = originalTimeScale;
