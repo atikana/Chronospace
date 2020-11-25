@@ -114,6 +114,11 @@ public class GrapplingGun : MonoBehaviour
         }
     }
 
+    public bool isGrapping()
+    {
+        return grapplingState == GrapplingState.Grappling;
+    }
+
     void LateUpdate()
     {
         WaitToGrapple();

@@ -3,6 +3,7 @@
 public class BoundaryTrigger : MonoBehaviour
 {
     private GameManager gameManager;
+    private GrapplingGun grapplingGun;
 
     private void Start()
     {
@@ -14,7 +15,11 @@ public class BoundaryTrigger : MonoBehaviour
         // If the player hits a level boundary, kill them.
         if (other.tag == "Player")
         {
-            gameManager.KillPlayer();
+            grapplingGun = FindObjectOfType<GrapplingGun>();
+            if (!grapplingGun.isGrapping())
+            {
+                gameManager.KillPlayer();
+            }
         }
     }
 }
