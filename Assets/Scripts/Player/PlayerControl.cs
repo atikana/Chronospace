@@ -742,15 +742,15 @@ public class PlayerControl : MonoBehaviour
     public void ResetPositions()
     {
         previousPositions = new List<Vector3>();
-        if (gameManager.checkPointManager.GetClosestCheckPoint().GetCheckPointPosition() == null)
+        if (gameManager.checkPointManager.GetClosestCheckPoint(transform.position).GetCheckPointPosition() == null)
         {
             Debug.Log("start position");
             previousPositions.Insert(0, new Vector3(-4.3f, 7.0f, -40.5f));
         }
         else
         {
-            previousPositions.Insert(0, gameManager.checkPointManager.GetClosestCheckPoint().GetCheckPointPosition());
-            Debug.Log(gameManager.checkPointManager.GetClosestCheckPoint().GetCheckPointPosition());
+            previousPositions.Insert(0, gameManager.checkPointManager.GetClosestCheckPoint(transform.position).GetCheckPointPosition());
+            Debug.Log(gameManager.checkPointManager.GetClosestCheckPoint(transform.position).GetCheckPointPosition());
         }
     }
 

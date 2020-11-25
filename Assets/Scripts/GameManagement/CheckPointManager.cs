@@ -1,39 +1,47 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class CheckPointManager : MonoBehaviour
 {
-    private CheckPoint lastCheckpoint;
 
+    Dictionary<int, CheckPoint> checkpoints = new Dictionary<int, CheckPoint>();
 
     void Start()
     {
-        lastCheckpoint = transform.GetChild(0).GetComponent<CheckPoint>();
+        checkpoints.Add(1,transform.GetChild(0).GetComponent<CheckPoint>());
     }
 
     public void AddCheckPoint(CheckPoint checkPoint)
     {
-        lastCheckpoint = checkPoint;
-        RevertColourAllCheckPoints();
-    }
+        CheckPoint last;
+        int i = int.Parse(checkPoint.gameObject.name);
 
-    public CheckPoint GetClosestCheckPoint()
-    {
-     return lastCheckpoint;
 
-    }
-
-    void RevertColourAllCheckPoints()
-    {
-        for (int i = 0; i < transform.childCount; i++)
+        if (!checkpoints.TryGetValue(i, out last))
         {
-            CheckPoint checkPoint = transform.GetChild(i).GetComponent<CheckPoint>();
-            
-            if (checkPoint.name.CompareTo(lastCheckpoint.name) == 0)
-            {
-                continue;
-            }
-
-            checkPoint.RevertColor();
+            checkpoints.Add(i, checkPoint);
         }
+       
     }
+
+    public CheckPoint GetClosestCheckPoint(Vector3 pos)
+    {
+        CheckPoint cp = null;
+
+        float dist = float.MaxValue;
+        foreach (var k in checkpoints.Keys)
+        {
+            float temp = Vector3.Distance(checkpoints[k].transform.position, pos);
+            if (dist > temp)
+            {
+                dist = temp;
+                cp = checkpoints[k];
+            }
+        }
+
+     return cp;
+
+    }
+
+ 
 }

@@ -47,7 +47,7 @@ public class GrapplingGun : MonoBehaviour
     private GameObject lastGrapple;
     private bool showRope = false;
     private Color original = new Color(255, 255, 255);
-    private Color neonPurple = new Color(191, 16, 155);
+    private Color neonGreen = new Color(28, 191, 42);
 
     bool autoAim = false;
 
@@ -186,7 +186,6 @@ public class GrapplingGun : MonoBehaviour
                 lr.positionCount = 2;
                 //autoAim = true;
                 StartGrappleHelper(close.gameObject);
-                //grapplePoint = lastGrapple.transform.position;
                 grapplePoint = close.GetComponent<Renderer>().bounds.center;
             }
         }
@@ -239,7 +238,7 @@ public class GrapplingGun : MonoBehaviour
         handsAnimator.SetTrigger("Grappling");
         soundManager.PlayGrapplingSound();
         lastGrapple = g;
-        g.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", neonPurple * 0.01f);
+        g.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", neonGreen * 0.025f);
 
         crosshair.ChangeCrossHairColor();
     }
@@ -312,7 +311,7 @@ public class GrapplingGun : MonoBehaviour
         crosshair.RevertCrosshairColor();
         if (lastGrapple != null)
         {
-            lastGrapple.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", original * 0.01f);
+            lastGrapple.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", original * 0.025f);
         }
     }
 
