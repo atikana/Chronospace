@@ -20,7 +20,8 @@ public class PlayerControl : MonoBehaviour
     private bool ableToDoubleJump = false;
     private bool grounded = true;
     private bool cancellingGrounded = false;
-    public float onAirControl = 2f; // change this value to adjust player's ability to move left/right in mid-air
+    public float onAirControlLR = 2f; // change this value to adjust player's ability to move left/right in mid-air
+    public float onAirControlFB = 2f; // change this value to adjust player's ability to move forward/backward in mid-air
 
     private float movementSpeed = 4500f;
 
@@ -624,8 +625,8 @@ public class PlayerControl : MonoBehaviour
         if (!grounded && !dashing)
         {
            // Debug.Log("!ground");
-            multiplier = 0.4f;
-            multiplierV = onAirControl;
+            multiplier = onAirControlFB;
+            multiplierV = onAirControlLR;
         }
         rigidBody.AddForce(transform.forward * y * movementSpeed * Time.deltaTime * multiplier * multiplier);
         rigidBody.AddForce(transform.right * x * movementSpeed * Time.deltaTime * multiplier * multiplierV);

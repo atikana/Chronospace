@@ -34476,6 +34476,11 @@ PrefabInstance:
       propertyPath: grappleMask.m_Bits
       value: 256
       objectReference: {fileID: 0}
+    - target: {fileID: 5517978682659398789, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: onAirControlFB
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 5517978682659398790, guid: 724e5968d51354200bac36b1af52c3a7,
         type: 3}
       propertyPath: m_CollisionDetection
