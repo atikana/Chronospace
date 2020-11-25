@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class OptionMenu : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class OptionMenu : MonoBehaviour
     Slider sensitivity;
     Slider music;
     Toggle autoaim;
+    bool autoaimOn;
+    public GameObject checkmark;
 
     void Awake()
     {
@@ -23,13 +26,14 @@ public class OptionMenu : MonoBehaviour
         volume = transform.GetChild(2).GetChild(0).GetComponent<Slider>();
         music = transform.GetChild(3).GetChild(0).GetComponent<Slider>();
         autoaim = transform.GetChild(4).GetComponent<Toggle>();
+        autoaim.isOn = gameSettings.GetAutoAim();
         sensitivity = transform.GetChild(5).GetChild(0).GetComponent<Slider>();
+        autoaimOn = false;
 
     }
 
     private void Start()
     {
-     
     }
 
 
@@ -65,6 +69,34 @@ public class OptionMenu : MonoBehaviour
             b = false;
         }
 
+        gameSettings.SetAutoAim(b);
+
+        if (gameManager != null)
+        {
+            gameManager.SetAutoAim(b);
+        }
+    }
+
+    public void SetAutoAimButton()
+    {
+        bool b;
+
+        if (autoaimOn)
+        {
+            Debug.Log("aim off");
+            autoaim.isOn = false;
+            autoaimOn = false;
+            b = false;
+        }
+        else
+        {
+            Debug.Log("aim on");
+            autoaim.isOn = true;
+            b = true;
+            autoaimOn = true;
+        }
+
+        checkmark.gameObject.SetActive(b);
         gameSettings.SetAutoAim(b);
 
         if (gameManager != null)

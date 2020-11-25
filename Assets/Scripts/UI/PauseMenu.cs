@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+using System.Collections;
+using System.Collections.Generic;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -7,6 +10,8 @@ public class PauseMenu : MonoBehaviour
     private GameObject menu;
     private GameObject pauseMenu;
     private GameObject optionMenu;
+
+    public GameObject firstPauseMenu, firstOption;
 
     private SoundManager soundManager;
  
@@ -41,6 +46,8 @@ public class PauseMenu : MonoBehaviour
         if (menu && !menu.activeInHierarchy)
         {
             PauseGame();
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(firstPauseMenu);
         }
         else
         {   
@@ -77,10 +84,11 @@ public class PauseMenu : MonoBehaviour
     }
 
     public void ResumeGame()
-    {
+    {   
         soundManager.SetLowPassFilterEnabled(false);
         pauseMenu.SetActive(false);
         menu.SetActive(false);
+        // Delay();
         Time.timeScale = originalTimeScale;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -96,5 +104,23 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenu.SetActive(false);
     }
+
+    public void OptionButtonNavi()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstOption);
+    }
+
+    public void BackButtonNavi()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstPauseMenu);
+    }
+
+    IEnumerator Delay()
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+    }
+
 
 }
