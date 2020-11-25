@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     private float deathDelay = 0f;
     private bool delayPeriod;
     public int countdown;
-    public Text countdownDisplay;
+    public GameObject countdownDisplay;
     public GameObject rewindAnim;
     private bool counted;
     private bool isRewinding;
@@ -249,25 +249,28 @@ public class GameManager : MonoBehaviour
         counted = true;
         int countdown_;
         countdown_ = countdown;
-        countdownDisplay.gameObject.SetActive(true);
+        //countdownDisplay.gameObject.SetActive(true);
+        countdownDisplay.SetActive(true);
+        countdownDisplay.GetComponent<Animator>().SetTrigger("StartCountdown");
         playerControl.input.Disable();
         cameraTransform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         while (countdown_ > 0)
         {
-            countdownDisplay.text = countdown_.ToString();
+            //countdownDisplay.text = countdown_.ToString();
 
             yield return new WaitForSecondsRealtime(1f);
 
             countdown_--;
         }
-        countdownDisplay.text = "START";
+        //countdownDisplay.text = "START";
 
         yield return new WaitForSecondsRealtime(0.2f);
 
         playerControl.input.Enable();
         levelStats.StartTimer();
         FindObjectOfType<MusicManager>().StartMusic();
-        countdownDisplay.gameObject.SetActive(false);
+        //countdownDisplay.gameObject.SetActive(false);
+        countdownDisplay.SetActive(false);
         menu.SetActive(true);
         OptionMenu optionMenu = menu.transform.GetChild(1).GetComponent<OptionMenu>();
         optionMenu.gameObject.SetActive(true);

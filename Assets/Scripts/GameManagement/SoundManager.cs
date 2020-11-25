@@ -55,12 +55,18 @@ public class SoundManager : MonoBehaviour
 
     public void SetHighPassFilterEnabled(bool enabled)
     {
-        highPassFilter.enabled = enabled;
+        if (highPassFilter)
+        {
+            highPassFilter.enabled = enabled;
+        }
     }
 
     public void SetLowPassFilterEnabled(bool enabled)
     {
-        lowPassFilter.enabled = enabled;
+        if (lowPassFilter)
+        {
+            lowPassFilter.enabled = enabled;
+        }
     }
 
     public void SetVolume(float newVolume)
