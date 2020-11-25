@@ -3101,7 +3101,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 0}
   jumpForce: 550
-  onAirControl: 2
+  onAirControlLR: 2
+  onAirControlFB: 2
   maxSpeed: 30
   counterMovement: 0.175
   groundMask:
