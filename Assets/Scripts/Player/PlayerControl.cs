@@ -93,7 +93,7 @@ public class PlayerControl : MonoBehaviour
     // Multiplier for player's horizontal sensitivity.
     public float additionalHorizontalSensitivity = 1.3f;
 
-    private List<Vector3> previousPositions;
+    private List<PositionRecord> previousPositions;
     private float rewindPeriod = 0.0f;
     public float rewindStep = 0.1f;
     public bool isRewinding;
@@ -110,7 +110,7 @@ public class PlayerControl : MonoBehaviour
         cameraParticleSystem = GetComponentInChildren<ParticleSystem>();
         levelStats = FindObjectOfType<LevelStats>();
         playerCapsuleCollider = GetComponent<CapsuleCollider>();
-        previousPositions = new List<Vector3>();
+        previousPositions = new List<PositionRecord>();
         isRewinding = false;
 
         // Reset animation triggers to prevent them running at start.
@@ -700,14 +700,21 @@ public class PlayerControl : MonoBehaviour
 
     private void Update()
     {
-        AdjustCamera();
+        if (isRewinding) { }
+        else
+        {
+            AdjustCamera();
+        }
     }
 
     private void Rewind()
     {
         if (previousPositions.Count > 0)
         {
-            rigidBody.transform.position = previousPositions[0];
+            PositionRecord p = previousPositions[0];
+            rigidBody.transform.position = p.position;
+            cameraTransform.rotation = p.rotation;
+            rigidBody.transform.rotation = p.playerRotation;
             previousPositions.RemoveAt(0);
             //Debug.Log(previousPositions.Count);
         }
@@ -723,9 +730,14 @@ public class PlayerControl : MonoBehaviour
         Debug.Log(previousPositions[previousPositions.Count - 1]);
         if (previousPositions.Count != 0)
         {
-            //Debug.Log("points stored:");
+            PositionRecord p = previousPositions[previousPositions.Count - 2];
+            while (previousPositions.Count < 200)
+            {
+                previousPositions.Insert(previousPositions.Count - 1, p);
+            }
+            Debug.Log("points stored:");
             rigidBody.isKinematic = true;
-            //Debug.Log(previousPositions.Count);
+            Debug.Log(previousPositions.Count);
             isRewinding = true;
             // rewindStep = 3.0f / previousPositions.Count;
             rewindStep = 3.0f / 200;
@@ -741,15 +753,17 @@ public class PlayerControl : MonoBehaviour
 
     public void ResetPositions()
     {
-        previousPositions = new List<Vector3>();
+        previousPositions = new List<PositionRecord>();
         if (gameManager.checkPointManager.GetClosestCheckPoint(transform.position).GetCheckPointPosition() == null)
         {
             Debug.Log("start position");
-            previousPositions.Insert(0, new Vector3(-4.3f, 7.0f, -40.5f));
+            // previousPositions.Insert(0, new Vector3(-4.3f, 7.0f, -40.5f));
+            previousPositions.Insert(0, new PositionRecord(new Vector3(-4.3f, 7.0f, -40.5f), Quaternion.identity, Quaternion.identity));
         }
         else
         {
-            previousPositions.Insert(0, gameManager.checkPointManager.GetClosestCheckPoint(transform.position).GetCheckPointPosition());
+            // previousPositions.Insert(0, gameManager.checkPointManager.GetClosestCheckPoint(transform.position).GetCheckPointPosition());
+            previousPositions.Insert(0, new PositionRecord(gameManager.checkPointManager.GetClosestCheckPoint(transform.position).GetCheckPointPosition(), Quaternion.identity, Quaternion.identity));
             Debug.Log(gameManager.checkPointManager.GetClosestCheckPoint(transform.position).GetCheckPointPosition());
         }
     }
@@ -773,15 +787,18 @@ public class PlayerControl : MonoBehaviour
         }
         else if (previousPositions.Count > 0)
         {
-            if (rigidBody.transform.position != previousPositions[0])
+            if (rigidBody.transform.position != previousPositions[0].position)
             {
                 Debug.Log("record position");
-                previousPositions.Insert(0, rigidBody.transform.position);
+
+                // previousPositions.Insert(0, rigidBody.transform.position);
+                previousPositions.Insert(0, new PositionRecord(rigidBody.transform.position, cameraTransform.rotation, rigidBody.transform.rotation));
             }
         }
         else
         {
-            previousPositions.Insert(0, new Vector3(-4.3f, 7.0f, -40.5f));
+            // previousPositions.Insert(0, new Vector3(-4.3f, 7.0f, -40.5f));
+            previousPositions.Insert(0, new PositionRecord(new Vector3(-4.3f, 7.0f, -40.5f), Quaternion.identity, Quaternion.identity));
         }
     }
 
