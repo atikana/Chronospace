@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Rendering.PostProcessing;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class GameManager : MonoBehaviour
     private bool counted;
     private bool isRewinding;
     public bool RewindEnabled;
+    public PostProcessVolume m_PostProcessVolume;
+    public GameObject diedMsg;
 
     /* The speed multiplier of the moving objects in the game.
      * This allows the time warp effect to take place.
@@ -196,17 +199,27 @@ public class GameManager : MonoBehaviour
 
     IEnumerator Rewinding()
     {
-        FindObjectOfType<SoundManager>().PlayRewindSound();
+        
         levelStats.PauseTimer();
+        playerControl.input.Disable();
+
+        Time.timeScale = 0.0f;
+        m_PostProcessVolume.isGlobal = true;
+        diedMsg.gameObject.SetActive(true);
+        yield return new WaitForSecondsRealtime(2f);
+        diedMsg.gameObject.SetActive(false);
+        Time.timeScale = 1.0f;
+
+        FindObjectOfType<SoundManager>().PlayRewindSound();
         isRewinding = true;
         rewindAnim.gameObject.SetActive(true);
         rewindAnim.GetComponentInChildren<Animator>().SetBool("PlayRewind",true);
-        playerControl.input.Disable();
         playerControl.StartRewind();
 
         // yield return new WaitForSecondsRealtime(3f);
         yield return new WaitUntil(() => playerControl.isRewinding == false);
         Debug.Log("rewind finished");
+        m_PostProcessVolume.isGlobal = false;
         playerControl.StopRewind();
         TurretControl[] turrets = FindObjectsOfType<TurretControl>();
         foreach (TurretControl turret in turrets)
