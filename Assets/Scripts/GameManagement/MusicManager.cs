@@ -38,7 +38,7 @@ public class MusicManager : MonoBehaviour
             { 
                 musicStarted = true;
                 audioSource.Play();
-                currentAlpha = Mathf.MoveTowards(currentAlpha, 0, 0.3f * Time.deltaTime);
+                currentAlpha = Mathf.MoveTowards(currentAlpha, 0, 0.05f * Time.deltaTime);
                 canvasGroup.alpha = currentAlpha;
             }
             playMusic();
