@@ -78,14 +78,12 @@ public class OptionMenu : MonoBehaviour
 
         if (autoaimOn)
         {
-            Debug.Log("aim off");
             autoaim.isOn = false;
             autoaimOn = false;
             b = false;
         }
         else
         {
-            Debug.Log("aim on");
             autoaim.isOn = true;
             b = true;
             autoaimOn = true;

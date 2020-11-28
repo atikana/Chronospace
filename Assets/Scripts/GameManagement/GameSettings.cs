@@ -35,7 +35,6 @@ public class GameSettings : MonoBehaviour
 
     public float GetVolume()
     {
-        Debug.Log(volume);
         return volume;
     }
 

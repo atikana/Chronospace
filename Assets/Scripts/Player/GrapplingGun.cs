@@ -140,7 +140,7 @@ public class GrapplingGun : MonoBehaviour
         return grapplingState == GrapplingState.Grappling;
     }
 
-    void GrappleAim()
+    /*void GrappleAim()
     {
         if (grapplingState == GrapplingState.Normal)
         {
@@ -157,7 +157,8 @@ public class GrapplingGun : MonoBehaviour
             else if (playerControl.GetGrapplingAutoAimStatus() && (close = FindGrapplePoint()) != null)
             {
                 // should i make it actually shoot to the player
-              
+
+               
                 aimPoint.transform.position = close.transform.position;
                 aimPoint.SetActive(true);
             }
@@ -167,7 +168,7 @@ public class GrapplingGun : MonoBehaviour
             }
         }
        
-    }
+    }*/
 
 
     void StartGrapple()
@@ -190,6 +191,7 @@ public class GrapplingGun : MonoBehaviour
                 showRope = true;
                 lr.positionCount = 2;
                 //autoAim = true;
+                crosshair.ChangeCrossHairSize();
                 StartGrappleHelper(close.gameObject);
                 grapplePoint = close.GetComponent<Renderer>().bounds.center;
             }
@@ -313,6 +315,7 @@ public class GrapplingGun : MonoBehaviour
         Destroy(joint);
         handsAnimator.ResetTrigger("Grappling");
         handsAnimator.SetTrigger("StopGrappling");
+        crosshair.RevertCrossHairSize();
         crosshair.RevertCrosshairColor();
         if (lastGrapple != null)
         {

@@ -6,11 +6,13 @@ public class Crosshair : MonoBehaviour
 
     RawImage crosshair;
     Color original;
+    RectTransform rt;
 
     void Awake()
     {
         crosshair = GetComponent<RawImage>();
         original = crosshair.color;
+        rt = GetComponent<RectTransform>();
     }
 
     public void ChangeCrossHairColor()
@@ -21,5 +23,24 @@ public class Crosshair : MonoBehaviour
     public void RevertCrosshairColor()
     {
         crosshair.color = original;
+    }
+
+    public void ChangeCrossHairSize()
+    {
+        ModifySize(65f);
+    }
+
+    public void RevertCrossHairSize()
+    {
+        ModifySize(35f);
+    }
+
+    private void ModifySize(float f)
+    {
+        Debug.Log(f);
+        Debug.Log(rt.sizeDelta.x);
+        Debug.Log(rt.sizeDelta.y);
+        rt.sizeDelta = new Vector2(f, f);
+
     }
 }
