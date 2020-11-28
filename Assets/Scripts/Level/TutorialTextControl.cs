@@ -16,33 +16,41 @@ public class TutorialTextControl : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (playerTransform.position.z > 70 && playerTransform.position.z < 95)
+        if (playerTransform.position.z > 0 && playerTransform.position.z < 40)
         {
             ShowText(0);
         }
-        else if (playerTransform.position.z > 95 && playerTransform.position.z < 130)
+        else if (playerTransform.position.z > 45 && playerTransform.position.z < 80)
         {
             ShowText(1);
         }
-        else if (playerTransform.position.z > 130 && playerTransform.position.z < 160)
+        else if (playerTransform.position.z > 85 && playerTransform.position.z < 120)
         {
             ShowText(2);
         }
-        else if (playerTransform.position.z > 170 && playerTransform.position.z < 200)
+        else if (playerTransform.position.z > 125 && playerTransform.position.z < 160)
         {
             ShowText(3);
         }
-        else if (playerTransform.position.z > 200 && playerTransform.position.z < 250)
+        else if (playerTransform.position.z > 165 && playerTransform.position.z < 200)
         {
             ShowText(4);
         }
-        else if (playerTransform.position.z > 250 && playerTransform.position.z < 300)
+        else if (playerTransform.position.z > 205 && playerTransform.position.z < 240)
         {
             ShowText(5);
         }
-        else if (playerTransform.position.z > 400 && playerTransform.position.z < 440)
+        else if (playerTransform.position.z > 265 && playerTransform.position.z < 300)
         {
             ShowText(6);
+        }
+        else if (playerTransform.position.z > 315 && playerTransform.position.z < 350)
+        {
+            ShowText(7);
+        }
+        else if (playerTransform.position.z > 435 && playerTransform.position.z < 470)
+        {
+            ShowText(8);
         }
     }
 
