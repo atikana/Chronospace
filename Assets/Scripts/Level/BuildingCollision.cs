@@ -4,7 +4,7 @@ public class BuildingCollision : MonoBehaviour
 {
     private GameManager gameManager;
 
-    private void Start()
+    private void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
     }

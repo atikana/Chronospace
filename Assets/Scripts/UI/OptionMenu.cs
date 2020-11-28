@@ -32,11 +32,6 @@ public class OptionMenu : MonoBehaviour
 
     }
 
-    private void Start()
-    {
-    }
-
-
     public void SetVolume()
     {
         gameSettings.SetVolume(volume.value);

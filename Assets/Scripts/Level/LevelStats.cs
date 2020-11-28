@@ -4,10 +4,10 @@ using System;
 
 public class LevelStats : MonoBehaviour
 {
-    private Text levelTimerText;
-    private Text numDeathsText;
-    private Animator dashGaugeAnimator;
-    private Animator timeWarpGaugeAnimator;
+    public Text levelTimerText;
+    public Text numDeathsText;
+    public Animator dashGaugeAnimator;
+    public Animator timeWarpGaugeAnimator;
 
     private float timer;
     public PauseMenu pauseMenu;
@@ -17,21 +17,10 @@ public class LevelStats : MonoBehaviour
 
     int deathCount = 0;
 
-    private void Awake()
-    {
-        Animator[] animators = GetComponentsInChildren<Animator>();
-        dashGaugeAnimator = animators[0];
-        timeWarpGaugeAnimator = animators[1];
-        levelTimerText = transform.GetChild(0).GetComponent<Text>();
-        numDeathsText = transform.GetChild(1).GetComponent<Text>();
-    }
-
     void Start()
     {
         dashGaugeAnimator.ResetTrigger("Dashing1");
         dashGaugeAnimator.ResetTrigger("Dashing2");
-        dashGaugeAnimator.ResetTrigger("Recharging1");
-        dashGaugeAnimator.ResetTrigger("Recharging2");
         dashGaugeAnimator.ResetTrigger("ResetGauge");
         timeWarpGaugeAnimator.ResetTrigger("TimeWarping");
         timeWarpGaugeAnimator.ResetTrigger("StopTimeWarping");
@@ -93,28 +82,22 @@ public class LevelStats : MonoBehaviour
 
                 TimeSpan timeSpan = TimeSpan.FromSeconds(timer);
 
-                levelTimerText.text = "Time: " + string.Format("{0,1:0}:{1,2:00}", timeSpan.Minutes, timeSpan.Seconds);
+                // Milliseconds should be between 0 and 60.
+                int millisecondsTo60 = (timeSpan.Milliseconds * 60) / 1000;
+                levelTimerText.text = ": " + string.Format("{0,1:0}:{1,2:00}:{2:00}", timeSpan.Minutes, timeSpan.Seconds, millisecondsTo60);
             }
         }
-        
-
-        // Update the number of deaths text.
-        // TODO:  Fix this!
-        //numDeathsText.text = "Deaths:  " + playerControl.GetNumDeaths();
     }
 
     public void setDeath(int i)
     {
         deathCount = i;
 
-        numDeathsText.text = "Death Count: " + deathCount.ToString();
+        numDeathsText.text = ": " + deathCount.ToString();
 
         if (!numDeathsText.gameObject.activeInHierarchy)
         {
             numDeathsText.gameObject.SetActive(true);
         }
-    }
-
-
-    
+    }   
 }

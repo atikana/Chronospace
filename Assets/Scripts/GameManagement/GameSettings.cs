@@ -17,6 +17,7 @@ public class GameSettings : MonoBehaviour
     private float playerScore = 0;
     private float music = 0.5f;
     private bool autoAim = false;
+
     void Awake()
     {
  
@@ -30,16 +31,6 @@ public class GameSettings : MonoBehaviour
         _instance = this;
         DontDestroyOnLoad(this.gameObject);
 
-    }
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public float GetVolume()
@@ -91,8 +82,4 @@ public class GameSettings : MonoBehaviour
     {
         music = f;
     }
-
-
-
-
 }

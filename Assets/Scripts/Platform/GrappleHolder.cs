@@ -7,7 +7,7 @@ public class GrappleHolder : MonoBehaviour
     private bool usingNormalMaterial = true;
     private Renderer grappleRenderer;
 
-    private void Start()
+    private void Awake()
     {
         grappleRenderer = GetComponent<Renderer>();
     }

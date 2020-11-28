@@ -6,7 +6,7 @@ public class CheckPointManager : MonoBehaviour
 
     Dictionary<int, CheckPoint> checkpoints = new Dictionary<int, CheckPoint>();
 
-    void Start()
+    private void Awake()
     {
         checkpoints.Add(1,transform.GetChild(0).GetComponent<CheckPoint>());
     }

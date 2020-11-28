@@ -7,14 +7,12 @@ public class LaserBeamControl : MonoBehaviour
     private GameManager gameManager;
     public GameObject hitEffect;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         isActive = true;
         gameManager = FindObjectOfType<GameManager>();
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         if (isActive)

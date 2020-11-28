@@ -49,7 +49,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7009732065411970415}
   m_Enabled: 0
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -161,6 +161,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7009732065786543907}
     m_Modifications:
+    - target: {fileID: -9000262754945341058, guid: 9dbb351ae5e92b94db7543183fc31eb0,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9dbb351ae5e92b94db7543183fc31eb0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -241,6 +246,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7390932562802264887, guid: 9dbb351ae5e92b94db7543183fc31eb0,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7279459983598448444, guid: 9dbb351ae5e92b94db7543183fc31eb0,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -5639414341770066212, guid: 9dbb351ae5e92b94db7543183fc31eb0,
         type: 3}
       propertyPath: m_IsActive
@@ -249,6 +264,16 @@ PrefabInstance:
     - target: {fileID: -5503390101285322353, guid: 9dbb351ae5e92b94db7543183fc31eb0,
         type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4830548618574930462, guid: 9dbb351ae5e92b94db7543183fc31eb0,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3766523085935510564, guid: 9dbb351ae5e92b94db7543183fc31eb0,
+        type: 3}
+      propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -1217030297075129771, guid: 9dbb351ae5e92b94db7543183fc31eb0,
@@ -270,6 +295,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1886038909627705031, guid: 9dbb351ae5e92b94db7543183fc31eb0,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3575641881151511511, guid: 9dbb351ae5e92b94db7543183fc31eb0,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5493529674174755995, guid: 9dbb351ae5e92b94db7543183fc31eb0,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5562517574704265593, guid: 9dbb351ae5e92b94db7543183fc31eb0,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6902844718518036148, guid: 9dbb351ae5e92b94db7543183fc31eb0,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9160325014271739373, guid: 9dbb351ae5e92b94db7543183fc31eb0,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9dbb351ae5e92b94db7543183fc31eb0, type: 3}

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,7 +28,7 @@ public class CountdownTimer : MonoBehaviour
         int countdown_;
         countdown_ = countdown;
         countdownDisplay.gameObject.SetActive(true);
-        playerControl.input.Disable();
+        playerControl.GetInput().Disable();
         cameraTransform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         while (countdown_ > 0)
         {
@@ -46,7 +45,7 @@ public class CountdownTimer : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.2f);
 
         //Time.timeScale = 1f;
-        playerControl.input.Enable();
+        playerControl.GetInput().Enable();
         countdownDisplay.gameObject.SetActive(false);
     }
 }
