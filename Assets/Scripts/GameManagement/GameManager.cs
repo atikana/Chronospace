@@ -56,12 +56,12 @@ public class GameManager : MonoBehaviour
         "AAAAAAAHHHHHHH",
         "*SCREAMING SOUNDS*",
         "NOOOOOOO",
-        "AAAAAAAAA",
+        "AAAAAAAAA-",
         "*SCREAMING IN CANADIAN*",
-        "*SCREAMING IN CANADIAN*",
+        "*SCREAMING IN FRENCH-CANADIAN*",
         "RIP",
-        "PRESS F TO PAY RESPECTS",
-        "ALT + F4"
+        "F",
+        "U BAD",
     };
 
     private void Awake()
