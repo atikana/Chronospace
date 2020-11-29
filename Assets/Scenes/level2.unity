@@ -3520,6 +3520,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 435a0032963bf45aa8054c03036950c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelTimerText: {fileID: 0}
+  numDeathsText: {fileID: 0}
+  dashGaugeAnimator: {fileID: 0}
+  timeWarpGaugeAnimator: {fileID: 0}
   pauseMenu: {fileID: 180776422}
   playerControl: {fileID: 1811659949}
 --- !u!1 &750873094
@@ -4298,6 +4302,26 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 912846045}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &912846047 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2937804633217935312, guid: 29b90303ca7cb4a4db91f58760240ecf,
+    type: 3}
+  m_PrefabInstance: {fileID: 912846045}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &912846048
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 912846047}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6788383922943872000, guid: c8df998c6574e0d4c83b4f468d337fb9, type: 3}
 --- !u!1001 &955962834
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4397,6 +4421,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29b90303ca7cb4a4db91f58760240ecf, type: 3}
+--- !u!1 &955962835 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2937804633217935312, guid: 29b90303ca7cb4a4db91f58760240ecf,
+    type: 3}
+  m_PrefabInstance: {fileID: 955962834}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &955962836
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 955962835}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6788383922943872000, guid: c8df998c6574e0d4c83b4f468d337fb9, type: 3}
 --- !u!1 &984298512
 GameObject:
   m_ObjectHideFlags: 0
@@ -5418,7 +5462,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca5605146bbd14db181b59e49f5ee897, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenu: {fileID: 180776422}
   menu: {fileID: 439061991}
   levelStats: {fileID: 736850038}
   checkPointManager: {fileID: 1616474973}
@@ -5427,6 +5470,7 @@ MonoBehaviour:
   countdown: 3
   countdownDisplay: {fileID: 0}
   rewindAnim: {fileID: 0}
+  crosshair: {fileID: 0}
   RewindEnabled: 1
   m_PostProcessVolume: {fileID: 0}
   diedMsg: {fileID: 0}
