@@ -16,7 +16,7 @@ public class GameSettings : MonoBehaviour
     private Dictionary<int, List<string>> level1 = new Dictionary<int, List<string>>();
     private Dictionary<int, List<string>> level2 = new Dictionary<int, List<string>>();
     private Dictionary<int, List<string>> level3 = new Dictionary<int, List<string>>();
-    private string playerName;
+    private static string playerName;
 
     private float volume = 0.5f;
     private float mouseSensitivity = 7f;
@@ -118,7 +118,6 @@ public class GameSettings : MonoBehaviour
 
     private bool AddScoreHelper(Dictionary<int, List<string>> dict, string score, string time)
     {
-        SelectNewPlayerName();
         dict.Add(dict.Count, new List<string> { playerName, time, score });
         return true;
     }
@@ -146,7 +145,7 @@ public class GameSettings : MonoBehaviour
 
     public void SelectNewPlayerName()
     {
-       playerName = tags[Random.Range(0, tags.Length)] + Random.Range(0, 10) + Random.Range(0, 10) + Random.Range(0, 10);
+       playerName = tags[Random.Range(0, tags.Length)] + "#" + Random.Range(0, 10) + Random.Range(0, 10) + Random.Range(0, 10);
     }
 
     public string ReturnPlayerName()

@@ -24,7 +24,8 @@ public class WinScreenMenu : MonoBehaviour
     Text win;
 
     int maxLeaderBoard = 20;
-    
+
+    Color original;
 
     void Awake()
     {
@@ -34,6 +35,7 @@ public class WinScreenMenu : MonoBehaviour
         rank = stats.GetChild(1).GetComponent<Text>();
         time = stats.GetChild(2).GetComponent<Text>();
         death = stats.GetChild(3).GetComponent<Text>();
+        original = death.color;
         CreateSlot();
     }
     void Start()
@@ -51,7 +53,8 @@ public class WinScreenMenu : MonoBehaviour
         death.text = "Deaths: " + deaths.ToString();
         time.text = "Time: " + levelStats.GetTimeText();
         score.text = "Score: " + playerScore.ToString();
-        rank.text = "Rank: " +CalculateRank(playerScore, timeString).ToString();
+        rank.text = "Rank: " + CalculateRank(playerScore, timeString).ToString();
+        win.text = "You won! " + gameSettings.ReturnPlayerName() + ".";
 
 
     }
@@ -60,50 +63,55 @@ public class WinScreenMenu : MonoBehaviour
 
         int timeScroe = Mathf.CeilToInt(381000 * Mathf.Ceil(recommendTime - time) % 10000);
 
-        return 381000 + timeScroe - (death * 1000);
+        return 381000 + timeScroe - (death * 1500);
     }
 
     int CalculateRank(int score, string s)
     {
         Dictionary<int, List<string>> temp = gameSettings.getScores();
 
-        var ordered = temp.OrderBy(x => x.Value[2]).ToDictionary(x => x.Key, x => x.Value);
+        var ordered = temp.OrderByDescending(x => x.Value[2]).ToDictionary(x => x.Key, x => x.Value);
 
-        int i = 0;
-        int rank = 0;
+        int i = 1;
+        int rank = 1;
 
-        
+        bool add = false;
+
         if (ordered.Count > 0)
         {
             foreach (var pair in ordered)
             {
 
-                if (int.Parse(pair.Value[2]) > score)
+                if (int.Parse(pair.Value[2]) < score)
                 {
 
-
-                    CalculateRankHelper(i, gameSettings.ReturnPlayerName(), s, score.ToString());
-                    i++;
+                    CalculateRankHelper(i, gameSettings.ReturnPlayerName(), s, score.ToString(), true);
+                    add = true;
                     rank = i;
-
+                    i++;
                 }
 
- 
                 CalculateRankHelper(i, pair.Value[0], pair.Value[1], pair.Value[2]);
                 i++;
+
+
             }
         }
-        else
+
+        if (!add)
         {
-            CalculateRankHelper(0, gameSettings.ReturnPlayerName(), s, score.ToString());
-            i = 1;
-            rank = 1;
+
+            CalculateRankHelper(i, gameSettings.ReturnPlayerName(), s, score.ToString(), true);
+            rank = i;
+            i++;
         }
 
-
-        for (int j = i; j < maxLeaderBoard; j++)
+        if (i < maxLeaderBoard)
         {
-            content.GetChild(j).gameObject.SetActive(false);
+            for (int j = i; j < maxLeaderBoard; j++)
+            {
+                content.GetChild(j).gameObject.SetActive(false);
+            }
         }
 
         gameSettings.AddScore(score.ToString(), s);
@@ -111,14 +119,45 @@ public class WinScreenMenu : MonoBehaviour
     }
 
 
-    private void CalculateRankHelper(int i, string playerName, string time, string score)
+    private void CalculateRankHelper(int i, string playerName, string time, string score, bool current = false)
     {
 
-        Transform t = content.transform.GetChild(i);
-        t.GetChild(0).GetChild(0).GetComponent<Text>().text = (i + 1).ToString();
-        t.GetChild(0).GetChild(1).GetComponent<Text>().text = playerName;
-        t.GetChild(0).GetChild(2).GetComponent<Text>().text = time;
-        t.GetChild(0).GetChild(3).GetComponent<Text>().text = score.ToString();
+        Transform t = content.transform.GetChild(i-1);
+
+        Text slotRank = t.GetChild(0).GetChild(0).GetComponent<Text>();
+        Text slotName = t.GetChild(0).GetChild(1).GetComponent<Text>();
+        Text slotTime = t.GetChild(0).GetChild(2).GetComponent<Text>();
+        Text slotScore = t.GetChild(0).GetChild(3).GetComponent<Text>();
+
+        slotRank.text = i.ToString();
+        slotName.text = playerName;
+        slotTime.text = time;
+        slotScore.text = score.ToString();
+
+        if (current)
+        {
+
+            slotRank.color = Color.yellow;
+            slotName.color = Color.yellow;
+            slotTime.color = Color.yellow;
+            slotScore.color = Color.yellow;
+            slotRank.fontStyle = FontStyle.Bold;
+            slotName.fontStyle = FontStyle.Bold;
+            slotTime.fontStyle = FontStyle.Bold;
+            slotScore.fontStyle = FontStyle.Bold;
+        }
+        else
+        {
+            slotRank.color = original;
+            slotName.color = original;
+            slotTime.color = original;
+            slotScore.color = original;
+            slotRank.fontStyle = FontStyle.Normal;
+            slotName.fontStyle = FontStyle.Normal;
+            slotTime.fontStyle = FontStyle.Normal;
+            slotScore.fontStyle = FontStyle.Normal;
+        }
+        
         t.gameObject.SetActive(true);
     }
   
