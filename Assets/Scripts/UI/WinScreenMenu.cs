@@ -72,7 +72,7 @@ public class WinScreenMenu : MonoBehaviour
         int i = 0;
         int rank = 0;
 
-
+        
         if (ordered.Count > 0)
         {
             foreach (var pair in ordered)
