@@ -10,11 +10,13 @@ public class LevelStats : MonoBehaviour
     public Animator timeWarpGaugeAnimator;
 
     private float timer;
+    
     public PauseMenu pauseMenu;
     private bool startTimer;
 
     public PlayerControl playerControl;
 
+    string timeText;
     int deathCount = 0;
 
     void Start()
@@ -84,8 +86,10 @@ public class LevelStats : MonoBehaviour
 
                 // Milliseconds should be between 0 and 60.
                 int millisecondsTo60 = (timeSpan.Milliseconds * 60) / 1000;
-                levelTimerText.text = ": " + string.Format("{0,1:0}:{1,2:00}:{2:00}", timeSpan.Minutes, timeSpan.Seconds, millisecondsTo60);
+                timeText = string.Format("{0,1:0}:{1,2:00}:{2:00}", timeSpan.Minutes, timeSpan.Seconds, millisecondsTo60);
             }
+            levelTimerText.text = ": " + timeText;
+            
         }
     }
 
@@ -99,5 +103,20 @@ public class LevelStats : MonoBehaviour
         {
             numDeathsText.gameObject.SetActive(true);
         }
-    }   
+    }
+
+    public float GetTime()
+    {
+        return timer;
+    }
+
+    public string GetTimeText()
+    {
+        return timeText;
+    }
+
+    public int GetNumDeath()
+    {
+        return deathCount;
+    }
 }

@@ -36,7 +36,7 @@ public class StartMenu : MonoBehaviour
         optionMenu.SetActive(true);
         optionMenu.GetComponent<OptionMenu>().SetMainMenuGameSettings();
         optionMenu.SetActive(false);
-
+        FindObjectOfType<GameSettings>().SelectNewPlayerName();
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstMain);
     }
