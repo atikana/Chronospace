@@ -37,9 +37,6 @@ public class Crosshair : MonoBehaviour
 
     private void ModifySize(float f)
     {
-        Debug.Log(f);
-        Debug.Log(rt.sizeDelta.x);
-        Debug.Log(rt.sizeDelta.y);
         rt.sizeDelta = new Vector2(f, f);
 
     }

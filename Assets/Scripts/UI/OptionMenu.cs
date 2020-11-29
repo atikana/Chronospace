@@ -140,7 +140,6 @@ public class OptionMenu : MonoBehaviour
         sensitivity.value = gameSettings.GetMouseSensitivity();
         autoaim.isOn = gameSettings.GetAutoAim();
         music.value = gameSettings.GetMusic();
-
         startMenuMusic.SetVolume(music.value);
     }
 
