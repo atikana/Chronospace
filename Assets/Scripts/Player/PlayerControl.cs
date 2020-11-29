@@ -485,7 +485,7 @@ public class PlayerControl : MonoBehaviour
             }
 
             Invoke(nameof(ResetJump), jumpCooldown);
-            Invoke(nameof(ResetDoubleJump), doubleJumpWindow);
+            //Invoke(nameof(ResetDoubleJump), doubleJumpWindow);
         }
         else
         {
