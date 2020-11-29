@@ -72,43 +72,30 @@ public class WinScreenMenu : MonoBehaviour
         int i = 0;
         int rank = 0;
 
-        Transform t;
 
         if (ordered.Count > 0)
         {
             foreach (var pair in ordered)
             {
-                t = content.GetChild(i);
-
-                t.GetChild(0).GetChild(0).GetComponent<Text>().text = (i + 1).ToString();
 
                 if (int.Parse(pair.Value[2]) > score)
                 {
-                    t.GetChild(0).GetChild(1).GetComponent<Text>().text = gameSettings.ReturnPlayerName();
-                    t.GetChild(0).GetChild(2).GetComponent<Text>().text = s;
-                    t.GetChild(0).GetChild(3).GetComponent<Text>().text = score.ToString();
-                    t.gameObject.SetActive(true);
+
+
+                    CalculateRankHelper(i, gameSettings.ReturnPlayerName(), s, score.ToString());
                     i++;
                     rank = i;
-                    t = content.GetChild(i);
+
                 }
 
-                t.GetChild(0).GetChild(0).GetComponent<Text>().text = i.ToString();
-                t.GetChild(0).GetChild(1).GetComponent<Text>().text = pair.Value[0];
-                t.GetChild(0).GetChild(2).GetComponent<Text>().text = pair.Value[1];
-                t.GetChild(0).GetChild(3).GetComponent<Text>().text = pair.Value[2];
-                t.gameObject.SetActive(true);
+ 
+                CalculateRankHelper(i, pair.Value[0], pair.Value[1], pair.Value[2]);
                 i++;
             }
         }
         else
         {
-            t = content.transform.GetChild(0);
-            t.GetChild(0).GetChild(0).GetComponent<Text>().text = 1.ToString();
-            t.GetChild(0).GetChild(1).GetComponent<Text>().text = gameSettings.ReturnPlayerName();
-            t.GetChild(0).GetChild(2).GetComponent<Text>().text = s;
-            t.GetChild(0).GetChild(3).GetComponent<Text>().text = score.ToString();
-            t.gameObject.SetActive(true);
+            CalculateRankHelper(0, gameSettings.ReturnPlayerName(), s, score.ToString());
             i = 1;
             rank = 1;
         }
@@ -123,6 +110,17 @@ public class WinScreenMenu : MonoBehaviour
         return rank;
     }
 
+
+    private void CalculateRankHelper(int i, string playerName, string time, string score)
+    {
+
+        Transform t = content.transform.GetChild(i);
+        t.GetChild(0).GetChild(0).GetComponent<Text>().text = (i + 1).ToString();
+        t.GetChild(0).GetChild(1).GetComponent<Text>().text = playerName;
+        t.GetChild(0).GetChild(2).GetComponent<Text>().text = time;
+        t.GetChild(0).GetChild(3).GetComponent<Text>().text = score.ToString();
+        t.gameObject.SetActive(true);
+    }
   
 
 
