@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
         "GIT GUD",
         "YOU DIED",
         "BRUH",
-        "AAAAAAAHHHHHHH",
+        "AAAAAAAHHHHHHH-",
         "*SCREAMING SOUNDS*",
         "NOOOOOOO",
         "AAAAAAAAA-",
@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
         "RIP",
         "F",
         "U BAD",
+        "?",
     };
 
     private void Awake()
