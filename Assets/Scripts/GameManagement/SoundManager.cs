@@ -27,16 +27,15 @@ public class SoundManager : MonoBehaviour
     void Awake()
     {
         lasersPlayingSound = new List<Vector3>();
-    }
-
-    void Start()
-    {
         playerTransform = FindObjectOfType<PlayerControl>().transform;
         AudioSource[] audioSources = GetComponents<AudioSource>();
         soundEffectsAudioSource = audioSources[0];
         highPitchSoundEffectsAudioSource = audioSources[1];
         laserAudioSource = audioSources[2];
+    }
 
+    void Start()
+    {
         jumpClip = Resources.Load<AudioClip>("JUMP");
         jumpLandingClip = Resources.Load<AudioClip>("LAND");
         dashClip = Resources.Load<AudioClip>("DASH_SHORT1");
@@ -55,12 +54,18 @@ public class SoundManager : MonoBehaviour
 
     public void SetHighPassFilterEnabled(bool enabled)
     {
-        highPassFilter.enabled = enabled;
+        if (highPassFilter)
+        {
+            highPassFilter.enabled = enabled;
+        }
     }
 
     public void SetLowPassFilterEnabled(bool enabled)
     {
-        lowPassFilter.enabled = enabled;
+        if (lowPassFilter)
+        {
+            lowPassFilter.enabled = enabled;
+        }
     }
 
     public void SetVolume(float newVolume)

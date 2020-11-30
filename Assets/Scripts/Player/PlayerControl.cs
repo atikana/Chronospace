@@ -9,7 +9,7 @@ public class PlayerControl : MonoBehaviour
     public Transform cameraTransform;
     private Rigidbody rigidBody;
     private Animator handsAnimator;
-    public PlayerInput input;
+    private PlayerInput input;
     private GameManager gameManager;
     private SoundManager soundManager;
     private ParticleSystem cameraParticleSystem;
@@ -20,7 +20,8 @@ public class PlayerControl : MonoBehaviour
     private bool ableToDoubleJump = false;
     private bool grounded = true;
     private bool cancellingGrounded = false;
-    public float onAirControl = 2f; // change this value to adjust player's ability to move left/right in mid-air
+    public float onAirControlLR = 2f; // change this value to adjust player's ability to move left/right in mid-air
+    public float onAirControlFB = 2f; // change this value to adjust player's ability to move forward/backward in mid-air
 
     private float movementSpeed = 4500f;
 
@@ -40,12 +41,16 @@ public class PlayerControl : MonoBehaviour
 
     private bool climbingPlatform = false;
     private float climbingSpeed = 15f;
+    private float beforeClimbingSpeed;
     private float endClimbingSpeed = 5f;
     private float climbingAngleThreshold = 25f;
     private Vector2 climbingPlatformNormal;
     private float climbingPlatformTop;
     private float beforeClimbCounter = 0f;
-    public float beforeClimbTime = 0.5f;
+    public float beforeClimbTime = 0.7f;
+
+    // Offset between the player's head and their hands when reached above.
+    private const float climbingOffset = 0.3f;
 
     private float jumpCooldown = 0.25f;
     public float doubleJumpWindow = 0.25f;
@@ -98,10 +103,7 @@ public class PlayerControl : MonoBehaviour
     public float rewindStep = 0.1f;
     public bool isRewinding;
 
-    /**
-     * Set up stuff before the level starts.
-     */
-    void Start()
+    private void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
@@ -111,14 +113,19 @@ public class PlayerControl : MonoBehaviour
         levelStats = FindObjectOfType<LevelStats>();
         playerCapsuleCollider = GetComponent<CapsuleCollider>();
         previousPositions = new List<PositionRecord>();
+        rippleCameraEffect = cameraTransform.GetComponent<RippleEffect>();
+        input = new PlayerInput();
+    }
+
+    /**
+     * Set up stuff before the level starts.
+     */
+    void Start()
+    {
         isRewinding = false;
 
         // Reset animation triggers to prevent them running at start.
         ResetAnimations();
-
-        // Set up player input.
-        input = new PlayerInput();
-        input.Enable();
 
         input.Player.Move.performed += context =>
         {
@@ -162,13 +169,26 @@ public class PlayerControl : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        rippleCameraEffect = cameraTransform.GetComponent<RippleEffect>();
-
         numDashes = dashCapacity;
 
         // Initialize look vector and camera rotation to (0, 0).
         lookVector = Vector2.zero;
         cameraRotation = Vector2.zero;
+    }
+
+    private void OnEnable()
+    {
+        input.Enable();
+    }
+
+    private void OnDisable()
+    {
+        input.Disable();
+    }
+
+    public PlayerInput GetInput()
+    {
+        return input;
     }
 
     /*
@@ -247,10 +267,10 @@ public class PlayerControl : MonoBehaviour
      */
     private void Dash()
     {
-        if (numDashes > 0)
+        Vector2 horizontalVelocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.z);
+        if (numDashes > 0 && horizontalVelocity.magnitude > 0.1f)
         {
-            Vector2 horizontalVelocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.z);
-            if (!dashing && horizontalVelocity.magnitude > 0.1f)
+            if (!dashing)
             {
                 // dashVector is the player's joystick direction, relative to the world.
                 Vector2 dashVectorForward = new Vector2(transform.forward.x, transform.forward.z) * moveVector.y;
@@ -353,8 +373,8 @@ public class PlayerControl : MonoBehaviour
 
             if (beforeClimbCounter > 0)
             {
-                // TODO:  Set the player's velocity so that after half a second of falling, their hands are at the top of the platform.
-                rigidBody.velocity = new Vector3(0f, -1f, 0f);
+                // TODO:  Set the player's velocity so that they fall slowly until their hands are at the top of the platform.
+                rigidBody.velocity = new Vector3(0f, beforeClimbingSpeed, 0f);
                 return;
             }
         }
@@ -406,14 +426,30 @@ public class PlayerControl : MonoBehaviour
                     Vector2 normal2d = new Vector2(normal.x, normal.z);
                     float playerPlatformAngle = Vector2.Angle(playerForward, -normal2d);
 
-                    // Start climbing if the player is facing the platform and moving.
-                    // TODO:  Include a condition to make sure the player doesn't start too low.
+                    // Start climbing if the player is not yet climbing, facing the platform and moving.
                     if (!climbingPlatform && playerPlatformAngle < climbingAngleThreshold && moveVector.magnitude > 0)
                     {
+                        float playerTop = playerCapsuleCollider.bounds.max.y;
+
+                        // Distance the player must fall until the point where their hands will be on top of the platform when reaching up.
+                        float distanceToHandsOnPlatform = climbingPlatformTop - playerTop - climbingOffset;
+
+                        // The player should not fall if their head is below the platform top.
+                        if (distanceToHandsOnPlatform > 0)
+                        {
+                            return;
+                        }
+
                         climbingPlatform = true;
                         climbingPlatformNormal = normal2d;
                         climbingPlatformTop = other.collider.bounds.max.y;
                         beforeClimbCounter = beforeClimbTime;
+
+                        /* Set player's y velocity to the distance they need to travel until their head is at the bottom
+                         * of the platform, divided by the time it takes until their hands are above their head.
+                         */
+                        beforeClimbingSpeed = distanceToHandsOnPlatform / beforeClimbTime;
+
                         handsAnimator.SetTrigger("Climbing");
                     }
                 }
@@ -431,7 +467,7 @@ public class PlayerControl : MonoBehaviour
     private void FirstJump()
     {
         // TODO:  Added "&& rigidBody" because FirstJump() was being called when rigidBody was null.  Figure out why this happens!
-        if (grounded && rigidBody && readyToJump)
+        if (grounded && readyToJump)
         {
             soundManager.PlayJumpSound();
             readyToJump = false;
@@ -449,7 +485,7 @@ public class PlayerControl : MonoBehaviour
             }
 
             Invoke(nameof(ResetJump), jumpCooldown);
-            Invoke(nameof(ResetDoubleJump), doubleJumpWindow);
+            //Invoke(nameof(ResetDoubleJump), doubleJumpWindow);
         }
         else
         {
@@ -461,7 +497,7 @@ public class PlayerControl : MonoBehaviour
     {
         // TODO:  Added "&& rigidBody" because SecondJump() was being called when rigidBody was null.  Figure out why this happens!
 
-        if (!grounded && rigidBody && ableToDoubleJump)
+        if (!grounded && ableToDoubleJump)
         {
             ableToDoubleJump = false;
             soundManager.PlayDoubleJumpSound();
@@ -624,8 +660,8 @@ public class PlayerControl : MonoBehaviour
         if (!grounded && !dashing)
         {
            // Debug.Log("!ground");
-            multiplier = 0.4f;
-            multiplierV = onAirControl;
+            multiplier = onAirControlFB;
+            multiplierV = onAirControlLR;
         }
         rigidBody.AddForce(transform.forward * y * movementSpeed * Time.deltaTime * multiplier * multiplier);
         rigidBody.AddForce(transform.right * x * movementSpeed * Time.deltaTime * multiplier * multiplierV);
@@ -694,14 +730,13 @@ public class PlayerControl : MonoBehaviour
                 Rewind();
                 rewindPeriod = 0;
             }
-            rewindPeriod += UnityEngine.Time.deltaTime;
+            rewindPeriod += Time.deltaTime;
         }
     }
 
     private void Update()
     {
-        if (isRewinding) { }
-        else
+        if (!isRewinding)
         {
             AdjustCamera();
         }
@@ -789,7 +824,7 @@ public class PlayerControl : MonoBehaviour
         {
             if (rigidBody.transform.position != previousPositions[0].position)
             {
-                Debug.Log("record position");
+                //Debug.Log("record position");
 
                 // previousPositions.Insert(0, rigidBody.transform.position);
                 previousPositions.Insert(0, new PositionRecord(rigidBody.transform.position, cameraTransform.rotation, rigidBody.transform.rotation));

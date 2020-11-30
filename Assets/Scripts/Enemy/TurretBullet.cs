@@ -9,7 +9,7 @@ public class TurretBullet : MonoBehaviour
     private bool isActive;
     public GameObject hitEffect;
     
-    void Start()
+    private void Awake()
     {
         isActive = true;
         gameManager = FindObjectOfType<GameManager>();

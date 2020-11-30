@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class StartMenu : MonoBehaviour
 {
-    public PlayerInput input;
     public GameObject levelSelect, aboutMenu;
     public GameObject firstMain, firstOption, firstAbout, firstLevel, closedMain;
 
@@ -34,28 +31,14 @@ public class StartMenu : MonoBehaviour
         Application.Quit();
     }
 
-
-    void Awake()
-    {
-        
-    }
-
-    // Start is called before the first frame update
     void Start()
     {
-        input = new PlayerInput();
-        input.Enable();
         optionMenu.SetActive(true);
         optionMenu.GetComponent<OptionMenu>().SetMainMenuGameSettings();
         optionMenu.SetActive(false);
+        FindObjectOfType<GameSettings>().SelectNewPlayerName();
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstMain);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void OptionButtonNavi()

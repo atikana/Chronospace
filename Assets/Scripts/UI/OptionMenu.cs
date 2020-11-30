@@ -32,11 +32,6 @@ public class OptionMenu : MonoBehaviour
 
     }
 
-    private void Start()
-    {
-    }
-
-
     public void SetVolume()
     {
         gameSettings.SetVolume(volume.value);
@@ -83,14 +78,12 @@ public class OptionMenu : MonoBehaviour
 
         if (autoaimOn)
         {
-            Debug.Log("aim off");
             autoaim.isOn = false;
             autoaimOn = false;
             b = false;
         }
         else
         {
-            Debug.Log("aim on");
             autoaim.isOn = true;
             b = true;
             autoaimOn = true;
@@ -147,7 +140,6 @@ public class OptionMenu : MonoBehaviour
         sensitivity.value = gameSettings.GetMouseSensitivity();
         autoaim.isOn = gameSettings.GetAutoAim();
         music.value = gameSettings.GetMusic();
-
         startMenuMusic.SetVolume(music.value);
     }
 

@@ -9,12 +9,6 @@ public class CheckPoint : MonoBehaviour
     private bool activated = false;
     private bool rewindReset = false;
 
-    private void Start()
-    {
-        playerControl = FindObjectOfType<PlayerControl>();
-        soundManager = FindObjectOfType<SoundManager>();
-    }
-
     Transform front;
     Transform back;
     Color original = new Color(255, 255, 255);
@@ -22,6 +16,9 @@ public class CheckPoint : MonoBehaviour
 
     private void Awake()
     {
+        playerControl = FindObjectOfType<PlayerControl>();
+        soundManager = FindObjectOfType<SoundManager>();
+
         front = transform.GetChild(0);
         back = transform.GetChild(1);
 

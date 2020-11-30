@@ -10,6 +10,7 @@ public class MusicManager : MonoBehaviour
     Object[] audioFiles;
     List<AudioClip> audioClips = new List<AudioClip>();
     Text songName;
+    Text composer;
     Slider songLength;
     CanvasGroup canvasGroup;
     private bool musicIn;
@@ -22,6 +23,7 @@ public class MusicManager : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
         songName = transform.GetChild(0).GetComponent<Text>();
+        composer = transform.GetChild(1).GetComponent<Text>();
         songLength = transform.GetChild(2).GetComponent<Slider>();
         canvasGroup = GetComponent<CanvasGroup>();
         getAllMusic();
@@ -38,7 +40,7 @@ public class MusicManager : MonoBehaviour
             { 
                 musicStarted = true;
                 audioSource.Play();
-                currentAlpha = Mathf.MoveTowards(currentAlpha, 0, 0.3f * Time.deltaTime);
+                currentAlpha = Mathf.MoveTowards(currentAlpha, 0, 0.05f * Time.deltaTime);
                 canvasGroup.alpha = currentAlpha;
             }
             playMusic();
@@ -58,6 +60,7 @@ public class MusicManager : MonoBehaviour
 
         for (int i = 0; i < audioFiles.Length; i++)
         {
+            
             audioClips.Add((AudioClip)audioFiles[i]);
         }
 
@@ -97,6 +100,20 @@ public class MusicManager : MonoBehaviour
     void SetSong(AudioClip audioClip)
     {
         songName.text = audioClips[index].name;
+        if (songName.text.StartsWith("Electric"))
+        {
+            composer.text = "by Carmine Coccimiglio";
+        }
+        else if (songName.text.StartsWith("Hyper"))
+        {
+            composer.text = "by Steven Webb";
+        }
+        else
+        {
+            composer.text = "by Justin Poon";
+        }
+
+        
         audioSource.clip = audioClips[index];
         songLength.minValue = 0;
         songLength.maxValue = audioClip.length;

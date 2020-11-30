@@ -19,10 +19,14 @@ public class TurretControl : MonoBehaviour
     // If player is within this distance of a turret, bullets will play a sound.
     private const float bulletSoundThreshold = 50f;
 
-    void Start()
+    private void Awake()
     {
         playerScript = FindObjectOfType<PlayerControl>();
         soundManager = FindObjectOfType<SoundManager>();
+    }
+
+    void Start()
+    {
         readyToShoot = true;
         readyToShoot2 = false;
         StartCoroutine(delay());

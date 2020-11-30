@@ -18,7 +18,7 @@ public class LaserControl : MonoBehaviour
     // If player is within this distance of a laser, it will play a sound.
     private const float laserSoundThreshold = 50f;
 
-    void Start()
+    private void Awake()
     {
         playerTransform = FindObjectOfType<PlayerControl>().transform;
         soundManager = FindObjectOfType<SoundManager>();

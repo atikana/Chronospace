@@ -22,18 +22,20 @@ public class PendulumControl : MonoBehaviour
     // If player is within this distance of a pendulum, it will play a sound.
     private const float pendulumSoundThreshold = 50f;
 
-    void Start()
+    private void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
+        playerTransform = FindObjectOfType<PlayerControl>().transform;
+    }
 
+    void Start()
+    {
         startRotation = GetPendulumRotation(0);
         endRotation = GetPendulumRotation(rotationAmount);
 
         // timePassed should be initialized randomly.
         timePassed = Random.Range(0f, 2 * Mathf.PI);
-
-        playerTransform = FindObjectOfType<PlayerControl>().transform;
     }
 
     void FixedUpdate()

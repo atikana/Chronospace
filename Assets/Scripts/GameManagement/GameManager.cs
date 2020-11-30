@@ -2,12 +2,11 @@
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.Rendering.PostProcessing;
 
 public class GameManager : MonoBehaviour
 {
-    public PauseMenu pauseMenu;
+    private PauseMenu pauseMenu;
     public GameObject menu;
     public LevelStats levelStats;
     public CheckPointManager checkPointManager;
@@ -18,8 +17,9 @@ public class GameManager : MonoBehaviour
     private float deathDelay = 0f;
     private bool delayPeriod;
     public int countdown;
-    public Text countdownDisplay;
+    public GameObject countdownDisplay;
     public GameObject rewindAnim;
+    public GameObject crosshair;
     private bool counted;
     private bool isRewinding;
     public bool RewindEnabled;
@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     /* The speed multiplier of the moving objects in the game.
      * This allows the time warp effect to take place.
      */
-    private const float timeWarpMultiplier = 0.5f;
+    private const float timeWarpMultiplier = 0.4f;
 
     private bool timeWarpEnabled;
     private bool autoAim;
@@ -41,18 +41,43 @@ public class GameManager : MonoBehaviour
 
     private const float baseSensitivity = 50f;
     private const float sensitivityMultiplier = 8f;
+    private int currDeathMessage;
 
- 
+    // Feel free to modify this list!
+    private string[] deathMessages =
+    {
+        //"NOT TUBULAR DUDE",
+        //"UNINSTALL",
+        //"NOT RADICAL",
+        //"WAY PAST NOT COOL"
+        "GIT GUD",
+        "YOU DIED",
+        "BRUH",
+        "AAAAAAAHHHHHHH-",
+        "*SCREAMING SOUNDS*",
+        "NOOOOOOO",
+        "AAAAAAAAA-",
+        "*SCREAMING IN CANADIAN*",
+        "*SCREAMING IN FRENCH-CANADIAN*",
+        "RIP",
+        "F",
+        "U BAD",
+        "?",
+    };
 
+    private void Awake()
+    {
+        Time.timeScale = 1f;
+        playerControl = FindObjectOfType<PlayerControl>();
+        grapplingGun = playerControl.gameObject.GetComponentInChildren<GrapplingGun>();
+        pauseMenu = FindObjectOfType<PauseMenu>();
+    }
 
     void Start()
     {
-        playerControl = FindObjectOfType<PlayerControl>();
-        grapplingGun = playerControl.gameObject.GetComponentInChildren<GrapplingGun>();
         counted = false;
         isRewinding = false;
     }
-
 
     public void PauseGame()
     {
@@ -88,7 +113,7 @@ public class GameManager : MonoBehaviour
             CheckPoint lastCheckPoint = checkPointManager.GetClosestCheckPoint(playerControl.transform.position);
 
             playerControl.ResetPositions();
-            // Debug.Log("level restarted");
+
             // camera is shaking
             playerRigidbody.MovePosition(lastCheckPoint.GetCheckPointPosition());
 
@@ -199,12 +224,17 @@ public class GameManager : MonoBehaviour
 
     IEnumerator Rewinding()
     {
-        
         levelStats.PauseTimer();
-        playerControl.input.Disable();
+        playerControl.GetInput().Disable();
+        crosshair.SetActive(false);
 
         Time.timeScale = 0.0f;
         m_PostProcessVolume.isGlobal = true;
+
+        // Generates a random death message that is never the same twice in a row.
+        currDeathMessage = (currDeathMessage + Random.Range(1, deathMessages.Length)) % deathMessages.Length;
+        diedMsg.GetComponent<Text>().text = deathMessages[currDeathMessage];
+
         diedMsg.gameObject.SetActive(true);
         yield return new WaitForSecondsRealtime(2f);
         diedMsg.gameObject.SetActive(false);
@@ -213,7 +243,7 @@ public class GameManager : MonoBehaviour
         FindObjectOfType<SoundManager>().PlayRewindSound();
         isRewinding = true;
         rewindAnim.gameObject.SetActive(true);
-        rewindAnim.GetComponentInChildren<Animator>().SetBool("PlayRewind",true);
+        rewindAnim.GetComponentInChildren<Animator>().SetBool("PlayRewind", true);
         playerControl.StartRewind();
 
         // yield return new WaitForSecondsRealtime(3f);
@@ -233,9 +263,10 @@ public class GameManager : MonoBehaviour
         {
             Destroy(bullet);
         }
-        playerControl.input.Enable();
+        playerControl.GetInput().Enable();
         rewindAnim.GetComponentInChildren<Animator>().SetBool("PlayRewind", false);
         rewindAnim.gameObject.SetActive(false);
+        crosshair.SetActive(true);
         levelStats.StartTimer();
         AddDeath();
         RestartLevel(true);
@@ -249,25 +280,28 @@ public class GameManager : MonoBehaviour
         counted = true;
         int countdown_;
         countdown_ = countdown;
-        countdownDisplay.gameObject.SetActive(true);
-        playerControl.input.Disable();
+        //countdownDisplay.gameObject.SetActive(true);
+        countdownDisplay.SetActive(true);
+        countdownDisplay.GetComponent<Animator>().SetTrigger("StartCountdown");
+        playerControl.GetInput().Disable();
         cameraTransform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         while (countdown_ > 0)
         {
-            countdownDisplay.text = countdown_.ToString();
+            //countdownDisplay.text = countdown_.ToString();
 
             yield return new WaitForSecondsRealtime(1f);
 
             countdown_--;
         }
-        countdownDisplay.text = "START";
+        //countdownDisplay.text = "START";
 
         yield return new WaitForSecondsRealtime(0.2f);
 
-        playerControl.input.Enable();
+        playerControl.GetInput().Enable();
         levelStats.StartTimer();
         FindObjectOfType<MusicManager>().StartMusic();
-        countdownDisplay.gameObject.SetActive(false);
+        //countdownDisplay.gameObject.SetActive(false);
+        countdownDisplay.SetActive(false);
         menu.SetActive(true);
         OptionMenu optionMenu = menu.transform.GetChild(1).GetComponent<OptionMenu>();
         optionMenu.gameObject.SetActive(true);
