@@ -27730,6 +27730,11 @@ PrefabInstance:
       propertyPath: levelStats
       value: 
       objectReference: {fileID: 261865917}
+    - target: {fileID: 8901189712511682695, guid: e78286ebda284114e83af5bb0fc1d102,
+        type: 3}
+      propertyPath: recommendTime
+      value: 60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e78286ebda284114e83af5bb0fc1d102, type: 3}
 --- !u!224 &1801668234 stripped
@@ -33591,6 +33596,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517978682659398789, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: onAirControlFB
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517978682659398789, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: onAirControlLR
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5517978683038504852, guid: 724e5968d51354200bac36b1af52c3a7,
         type: 3}
