@@ -54,7 +54,7 @@ public class WinScreenMenu : MonoBehaviour
         time.text = "Time: " + levelStats.GetTimeText();
         score.text = "Score: " + playerScore.ToString();
         rank.text = "Rank: " + CalculateRank(playerScore, timeString).ToString();
-        win.text = "You won! " + gameSettings.ReturnPlayerName() + ".";
+        win.text = "You won " + gameSettings.ReturnPlayerName() + "!";
 
 
     }

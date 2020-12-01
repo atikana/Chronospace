@@ -15,6 +15,7 @@ public class TurretControl : MonoBehaviour
     private float delayTimer = 0.4f;  // Used to be 1.
     private PlayerControl playerScript;
     private SoundManager soundManager;
+    private bool turretEnabled = true;
 
     // If player is within this distance of a turret, bullets will play a sound.
     private const float bulletSoundThreshold = 50f;
@@ -101,9 +102,20 @@ public class TurretControl : MonoBehaviour
 
     }
 
+    public void EnableTurret()
+    {
+        turretEnabled = true;
+    }
+
+    public void DisableTurret()
+    {
+        turretEnabled = false;
+        targetLocked = false;
+    }
+
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (turretEnabled && other.tag == "Player")
         {
             target = other.gameObject;
             targetLocked = true;

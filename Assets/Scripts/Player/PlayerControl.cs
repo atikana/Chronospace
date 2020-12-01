@@ -17,7 +17,8 @@ public class PlayerControl : MonoBehaviour
     private CapsuleCollider playerCapsuleCollider;
 
     public float jumpForce = 550f;
-    private bool ableToDoubleJump = false;
+    private bool firstJumpUsed = false;
+    private bool secondJumpUsed = false;
     private bool grounded = true;
     private bool cancellingGrounded = false;
     public float onAirControlLR = 2f; // change this value to adjust player's ability to move left/right in mid-air
@@ -35,9 +36,11 @@ public class PlayerControl : MonoBehaviour
     public LayerMask grappleMask;
 
     private bool dashing = false;
-    private bool jumping = false;
-    private bool firstJump = true;
-    private bool readyToJump = true;
+
+    private float steppingUpVelocity = 7f;
+    private bool steppingUp = false;
+    private float stepSize;
+    private const float maxStepSize = 1.0f;
 
     private bool climbingPlatform = false;
     private float climbingSpeed = 15f;
@@ -51,9 +54,6 @@ public class PlayerControl : MonoBehaviour
 
     // Offset between the player's head and their hands when reached above.
     private const float climbingOffset = 0.3f;
-
-    private float jumpCooldown = 0.25f;
-    public float doubleJumpWindow = 0.25f;
 
     // Dash speed multiplier.
     public float dashMultiplier = 5f;
@@ -141,15 +141,7 @@ public class PlayerControl : MonoBehaviour
         input.Player.Look.performed += context => lookVector = context.ReadValue<Vector2>();
         input.Player.Look.canceled += context => lookVector = Vector2.zero;
 
-        input.Player.Jump.performed += context => jumping = true;
-        input.Player.Jump.canceled += context =>
-        {
-            if (ableToDoubleJump)
-            {
-                firstJump = !firstJump;
-            }
-            jumping = false;
-        };
+        input.Player.Jump.performed += context => Jump();
 
         input.Player.Dash.performed += context => Dash();
         input.Player.TimeWarp.performed += context => TimeWarp();
@@ -390,6 +382,19 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
+    private void MaintainStepUp()
+    {
+        if (steppingUp)
+        {
+            rigidBody.velocity = new Vector3(rigidBody.velocity.x, steppingUpVelocity, rigidBody.velocity.x);
+
+            if (playerCapsuleCollider.bounds.min.y > climbingPlatformTop)
+            {
+                steppingUp = false;
+            }
+        }
+    }
+
     private void OnCollisionStay(Collision other)
     {
         // Make sure we are only checking for walkable layers.
@@ -398,6 +403,7 @@ public class PlayerControl : MonoBehaviour
         bool isGrapple = grappleMask == (grappleMask | (1 << layer));
         if (isGround || isGrapple)
         {
+            // First check if the player is on the ground.
             for (int i = 0; i < other.contactCount; i++)
             {
                 Vector3 normal = other.contacts[i].normal;
@@ -410,48 +416,12 @@ public class PlayerControl : MonoBehaviour
                     }
 
                     grounded = true;
-                    if (!firstJump)
-                    {
-                        firstJump = true;
-                    }
+                    firstJumpUsed = false;
+                    secondJumpUsed = false;
 
                     cancellingGrounded = false;
 
                     CancelInvoke(nameof(StopGrounded));
-                }
-                // Player hit the side of a platform.
-                else if ((IsNotBottom(normal)) && isGround)
-                {
-                    Vector2 playerForward = new Vector2(transform.forward.x, transform.forward.z);
-                    Vector2 normal2d = new Vector2(normal.x, normal.z);
-                    float playerPlatformAngle = Vector2.Angle(playerForward, -normal2d);
-
-                    // Start climbing if the player is not yet climbing, facing the platform and moving.
-                    if (!climbingPlatform && playerPlatformAngle < climbingAngleThreshold && moveVector.magnitude > 0)
-                    {
-                        float playerTop = playerCapsuleCollider.bounds.max.y;
-
-                        // Distance the player must fall until the point where their hands will be on top of the platform when reaching up.
-                        float distanceToHandsOnPlatform = climbingPlatformTop - playerTop - climbingOffset;
-
-                        // The player should not fall if their head is below the platform top.
-                        if (distanceToHandsOnPlatform > 0)
-                        {
-                            return;
-                        }
-
-                        climbingPlatform = true;
-                        climbingPlatformNormal = normal2d;
-                        climbingPlatformTop = other.collider.bounds.max.y;
-                        beforeClimbCounter = beforeClimbTime;
-
-                        /* Set player's y velocity to the distance they need to travel until their head is at the bottom
-                         * of the platform, divided by the time it takes until their hands are above their head.
-                         */
-                        beforeClimbingSpeed = distanceToHandsOnPlatform / beforeClimbTime;
-
-                        handsAnimator.SetTrigger("Climbing");
-                    }
                 }
             }
 
@@ -461,54 +431,110 @@ public class PlayerControl : MonoBehaviour
                 cancellingGrounded = true;
                 Invoke(nameof(StopGrounded), Time.deltaTime * delay);
             }
+
+
+            // Next, check if the player is climbing, since it requires knowing if the player is grounded or not.
+            for (int i = 0; i < other.contactCount; i++)
+            {
+                Vector3 normal = other.contacts[i].normal;
+
+                // Player hit the side of a platform.
+                if (!IsFloor(normal) && IsNotBottom(normal) && isGround)
+                {
+                    float playerBottom = playerCapsuleCollider.bounds.min.y;
+                    float platformTop = other.collider.bounds.max.y;
+
+                    // Handle the case where the player is trying to walk onto a slightly taller platform.
+                    if (!climbingPlatform && !steppingUp && grounded && climbingPlatformTop - playerBottom < maxStepSize && rigidBody.velocity.y >= -0.01)
+                    {
+                        steppingUp = true;
+                        climbingPlatformTop = platformTop;
+                        rigidBody.velocity = new Vector3(rigidBody.velocity.x, steppingUpVelocity, rigidBody.velocity.x);
+                    }
+                    else if (!climbingPlatform && !steppingUp)
+                    {
+                        climbingPlatformTop = platformTop;
+
+                        Vector2 playerForward = new Vector2(transform.forward.x, transform.forward.z);
+                        Vector2 normal2d = new Vector2(normal.x, normal.z);
+                        float playerPlatformAngle = Mathf.Abs(Vector2.Angle(playerForward, -normal2d));
+
+                        // Start climbing if the player is not yet climbing, but facing the platform.
+                        if (playerPlatformAngle < climbingAngleThreshold)
+                        {
+                            float playerTop = playerCapsuleCollider.bounds.max.y;
+
+                            // Distance the player must fall until the point where their hands will be on top of the platform when reaching up.
+                            float distanceToHandsOnPlatform = climbingPlatformTop - playerTop - climbingOffset;
+
+                            // The player should not fall if their head is below the platform top.
+                            if (distanceToHandsOnPlatform > 0)
+                            {
+                                return;
+                            }
+
+                            climbingPlatform = true;
+                            climbingPlatformNormal = normal2d;
+                            beforeClimbCounter = beforeClimbTime;
+
+                            /* Set player's y velocity to the distance they need to travel until their head is at the bottom
+                             * of the platform, divided by the time it takes until their hands are above their head.
+                             */
+                            beforeClimbingSpeed = distanceToHandsOnPlatform / beforeClimbTime;
+
+                            handsAnimator.SetTrigger("Climbing");
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void Jump()
+    {
+        if (grounded && !firstJumpUsed)
+        {
+            FirstJump();
+
+        }
+        else if (!secondJumpUsed)
+        {
+            SecondJump();
         }
     }
 
     private void FirstJump()
     {
-        // TODO:  Added "&& rigidBody" because FirstJump() was being called when rigidBody was null.  Figure out why this happens!
-        if (grounded && readyToJump)
-        {
-            soundManager.PlayJumpSound();
-            readyToJump = false;
-            ableToDoubleJump = true;
-            rigidBody.AddForce(Vector2.up * jumpForce * 1.5f);
-            rigidBody.AddForce(Vector3.up * jumpForce * 0.5f);
-            Vector3 vel = rigidBody.velocity;
-            if (rigidBody.velocity.y < 0.5f)
-            {
-                rigidBody.velocity = new Vector3(vel.x, 0, vel.z);
-            }
-            else if (rigidBody.velocity.y > 0)
-            {
-                rigidBody.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
-            }
+        firstJumpUsed = true;
+        soundManager.PlayJumpSound();
+        rigidBody.velocity = new Vector3(rigidBody.velocity.x, Mathf.Max(0f, rigidBody.velocity.y), rigidBody.velocity.z);
+        rigidBody.AddForce(Vector2.up * jumpForce * 1.5f);
+        rigidBody.AddForce(Vector3.up * jumpForce * 0.5f);
 
-            Invoke(nameof(ResetJump), jumpCooldown);
-            //Invoke(nameof(ResetDoubleJump), doubleJumpWindow);
-        }
-        else
-        {
-           // Debug.Log("Jump failded. Not on ground");
-        }
+        //Vector3 vel = rigidBody.velocity;
+        //if (rigidBody.velocity.y < 0.5f)
+        //{
+        //    rigidBody.velocity = new Vector3(vel.x, 0, vel.z);
+        //}
+        //else if (rigidBody.velocity.y > 0)
+        //{
+        //    rigidBody.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
+        //}
     }
 
     private void SecondJump()
     {
-        // TODO:  Added "&& rigidBody" because SecondJump() was being called when rigidBody was null.  Figure out why this happens!
+        secondJumpUsed = true;
+        soundManager.PlayDoubleJumpSound();
+        rigidBody.velocity = new Vector3(rigidBody.velocity.x, Mathf.Max(0f, rigidBody.velocity.y), rigidBody.velocity.z);
+        rigidBody.AddForce(Vector2.up * jumpForce * 1.5f);
+        rigidBody.AddForce(Vector3.up * jumpForce * 0.5f);
 
-        if (!grounded && ableToDoubleJump)
-        {
-            ableToDoubleJump = false;
-            soundManager.PlayDoubleJumpSound();
-            rigidBody.AddForce(Vector2.up * jumpForce * 1.5f);
-            rigidBody.AddForce(Vector3.up * jumpForce * 0.5f);
-
-
-            Vector3 vel = rigidBody.velocity;
-            if (rigidBody.velocity.y < 0.5f)
-                rigidBody.velocity = new Vector3(vel.x, 0, vel.z);
-        }
+        //Vector3 vel = rigidBody.velocity;
+        //if (rigidBody.velocity.y < 0.5f)
+        //{
+        //    rigidBody.velocity = new Vector3(vel.x, 0, vel.z);
+        //}
     }
 
     /**
@@ -534,17 +560,6 @@ public class PlayerControl : MonoBehaviour
         grounded = false;
     }
 
-    private void ResetJump()
-    {
-        readyToJump = true;
-
-    }
-
-    private void ResetDoubleJump()
-    {
-        ableToDoubleJump = false;
-    }
-
     /*
      * Returns the player's velocity relative to the direction they are looking.
      */
@@ -568,7 +583,7 @@ public class PlayerControl : MonoBehaviour
      */
     private void CounterMovement(float x, float y, Vector2 mag)
     {
-        if (!grounded || dashing || jumping) return;
+        if (!grounded || dashing) return;
 
         if (Mathf.Abs(mag.x) > counterMovementThreshold && Mathf.Abs(x) < 0.05f || (mag.x < -counterMovementThreshold && x > 0) || (mag.x > counterMovementThreshold && x < 0))
         {
@@ -639,18 +654,6 @@ public class PlayerControl : MonoBehaviour
 
         CounterMovement(x, y, mag);
 
-        if (jumping)
-        {
-            if (firstJump)
-            {
-                FirstJump();
-            }
-            else
-            {
-                SecondJump();
-            }
-        }
-
         if (x > 0 && xMag > maxSpeed && !dashing) x = 0;
         if (x < 0 && xMag < -maxSpeed && !dashing) x = 0;
         if (y > 0 && yMag > maxSpeed && !dashing) y = 0;
@@ -714,6 +717,7 @@ public class PlayerControl : MonoBehaviour
         MaintainDash();
         MaintainTimeWarp();
         MaintainClimb();
+        MaintainStepUp();
         Move();
         if (isRewinding)
         {
