@@ -38,6 +38,7 @@ public class PlayerControl : MonoBehaviour
     private bool jumping = false;
     private bool firstJump = true;
     private bool readyToJump = true;
+    private float walkingUpStairsVelocity = 10f;
 
     private bool climbingPlatform = false;
     private float climbingSpeed = 15f;
@@ -422,35 +423,53 @@ public class PlayerControl : MonoBehaviour
                 // Player hit the side of a platform.
                 else if ((IsNotBottom(normal)) && isGround)
                 {
-                    Vector2 playerForward = new Vector2(transform.forward.x, transform.forward.z);
-                    Vector2 normal2d = new Vector2(normal.x, normal.z);
-                    float playerPlatformAngle = Vector2.Angle(playerForward, -normal2d);
+                    float playerBottom = playerCapsuleCollider.bounds.min.y;
+                    float platformTop = other.collider.bounds.max.y;
 
-                    // Start climbing if the player is not yet climbing, facing the platform and moving.
-                    if (!climbingPlatform && playerPlatformAngle < climbingAngleThreshold && moveVector.magnitude > 0)
+                    // Handle the case where the player is trying to walk onto a slightly taller platform.
+                    if (!climbingPlatform && climbingPlatformTop - playerBottom < 0.6f)
                     {
-                        float playerTop = playerCapsuleCollider.bounds.max.y;
-
-                        // Distance the player must fall until the point where their hands will be on top of the platform when reaching up.
-                        float distanceToHandsOnPlatform = climbingPlatformTop - playerTop - climbingOffset;
-
-                        // The player should not fall if their head is below the platform top.
-                        if (distanceToHandsOnPlatform > 0)
+                        Debug.Log("stairs");
+                        if (Mathf.Abs(rigidBody.velocity.y) < 0.1f)
                         {
-                            return;
+                            rigidBody.velocity = new Vector3(rigidBody.velocity.x, walkingUpStairsVelocity, rigidBody.velocity.x);
                         }
+                    }
+                    else
+                    {
+                        Debug.Log("Climbing");
 
-                        climbingPlatform = true;
-                        climbingPlatformNormal = normal2d;
-                        climbingPlatformTop = other.collider.bounds.max.y;
-                        beforeClimbCounter = beforeClimbTime;
+                        climbingPlatformTop = platformTop;
 
-                        /* Set player's y velocity to the distance they need to travel until their head is at the bottom
-                         * of the platform, divided by the time it takes until their hands are above their head.
-                         */
-                        beforeClimbingSpeed = distanceToHandsOnPlatform / beforeClimbTime;
+                        Vector2 playerForward = new Vector2(transform.forward.x, transform.forward.z);
+                        Vector2 normal2d = new Vector2(normal.x, normal.z);
+                        float playerPlatformAngle = Vector2.Angle(playerForward, -normal2d);
 
-                        handsAnimator.SetTrigger("Climbing");
+                        // Start climbing if the player is not yet climbing, facing the platform and moving.
+                        if (!climbingPlatform && playerPlatformAngle < climbingAngleThreshold && moveVector.magnitude > 0)
+                        {
+                            float playerTop = playerCapsuleCollider.bounds.max.y;
+
+                            // Distance the player must fall until the point where their hands will be on top of the platform when reaching up.
+                            float distanceToHandsOnPlatform = climbingPlatformTop - playerTop - climbingOffset;
+
+                            // The player should not fall if their head is below the platform top.
+                            if (distanceToHandsOnPlatform > 0)
+                            {
+                                return;
+                            }
+
+                            climbingPlatform = true;
+                            climbingPlatformNormal = normal2d;
+                            beforeClimbCounter = beforeClimbTime;
+
+                            /* Set player's y velocity to the distance they need to travel until their head is at the bottom
+                             * of the platform, divided by the time it takes until their hands are above their head.
+                             */
+                            beforeClimbingSpeed = distanceToHandsOnPlatform / beforeClimbTime;
+
+                            handsAnimator.SetTrigger("Climbing");
+                        }
                     }
                 }
             }

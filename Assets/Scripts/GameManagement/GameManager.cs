@@ -103,6 +103,62 @@ public class GameManager : MonoBehaviour
         return (timeWarpEnabled) ? timeWarpMultiplier : 1f;
     }
 
+    /**
+     * Resets things related to the player, which should occur prior to rewinding.
+     */
+    private void ResetPlayer()
+    {
+        // Turn off time warp.
+        playerControl.ResetTimeWarp();
+
+        // Reset dash counters.
+        playerControl.ResetDash();
+
+        // Reset hands animation.
+        playerControl.ResetAnimations();
+
+        levelStats.setDeath(GetNumDeaths());
+    }
+
+    /**
+     * Resets the grappling rope and turrets, and destroys bullets in the level.
+     */
+    private void ResetLevelObjects(bool disableTurrets = false)
+    {
+        grapplingGun.StopGrapple();
+        grapplingGun.ResetRope();
+
+        // Reset all turrets so they aren't locked onto the player.
+        TurretControl[] turrets = FindObjectsOfType<TurretControl>();
+        foreach (TurretControl turret in turrets)
+        {
+            if (disableTurrets)
+            {
+                turret.DisableTurret();
+            }
+            else
+            {
+                turret.ResetTurret();
+            }
+        }
+
+        // Remove all existing bullets.
+        GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
+        foreach (GameObject bullet in bullets)
+        {
+            Destroy(bullet);
+        }
+    }
+
+    private void EnableTurrets()
+    {
+        TurretControl[] turrets = FindObjectsOfType<TurretControl>();
+        foreach (TurretControl turret in turrets)
+        {
+            turret.EnableTurret();
+        }
+    }
+
     /*
      * Allows the player to restart the level they are currently on.
      */
@@ -114,40 +170,17 @@ public class GameManager : MonoBehaviour
 
             playerControl.ResetPositions();
 
-            // camera is shaking
             playerRigidbody.MovePosition(lastCheckPoint.GetCheckPointPosition());
 
             // Reset the player's velocity and looking angle.
             playerRigidbody.velocity = Vector3.zero;
             playerControl.SetCameraRotation(new Vector2(lastCheckPoint.GetPlayerRotation(), 0f));
 
-            // Turn off time warp.
-            playerControl.ResetTimeWarp();
-
-            // Reset dash counters.
-            playerControl.ResetDash();
-
-            // Reset hands animation.
-            playerControl.ResetAnimations();
-
-            // Reset grappling gun.
-            grapplingGun.StopGrapple();
-            grapplingGun.ResetRope();
-
-            levelStats.setDeath(GetNumDeaths());
-
-            // Reset all turrets so they aren't locked onto the player.
-            TurretControl[] turrets = FindObjectsOfType<TurretControl>();
-            foreach (TurretControl turret in turrets)
+            // If rewind is enabled, these methods are called before the rewind begins.
+            if (!RewindEnabled)
             {
-                turret.ResetTurret();
-            }
-
-            // Remove all existing bullets.
-            GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
-            foreach (GameObject bullet in bullets)
-            {
-                Destroy(bullet);
+                ResetPlayer();
+                ResetLevelObjects();
             }
         }
         else
@@ -182,7 +215,6 @@ public class GameManager : MonoBehaviour
 
     public void KillPlayer()
     {
-        // TODO:  Modify this when checkpoints are implemented!
         if (!isRewinding)
         {
             if (!delayPeriod)
@@ -228,6 +260,9 @@ public class GameManager : MonoBehaviour
         playerControl.GetInput().Disable();
         crosshair.SetActive(false);
 
+        AddDeath();
+        ResetPlayer();
+
         Time.timeScale = 0.0f;
         m_PostProcessVolume.isGlobal = true;
 
@@ -240,6 +275,7 @@ public class GameManager : MonoBehaviour
         diedMsg.gameObject.SetActive(false);
         Time.timeScale = 1.0f;
 
+        ResetLevelObjects(true);
         FindObjectOfType<SoundManager>().PlayRewindSound();
         isRewinding = true;
         rewindAnim.gameObject.SetActive(true);
@@ -249,26 +285,14 @@ public class GameManager : MonoBehaviour
         // yield return new WaitForSecondsRealtime(3f);
         yield return new WaitUntil(() => playerControl.isRewinding == false);
         Debug.Log("rewind finished");
+        EnableTurrets();
         m_PostProcessVolume.isGlobal = false;
         playerControl.StopRewind();
-        TurretControl[] turrets = FindObjectsOfType<TurretControl>();
-        foreach (TurretControl turret in turrets)
-        {
-            turret.ResetTurret();
-        }
-
-        // Remove all existing bullets.
-        GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
-        foreach (GameObject bullet in bullets)
-        {
-            Destroy(bullet);
-        }
         playerControl.GetInput().Enable();
         rewindAnim.GetComponentInChildren<Animator>().SetBool("PlayRewind", false);
         rewindAnim.gameObject.SetActive(false);
         crosshair.SetActive(true);
         levelStats.StartTimer();
-        AddDeath();
         RestartLevel(true);
         isRewinding = false;
     }
@@ -280,27 +304,22 @@ public class GameManager : MonoBehaviour
         counted = true;
         int countdown_;
         countdown_ = countdown;
-        //countdownDisplay.gameObject.SetActive(true);
         countdownDisplay.SetActive(true);
         countdownDisplay.GetComponent<Animator>().SetTrigger("StartCountdown");
         playerControl.GetInput().Disable();
         cameraTransform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         while (countdown_ > 0)
         {
-            //countdownDisplay.text = countdown_.ToString();
-
             yield return new WaitForSecondsRealtime(1f);
 
             countdown_--;
         }
-        //countdownDisplay.text = "START";
-
+        
         yield return new WaitForSecondsRealtime(0.2f);
 
         playerControl.GetInput().Enable();
         levelStats.StartTimer();
         FindObjectOfType<MusicManager>().StartMusic();
-        //countdownDisplay.gameObject.SetActive(false);
         countdownDisplay.SetActive(false);
         menu.SetActive(true);
         OptionMenu optionMenu = menu.transform.GetChild(1).GetComponent<OptionMenu>();
