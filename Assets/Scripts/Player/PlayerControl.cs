@@ -38,7 +38,10 @@ public class PlayerControl : MonoBehaviour
     private bool jumping = false;
     private bool firstJump = true;
     private bool readyToJump = true;
-    private float walkingUpStairsVelocity = 10f;
+    private float steppingUpVelocity = 7f;
+    private bool steppingUp = false;
+    private float stepSize;
+    private const float maxStepSize = 1.0f;
 
     private bool climbingPlatform = false;
     private float climbingSpeed = 15f;
@@ -391,6 +394,19 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
+    private void MaintainStepUp()
+    {
+        if (steppingUp)
+        {
+            rigidBody.velocity = new Vector3(rigidBody.velocity.x, steppingUpVelocity, rigidBody.velocity.x);
+
+            if (playerCapsuleCollider.bounds.min.y > climbingPlatformTop)
+            {
+                steppingUp = false;
+            }
+        }
+    }
+
     private void OnCollisionStay(Collision other)
     {
         // Make sure we are only checking for walkable layers.
@@ -399,6 +415,7 @@ public class PlayerControl : MonoBehaviour
         bool isGrapple = grappleMask == (grappleMask | (1 << layer));
         if (isGround || isGrapple)
         {
+            // First check if the player is on the ground.
             for (int i = 0; i < other.contactCount; i++)
             {
                 Vector3 normal = other.contacts[i].normal;
@@ -420,33 +437,44 @@ public class PlayerControl : MonoBehaviour
 
                     CancelInvoke(nameof(StopGrounded));
                 }
+            }
+
+            float delay = 3f;
+            if (!cancellingGrounded)
+            {
+                cancellingGrounded = true;
+                Invoke(nameof(StopGrounded), Time.deltaTime * delay);
+            }
+
+
+            // Next, check if the player is climbing, since it requires knowing if the player is grounded or not.
+            for (int i = 0; i < other.contactCount; i++)
+            {
+                Vector3 normal = other.contacts[i].normal;
+
                 // Player hit the side of a platform.
-                else if ((IsNotBottom(normal)) && isGround)
+                if (!IsFloor(normal) && IsNotBottom(normal) && isGround)
                 {
                     float playerBottom = playerCapsuleCollider.bounds.min.y;
                     float platformTop = other.collider.bounds.max.y;
 
                     // Handle the case where the player is trying to walk onto a slightly taller platform.
-                    if (!climbingPlatform && climbingPlatformTop - playerBottom < 0.6f)
+                    if (!climbingPlatform && !steppingUp && grounded && climbingPlatformTop - playerBottom < maxStepSize && rigidBody.velocity.y >= -0.01)
                     {
-                        Debug.Log("stairs");
-                        if (Mathf.Abs(rigidBody.velocity.y) < 0.1f)
-                        {
-                            rigidBody.velocity = new Vector3(rigidBody.velocity.x, walkingUpStairsVelocity, rigidBody.velocity.x);
-                        }
+                        steppingUp = true;
+                        climbingPlatformTop = platformTop;
+                        rigidBody.velocity = new Vector3(rigidBody.velocity.x, steppingUpVelocity, rigidBody.velocity.x);
                     }
-                    else
+                    else if (!climbingPlatform && !steppingUp)
                     {
-                        Debug.Log("Climbing");
-
                         climbingPlatformTop = platformTop;
 
                         Vector2 playerForward = new Vector2(transform.forward.x, transform.forward.z);
                         Vector2 normal2d = new Vector2(normal.x, normal.z);
-                        float playerPlatformAngle = Vector2.Angle(playerForward, -normal2d);
+                        float playerPlatformAngle = Mathf.Abs(Vector2.Angle(playerForward, -normal2d));
 
-                        // Start climbing if the player is not yet climbing, facing the platform and moving.
-                        if (!climbingPlatform && playerPlatformAngle < climbingAngleThreshold && moveVector.magnitude > 0)
+                        // Start climbing if the player is not yet climbing, but facing the platform.
+                        if (playerPlatformAngle < climbingAngleThreshold)
                         {
                             float playerTop = playerCapsuleCollider.bounds.max.y;
 
@@ -472,13 +500,6 @@ public class PlayerControl : MonoBehaviour
                         }
                     }
                 }
-            }
-
-            float delay = 3f;
-            if (!cancellingGrounded)
-            {
-                cancellingGrounded = true;
-                Invoke(nameof(StopGrounded), Time.deltaTime * delay);
             }
         }
     }
@@ -733,6 +754,7 @@ public class PlayerControl : MonoBehaviour
         MaintainDash();
         MaintainTimeWarp();
         MaintainClimb();
+        MaintainStepUp();
         Move();
         if (isRewinding)
         {
