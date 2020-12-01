@@ -1860,18 +1860,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d38e0c075ed6f45c5bdc6ebb4031992b, type: 3}
---- !u!114 &437155584 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5517978681912334090, guid: 724e5968d51354200bac36b1af52c3a7,
-    type: 3}
-  m_PrefabInstance: {fileID: 5517978681985521704}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &439061991
 GameObject:
   m_ObjectHideFlags: 0
@@ -4216,6 +4204,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &818810165 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1944572799, guid: 724e5968d51354200bac36b1af52c3a7,
+    type: 3}
+  m_PrefabInstance: {fileID: 5517978681985521704}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &867108396
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6461,7 +6461,7 @@ MonoBehaviour:
   rewindAnim: {fileID: 1074588958}
   crosshair: {fileID: 959973672}
   RewindEnabled: 1
-  m_PostProcessVolume: {fileID: 437155584}
+  m_PostProcessVolume: {fileID: 818810165}
   diedMsg: {fileID: 1751210691}
 --- !u!4 &1404047974
 Transform:
@@ -10231,10 +10231,23 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1944572799, guid: 724e5968d51354200bac36b1af52c3a7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944572799, guid: 724e5968d51354200bac36b1af52c3a7, type: 3}
+      propertyPath: isGlobal
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5517978681333322320, guid: 724e5968d51354200bac36b1af52c3a7,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517978681912334090, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5517978682363965793, guid: 724e5968d51354200bac36b1af52c3a7,
         type: 3}
