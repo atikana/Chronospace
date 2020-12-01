@@ -22,11 +22,11 @@ public class TutorialTextControl : MonoBehaviour
         {
             ShowText(1);
         }
-        else if (playerTransform.position.z > -347 && playerTransform.position.z < -309)
+        else if (playerTransform.position.z > -347 && playerTransform.position.z < -295)
         {
             ShowText(2);
         }
-        else if (playerTransform.position.z > -304 && playerTransform.position.z < -242)
+        else if (playerTransform.position.z > -291 && playerTransform.position.z < -242)
         {
             ShowText(3);
         }
