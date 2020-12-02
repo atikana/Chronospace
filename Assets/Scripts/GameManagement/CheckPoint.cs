@@ -78,7 +78,10 @@ public class CheckPoint : MonoBehaviour
             /* Change the player's rotation while they're inside the checkpoint, so that if they
              * die before leaving the checkpoint they'll respawn at a reasonable rotation.
              */
-            playerRotation = playerControl.GetCameraRotation().x;
+            if (!IsStartCheckpoint())
+            {
+                playerRotation = playerControl.GetCameraRotation().x;
+            }
         }
     }
 
