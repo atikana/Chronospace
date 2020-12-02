@@ -251,7 +251,7 @@ public class PlayerControl : MonoBehaviour
             gameManager.SetTimeWarpEnabled(true);
             timeWarpCounter = timeWarpLength;
             rippleCameraEffect.SetNewRipplePosition(new Vector2(Screen.width / 2, (Screen.height / 2) + 35f));
-        } 
+        }
     }
 
     /**
@@ -288,7 +288,8 @@ public class PlayerControl : MonoBehaviour
             if (numDashes == 1)
             {
                 levelStats.StartDashGaugeAnimation1();
-            } else
+            }
+            else
             {
                 levelStats.StartDashGaugeAnimation2();
             }
@@ -344,7 +345,7 @@ public class PlayerControl : MonoBehaviour
             dashCooldownCounter = dashCooldownLength;
         }
 
-        
+
     }
 
     /**
@@ -511,15 +512,15 @@ public class PlayerControl : MonoBehaviour
         rigidBody.AddForce(Vector2.up * jumpForce * 1.5f);
         rigidBody.AddForce(Vector3.up * jumpForce * 0.5f);
 
-        //Vector3 vel = rigidBody.velocity;
-        //if (rigidBody.velocity.y < 0.5f)
-        //{
-        //    rigidBody.velocity = new Vector3(vel.x, 0, vel.z);
-        //}
-        //else if (rigidBody.velocity.y > 0)
-        //{
-        //    rigidBody.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
-        //}
+        Vector3 vel = rigidBody.velocity;
+        if (rigidBody.velocity.y < 0.5f)
+        {
+            rigidBody.velocity = new Vector3(vel.x, 0, vel.z);
+        }
+        else if (rigidBody.velocity.y > 0)
+        {
+            rigidBody.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
+        }
     }
 
     private void SecondJump()
@@ -530,11 +531,11 @@ public class PlayerControl : MonoBehaviour
         rigidBody.AddForce(Vector2.up * jumpForce * 1.5f);
         rigidBody.AddForce(Vector3.up * jumpForce * 0.5f);
 
-        //Vector3 vel = rigidBody.velocity;
-        //if (rigidBody.velocity.y < 0.5f)
-        //{
-        //    rigidBody.velocity = new Vector3(vel.x, 0, vel.z);
-        //}
+        Vector3 vel = rigidBody.velocity;
+        if (rigidBody.velocity.y < 0.5f)
+        {
+            rigidBody.velocity = new Vector3(vel.x, 0, vel.z);
+        }
     }
 
     /**
@@ -662,7 +663,7 @@ public class PlayerControl : MonoBehaviour
         float multiplier = 1f, multiplierV = 1f;
         if (!grounded && !dashing)
         {
-           // Debug.Log("!ground");
+            // Debug.Log("!ground");
             multiplier = onAirControlFB;
             multiplierV = onAirControlLR;
         }
@@ -757,14 +758,14 @@ public class PlayerControl : MonoBehaviour
             previousPositions.RemoveAt(0);
             //Debug.Log(previousPositions.Count);
         }
-        else 
-        { 
+        else
+        {
             isRewinding = false;
-            
+
         }
     }
 
-    public void StartRewind() 
+    public void StartRewind()
     {
         Debug.Log(previousPositions[previousPositions.Count - 1]);
         if (previousPositions.Count != 0)
@@ -859,6 +860,4 @@ public class PlayerControl : MonoBehaviour
     {
         return dashing;
     }
-
- 
 }

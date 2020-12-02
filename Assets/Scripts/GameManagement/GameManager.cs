@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     private PauseMenu pauseMenu;
     public GameObject menu;
+    private SoundManager soundManager;
     public LevelStats levelStats;
     public CheckPointManager checkPointManager;
     private PlayerControl playerControl;
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour
     public bool RewindEnabled;
     public PostProcessVolume m_PostProcessVolume;
     public GameObject diedMsg;
+    private float deathTime = 2.5f;
 
     /* The speed multiplier of the moving objects in the game.
      * This allows the time warp effect to take place.
@@ -71,6 +73,7 @@ public class GameManager : MonoBehaviour
         playerControl = FindObjectOfType<PlayerControl>();
         grapplingGun = playerControl.gameObject.GetComponentInChildren<GrapplingGun>();
         pauseMenu = FindObjectOfType<PauseMenu>();
+        soundManager = FindObjectOfType<SoundManager>();
     }
 
     void Start()
@@ -269,14 +272,15 @@ public class GameManager : MonoBehaviour
         // Generates a random death message that is never the same twice in a row.
         currDeathMessage = (currDeathMessage + Random.Range(1, deathMessages.Length)) % deathMessages.Length;
         diedMsg.GetComponent<Text>().text = deathMessages[currDeathMessage];
-
         diedMsg.gameObject.SetActive(true);
-        yield return new WaitForSecondsRealtime(2f);
+
+        soundManager.PlayDeathSound();
+        yield return new WaitForSecondsRealtime(deathTime);
         diedMsg.gameObject.SetActive(false);
         Time.timeScale = 1.0f;
 
         ResetLevelObjects(true);
-        FindObjectOfType<SoundManager>().PlayRewindSound();
+        soundManager.PlayRewindSound();
         isRewinding = true;
         rewindAnim.gameObject.SetActive(true);
         rewindAnim.GetComponentInChildren<Animator>().SetBool("PlayRewind", true);
@@ -299,8 +303,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator CountdownTo()
     {
- 
-        FindObjectOfType<SoundManager>().PlayCountdownSound();
+        soundManager.PlayCountdownSound();
         counted = true;
         int countdown_;
         countdown_ = countdown;

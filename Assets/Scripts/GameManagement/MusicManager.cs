@@ -9,12 +9,14 @@ public class MusicManager : MonoBehaviour
     AudioSource audioSource;
     Object[] audioFiles;
     List<AudioClip> audioClips = new List<AudioClip>();
+    AudioClip winMusicClip;
     Text songName;
     Text composer;
     Slider songLength;
     CanvasGroup canvasGroup;
     private bool musicIn;
     private bool musicStarted;
+    private bool playingWinMusic;
     int index = 0;
     float currentAlpha = 1;
 
@@ -29,15 +31,22 @@ public class MusicManager : MonoBehaviour
         getAllMusic();
         musicIn = false;
         musicStarted = false;
-    
+        playingWinMusic = false;
     }
 
     void Update()
     {
-        if (musicIn)
-        {   
-           if (!musicStarted) 
-            { 
+        if (playingWinMusic)
+        {
+            if (!audioSource.isPlaying)
+            {
+                PlayWinMusic();
+            }
+        }
+        else if (musicIn)
+        {
+            if (!musicStarted)
+            {
                 musicStarted = true;
                 audioSource.Play();
                 currentAlpha = Mathf.MoveTowards(currentAlpha, 0, 0.05f * Time.deltaTime);
@@ -45,8 +54,13 @@ public class MusicManager : MonoBehaviour
             }
             playMusic();
         }
+    }
 
-     
+    public void PlayWinMusic()
+    {
+        playingWinMusic = true;
+        audioSource.clip = winMusicClip;
+        audioSource.Play();
     }
 
     public void StartMusic() 
@@ -57,10 +71,10 @@ public class MusicManager : MonoBehaviour
     void getAllMusic()
     {
         audioFiles = Resources.LoadAll("Music/Levels/");
+        winMusicClip = Resources.Load<AudioClip>("Music/WinScreen/WinMusic");
 
         for (int i = 0; i < audioFiles.Length; i++)
         {
-            
             audioClips.Add((AudioClip)audioFiles[i]);
         }
 

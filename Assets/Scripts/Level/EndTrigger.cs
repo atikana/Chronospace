@@ -5,8 +5,12 @@ public class EndTrigger : MonoBehaviour
 {
     public GameObject winScreen;
     public GameObject HUD;
-    public GameObject musicDisplay;
+    private MusicManager musicManager;
 
+    private void Awake()
+    {
+        musicManager = FindObjectOfType<MusicManager>();
+    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -17,9 +21,8 @@ public class EndTrigger : MonoBehaviour
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined;
             HUD.SetActive(false);
-            musicDisplay.SetActive(false);
             winScreen.SetActive(true);
-
+            musicManager.PlayWinMusic();
         }
     }
 }

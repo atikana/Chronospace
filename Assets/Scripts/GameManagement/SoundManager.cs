@@ -6,7 +6,7 @@ public class SoundManager : MonoBehaviour
     private float volume = 0.5f;
     private AudioSource soundEffectsAudioSource, highPitchSoundEffectsAudioSource, laserAudioSource;
     private AudioClip jumpClip, jumpLandingClip, dashClip, timeWarpClip, pendulumClip,
-        grapplingClip, countDownClip, rewindClip, checkpointClip;
+        grapplingClip, countDownClip, rewindClip, checkpointClip, deathClip;
     private AudioClip[] bulletClips;
 
     // Keep track of which lasers are playing a sound, so that the sound turns off at the right point in time.
@@ -45,6 +45,7 @@ public class SoundManager : MonoBehaviour
         countDownClip = Resources.Load<AudioClip>("COUNTDOWN");
         rewindClip = Resources.Load<AudioClip>("DEATH_REWIND");
         checkpointClip = Resources.Load<AudioClip>("CHECKPOINT");
+        deathClip = Resources.Load<AudioClip>("DEATH_HIT");
         bulletClips = new AudioClip[] {
             Resources.Load<AudioClip>("TURRET_BULLET_1"),
             Resources.Load<AudioClip>("TURRET_BULLET_2"),
@@ -161,6 +162,14 @@ public class SoundManager : MonoBehaviour
             soundEffectsAudioSource.PlayOneShot(checkpointClip, volume);
         }
     }
+
+    public void PlayDeathSound()
+    {
+        if (soundEffectsAudioSource && deathClip)
+        {
+            soundEffectsAudioSource.PlayOneShot(deathClip, volume);
+        }
+    }    
 
     public void PlayBulletSound(Vector3 turretPosition)
     {
