@@ -779,7 +779,7 @@ public class PlayerControl : MonoBehaviour
             Debug.Log(previousPositions.Count);
             isRewinding = true;
             // rewindStep = 3.0f / previousPositions.Count;
-            rewindStep = 3.0f / 200;
+            rewindStep = 3.0f / 400;
         }
     }
 
@@ -811,8 +811,9 @@ public class PlayerControl : MonoBehaviour
     {
         int partition = 20;
         int i = 1;
-        if (previousPositions.Count >= 201)
+        if (previousPositions.Count >= 401)
         {
+            /***
             if (i <= partition)
             {
                 previousPositions.RemoveAt(i * 10);
@@ -823,6 +824,10 @@ public class PlayerControl : MonoBehaviour
                 i = 1;
                 previousPositions.RemoveAt(i * 10);
             }
+            ***/
+            previousPositions.RemoveAt(200);
+            previousPositions.Insert(0, new PositionRecord(rigidBody.transform.position, cameraTransform.rotation, rigidBody.transform.rotation));
+
         }
         else if (previousPositions.Count > 0)
         {
