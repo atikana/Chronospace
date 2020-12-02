@@ -6,7 +6,7 @@ public class EndTrigger : MonoBehaviour
     public GameObject winScreen;
     public GameObject HUD;
     public GameObject musicDisplay;
-    public GameObject defaultWinScreenOption;
+
 
     void OnTriggerEnter(Collider other)
     {
@@ -20,9 +20,6 @@ public class EndTrigger : MonoBehaviour
             musicDisplay.SetActive(false);
             winScreen.SetActive(true);
 
-            // Set the default option for the win screen.
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(defaultWinScreenOption);
         }
     }
 }
