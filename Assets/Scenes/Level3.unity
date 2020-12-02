@@ -2274,6 +2274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96a82cc7e8f2d7c40bf72754b00d5636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  winScreen: {fileID: 708097901}
   firstPauseMenu: {fileID: 1928389548}
   firstOption: {fileID: 1189445973}
 --- !u!1001 &185303866
@@ -11553,7 +11554,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   winScreen: {fileID: 708097901}
   HUD: {fileID: 1686244827}
-  musicDisplay: {fileID: 984298512}
 --- !u!65 &739099309
 BoxCollider:
   m_ObjectHideFlags: 0

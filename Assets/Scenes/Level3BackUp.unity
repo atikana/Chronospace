@@ -2588,6 +2588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96a82cc7e8f2d7c40bf72754b00d5636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  winScreen: {fileID: 1092058760}
   firstPauseMenu: {fileID: 1928389548}
   firstOption: {fileID: 1189445973}
 --- !u!1001 &185303866
@@ -12332,8 +12333,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   winScreen: {fileID: 1092058760}
   HUD: {fileID: 1686244827}
-  musicDisplay: {fileID: 984298512}
-  defaultWinScreenOption: {fileID: 807661146}
 --- !u!65 &739099309
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18886,17 +18885,17 @@ Transform:
   - {fileID: 1769262644}
   - {fileID: 1520944094}
   - {fileID: 1356655512}
-  - {fileID: 2000061221}
   - {fileID: 395775732}
   - {fileID: 1352816770}
+  - {fileID: 2000061221}
   - {fileID: 1711910889}
   - {fileID: 543774499}
   - {fileID: 517549040}
-  - {fileID: 1969691689}
-  - {fileID: 1225000333}
   - {fileID: 279716790}
   - {fileID: 1521714899}
+  - {fileID: 1969691689}
   - {fileID: 1328338903}
+  - {fileID: 1225000333}
   - {fileID: 1024776591}
   - {fileID: 1100416466}
   - {fileID: 1045899439}

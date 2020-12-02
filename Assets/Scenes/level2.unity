@@ -2559,6 +2559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96a82cc7e8f2d7c40bf72754b00d5636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  winScreen: {fileID: 1801668235}
   firstPauseMenu: {fileID: 1928389548}
   firstOption: {fileID: 1189445973}
 --- !u!1001 &182363493
@@ -19413,6 +19414,12 @@ PrefabInstance:
 --- !u!224 &1801668234 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8901189712511682694, guid: e78286ebda284114e83af5bb0fc1d102,
+    type: 3}
+  m_PrefabInstance: {fileID: 1801668233}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1801668235 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8901189712511682693, guid: e78286ebda284114e83af5bb0fc1d102,
     type: 3}
   m_PrefabInstance: {fileID: 1801668233}
   m_PrefabAsset: {fileID: 0}
