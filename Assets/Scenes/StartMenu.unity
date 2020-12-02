@@ -2752,10 +2752,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 290820962, guid: db019c07508d5504ba5e4c48bfb81b71, type: 3}
-      propertyPath: m_Maskable
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2536755287425717614, guid: db019c07508d5504ba5e4c48bfb81b71,
         type: 3}
       propertyPath: m_AnchorMin.x

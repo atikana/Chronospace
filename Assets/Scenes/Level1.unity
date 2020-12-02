@@ -2826,6 +2826,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Turret
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2063001871730864813, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
       propertyPath: m_CastShadows
@@ -6308,7 +6313,7 @@ PrefabInstance:
     - target: {fileID: 1844023837909348342, guid: 0541aa77c6b4f0149a35c306a2d9f437,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 293.8
+      value: 290.45
       objectReference: {fileID: 0}
     - target: {fileID: 1844023837909348342, guid: 0541aa77c6b4f0149a35c306a2d9f437,
         type: 3}
@@ -14672,6 +14677,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: building2.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8103700057042519869, guid: 29b90303ca7cb4a4db91f58760240ecf,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8880518923106475399, guid: 29b90303ca7cb4a4db91f58760240ecf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -16310,7 +16320,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
-      objectReference: {fileID: 1189445979}
+      objectReference: {fileID: 0}
     - target: {fileID: 2536755287425717614, guid: db019c07508d5504ba5e4c48bfb81b71,
         type: 3}
       propertyPath: m_AnchorMin.x
@@ -16656,24 +16666,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1189445975 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 927063610, guid: db019c07508d5504ba5e4c48bfb81b71,
-    type: 3}
-  m_PrefabInstance: {fileID: 1189445972}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1189445976 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 927063612, guid: db019c07508d5504ba5e4c48bfb81b71,
-    type: 3}
-  m_PrefabInstance: {fileID: 1189445972}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1189445975}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1189445977 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3080512270497297041, guid: db019c07508d5504ba5e4c48bfb81b71,
@@ -16696,96 +16688,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1189445979
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1189445975}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 4
-    m_SelectOnUp: {fileID: 1189445982}
-    m_SelectOnDown: {fileID: 1189445980}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 1, g: 0.43910423, b: 0.21698111, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1189445976}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1189445981}
-        m_MethodName: SetAutoAimButton
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1189445980 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3080512270787070055, guid: db019c07508d5504ba5e4c48bfb81b71,
-    type: 3}
-  m_PrefabInstance: {fileID: 1189445972}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1189445973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1189445981 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3080512270385096588, guid: db019c07508d5504ba5e4c48bfb81b71,
-    type: 3}
-  m_PrefabInstance: {fileID: 1189445972}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1585870733}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 951c27f62ffb41845964e3b910452756, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1189445982 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1454423413745452668, guid: db019c07508d5504ba5e4c48bfb81b71,
-    type: 3}
-  m_PrefabInstance: {fileID: 1189445972}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1189445983 stripped
@@ -23685,6 +23587,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: building2.6
       objectReference: {fileID: 0}
+    - target: {fileID: 8103700057042519869, guid: 29b90303ca7cb4a4db91f58760240ecf,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8880518923106475399, guid: 29b90303ca7cb4a4db91f58760240ecf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -29944,6 +29851,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Turret
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2063001871730864813, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
