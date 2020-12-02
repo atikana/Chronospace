@@ -11227,6 +11227,21 @@ PrefabInstance:
       propertyPath: levelStats
       value: 
       objectReference: {fileID: 261865917}
+    - target: {fileID: 8901189712511682745, guid: e78286ebda284114e83af5bb0fc1d102,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8901189712511682745, guid: e78286ebda284114e83af5bb0fc1d102,
+        type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 8901189712511682745, guid: e78286ebda284114e83af5bb0fc1d102,
+        type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 8901189714181092936, guid: e78286ebda284114e83af5bb0fc1d102,
         type: 3}
       propertyPath: m_AnchorMax.x
