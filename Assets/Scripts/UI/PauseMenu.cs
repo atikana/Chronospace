@@ -9,6 +9,7 @@ public class PauseMenu : MonoBehaviour
     private GameObject menu;
     private GameObject pauseMenu;
     private GameObject optionMenu;
+    public GameObject winScreen;
 
     public GameObject firstPauseMenu, firstOption;
 
@@ -27,6 +28,11 @@ public class PauseMenu : MonoBehaviour
 
     public void PressPause()
     {
+        // If the win screen is active, you can't pause the game.
+        if (winScreen.activeInHierarchy)
+        {
+            return;
+        }
         if (!menu.activeInHierarchy)
         {
             PauseGame();
