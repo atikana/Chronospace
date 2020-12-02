@@ -15379,6 +15379,11 @@ PrefabInstance:
       propertyPath: walkingUpStairsVelocity
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 5517978682659398789, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: thingy
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5517978682659398790, guid: 724e5968d51354200bac36b1af52c3a7,
         type: 3}
       propertyPath: m_CollisionDetection
