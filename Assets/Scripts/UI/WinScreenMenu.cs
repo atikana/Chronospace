@@ -194,4 +194,21 @@ public class WinScreenMenu : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+    
+    public void ClickContinue()
+    {
+        string s = "";
+
+        switch (SceneManager.GetActiveScene().name)
+        {
+            case "tutorial":
+                s = "Level1";
+                break;
+        }
+
+        if (s.CompareTo("") != 0)
+        {
+            SceneManager.LoadScene(s);
+        }
+    }
 }
