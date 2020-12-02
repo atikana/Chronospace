@@ -29,6 +29,7 @@ public class OptionMenu : MonoBehaviour
         autoaim.isOn = gameSettings.GetAutoAim();
         sensitivity = transform.GetChild(5).GetChild(0).GetComponent<Slider>();
         autoaimOn = false;
+        checkmark.gameObject.SetActive(gameSettings.GetAutoAim());
 
     }
 
