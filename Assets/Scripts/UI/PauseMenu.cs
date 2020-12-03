@@ -13,10 +13,14 @@ public class PauseMenu : MonoBehaviour
 
     public GameObject firstPauseMenu, firstOption;
 
+    private PlayerControl playerControl;
+    private GameManager gameManager;
     private SoundManager soundManager;
 
     private void Awake()
     {
+        playerControl = FindObjectOfType<PlayerControl>();
+        gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
     }
     void Start()
@@ -33,7 +37,7 @@ public class PauseMenu : MonoBehaviour
         {
             return;
         }
-        if (!menu.activeInHierarchy)
+        if (!CheckPaused())
         {
             PauseGame();
             EventSystem.current.SetSelectedGameObject(null);
@@ -45,6 +49,8 @@ public class PauseMenu : MonoBehaviour
             {
                 optionMenu.SetActive(false);
                 pauseMenu.SetActive(true);
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(pauseMenu);
             }
             else
             {
@@ -67,6 +73,7 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 0f;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
+        playerControl.EnableUIControls();
     }
 
     public void ResumeGame()
@@ -81,6 +88,7 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        playerControl.EnablePlayerControls();
     }
 
     public void BackToMain()

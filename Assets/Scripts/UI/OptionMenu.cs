@@ -21,13 +21,12 @@ public class OptionMenu : MonoBehaviour
 
     void Awake()
     {
-
         gameSettings = FindObjectOfType<GameSettings>();
         volume = transform.GetChild(2).GetChild(0).GetComponent<Slider>();
         music = transform.GetChild(3).GetChild(0).GetComponent<Slider>();
-        autoaim = transform.GetChild(4).GetComponent<Toggle>();
+        sensitivity = transform.GetChild(4).GetChild(0).GetComponent<Slider>();
+        autoaim = transform.GetChild(5).GetComponent<Toggle>();
         autoaim.isOn = gameSettings.GetAutoAim();
-        sensitivity = transform.GetChild(5).GetChild(0).GetComponent<Slider>();
         autoaimOn = false;
         checkmark.gameObject.SetActive(gameSettings.GetAutoAim());
 
@@ -118,7 +117,6 @@ public class OptionMenu : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
         musicManager = FindObjectOfType<MusicManager>();
-
 
         volume.value = gameSettings.GetVolume();
         sensitivity.value = gameSettings.GetMouseSensitivity();

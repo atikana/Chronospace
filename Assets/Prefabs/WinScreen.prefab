@@ -128,11 +128,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnLeft: {fileID: 8901189714405945292}
+    m_SelectOnRight: {fileID: 8901189713043931520}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -290,6 +290,7 @@ MonoBehaviour:
   levelStats: {fileID: 0}
   content: {fileID: 8901189714355109276}
   recommendTime: 20
+  defaultOption: {fileID: 8901189713043931534}
   slot: {fileID: 2575234168454811667, guid: b07bd345441ee784e86398c931109e7e, type: 3}
 --- !u!1 &8901189712533416398
 GameObject:
@@ -301,7 +302,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8901189712533416399}
   m_Layer: 0
-  m_Name: Button
+  m_Name: Buttons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -601,7 +602,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8901189714181092937}
   m_HandleRect: {fileID: 8901189714181092936}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -853,10 +854,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 4
-    m_SelectOnUp: {fileID: 8901189712475375089}
-    m_SelectOnDown: {fileID: 8901189712475375089}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 8901189712475375089}
+    m_SelectOnRight: {fileID: 8901189714405945292}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -2184,7 +2185,7 @@ GameObject:
   - component: {fileID: 8901189714405945293}
   - component: {fileID: 8901189714405945292}
   m_Layer: 0
-  m_Name: Retry
+  m_Name: RetryButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2261,10 +2262,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 4
-    m_SelectOnUp: {fileID: 8901189712475375089}
-    m_SelectOnDown: {fileID: 8901189712475375089}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 8901189713043931520}
+    m_SelectOnRight: {fileID: 8901189712475375089}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
