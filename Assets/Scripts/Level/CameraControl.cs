@@ -25,7 +25,7 @@ public class CameraControl : MonoBehaviour
         float nextBobbingTime;
         if (bobCamera)
         {
-            nextBobbingTime = bobbingTime + Time.unscaledDeltaTime * bobbingTimeMultiplier;
+            nextBobbingTime = bobbingTime + Time.deltaTime * bobbingTimeMultiplier;
         }
         else
         {

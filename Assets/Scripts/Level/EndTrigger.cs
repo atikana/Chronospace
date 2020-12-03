@@ -4,11 +4,13 @@ using UnityEngine.EventSystems;
 public class EndTrigger : MonoBehaviour
 {
     public GameObject winScreen;
+    private WinScreenMenu winScreenMenu;
     public GameObject HUD;
     private MusicManager musicManager;
 
     private void Awake()
     {
+        winScreenMenu = winScreen.GetComponent<WinScreenMenu>();
         musicManager = FindObjectOfType<MusicManager>();
     }
 
@@ -22,6 +24,7 @@ public class EndTrigger : MonoBehaviour
             Cursor.lockState = CursorLockMode.Confined;
             HUD.SetActive(false);
             winScreen.SetActive(true);
+            winScreenMenu.SetupWinScreen();
             musicManager.PlayWinMusic();
         }
     }

@@ -43,7 +43,7 @@ public class PendulumControl : MonoBehaviour
         float prevTimePassed = timePassed;
 
         // Multiply by time warp multiplier to allow time warp effect.
-        timePassed += Time.fixedUnscaledDeltaTime * rotationSpeed * gameManager.GetTimeWarpMultiplier();
+        timePassed += Time.fixedDeltaTime * rotationSpeed * gameManager.GetTimeWarpMultiplier();
 
         transform.rotation = Quaternion.Lerp(startRotation, endRotation, (Mathf.Sin(timePassed + Mathf.PI / 2) + 1.0f) / 2.0f);
 

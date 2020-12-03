@@ -260,7 +260,7 @@ public class GameManager : MonoBehaviour
     IEnumerator Rewinding()
     {
         levelStats.PauseTimer();
-        playerControl.GetInput().Disable();
+        playerControl.DisableControls();
         crosshair.SetActive(false);
 
         AddDeath();
@@ -292,7 +292,7 @@ public class GameManager : MonoBehaviour
         EnableTurrets();
         m_PostProcessVolume.isGlobal = false;
         playerControl.StopRewind();
-        playerControl.GetInput().Enable();
+        playerControl.EnablePlayerControls();
         rewindAnim.GetComponentInChildren<Animator>().SetBool("PlayRewind", false);
         rewindAnim.gameObject.SetActive(false);
         crosshair.SetActive(true);
@@ -309,7 +309,7 @@ public class GameManager : MonoBehaviour
         countdown_ = countdown;
         countdownDisplay.SetActive(true);
         countdownDisplay.GetComponent<Animator>().SetTrigger("StartCountdown");
-        playerControl.GetInput().Disable();
+        playerControl.DisableControls();
         cameraTransform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         while (countdown_ > 0)
         {
@@ -320,7 +320,7 @@ public class GameManager : MonoBehaviour
         
         yield return new WaitForSecondsRealtime(0.2f);
 
-        playerControl.GetInput().Enable();
+        playerControl.EnablePlayerControls();
         levelStats.StartTimer();
         FindObjectOfType<MusicManager>().StartMusic();
         countdownDisplay.SetActive(false);
