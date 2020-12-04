@@ -177,7 +177,7 @@ public class GameManager : MonoBehaviour
 
             // Reset the player's velocity and looking angle.
             playerRigidbody.velocity = Vector3.zero;
-            playerControl.SetCameraRotation(new Vector2(lastCheckPoint.GetPlayerRotation(), 0f));
+            playerControl.SetCameraRotation(new Vector2(lastCheckPoint.GetRespawnRotation(), 0f));
 
             // If rewind is enabled, these methods are called before the rewind begins.
             if (!RewindEnabled)
