@@ -3,11 +3,13 @@
 public class CheckPoint : MonoBehaviour
 {
     // Player's rotation when starting at this checkpoint.
-    private float playerRotation = 0f;
     private PlayerControl playerControl;
     private SoundManager soundManager;
     private bool activated = false;
     private bool rewindReset = false;
+
+    // The rotation that the player should have when they respawn at this checkpoint.
+    public float respawnRotation = 0f;
 
     Transform front;
     Transform back;
@@ -33,9 +35,9 @@ public class CheckPoint : MonoBehaviour
         return transform.position;
     }
 
-    public float GetPlayerRotation()
+    public float GetRespawnRotation()
     {
-        return playerRotation;
+        return respawnRotation;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -64,25 +66,11 @@ public class CheckPoint : MonoBehaviour
         {
             rewindReset = false;
         }
-    }  
+    }
 
     private bool IsStartCheckpoint()
     {
         return name.CompareTo("1") == 0;
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            /* Change the player's rotation while they're inside the checkpoint, so that if they
-             * die before leaving the checkpoint they'll respawn at a reasonable rotation.
-             */
-            if (!IsStartCheckpoint())
-            {
-                playerRotation = playerControl.GetCameraRotation().x;
-            }
-        }
     }
 
     void ChangeColor(Color c)

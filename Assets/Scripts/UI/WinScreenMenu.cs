@@ -13,6 +13,7 @@ public class WinScreenMenu : MonoBehaviour
 
     public float recommendTime;
 
+    public GameObject defaultOption;
     public GameObject slot;
 
     GameSettings gameSettings;
@@ -29,6 +30,7 @@ public class WinScreenMenu : MonoBehaviour
 
     void Awake()
     {
+        defaultOption = transform.GetChild(5).GetChild(0).gameObject;
         win = transform.GetChild(1).GetComponent<Text>();
         Transform stats = transform.GetChild(2);
         score = stats.GetChild(0).GetComponent<Text>();
@@ -42,6 +44,12 @@ public class WinScreenMenu : MonoBehaviour
     {
         gameSettings = FindObjectOfType<GameSettings>();
         getStats();
+    }
+
+    public void SetupWinScreen()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(defaultOption);
     }
 
     void getStats()
@@ -61,9 +69,9 @@ public class WinScreenMenu : MonoBehaviour
     int CalculateScore(int death, float time)
     {
 
-        int timeScroe = Mathf.CeilToInt(381000 * Mathf.Ceil(recommendTime - time) % 10000);
+        int timeScore = Mathf.CeilToInt(381000 * Mathf.Ceil(recommendTime - time) % 10000);
 
-        return 381000 + timeScroe - (death * 1500);
+        return 381000 + timeScore - (death * 1500);
     }
 
     int CalculateRank(int score, string s)

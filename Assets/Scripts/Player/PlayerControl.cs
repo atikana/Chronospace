@@ -127,33 +127,8 @@ public class PlayerControl : MonoBehaviour
         // Reset animation triggers to prevent them running at start.
         ResetAnimations();
 
-        input.Player.Move.performed += context =>
-        {
-            // Set animation trigger if player is starting to run.
-            if (handsAnimator && moveVector == Vector2.zero && grounded)
-            {
-                handsAnimator.SetTrigger("StartRunning");
-            }
-            moveVector = context.ReadValue<Vector2>();
-        };
-        input.Player.Move.canceled += context => moveVector = Vector2.zero;
-
-        input.Player.Look.performed += context => lookVector = context.ReadValue<Vector2>();
-        input.Player.Look.canceled += context => lookVector = Vector2.zero;
-
-        input.Player.Jump.performed += context => Jump();
-
-        input.Player.Dash.performed += context => Dash();
-        input.Player.TimeWarp.performed += context => TimeWarp();
-        //input.Player.RestartLevel.performed += context => gameManager.RestartLevel();
-
-        input.Player.Pause.performed += context => gameManager.PauseGame();
-
-        // TODO:  Instead, call a function within GrappleGun.
-        input.Player.GrappleShoot.performed += context => grappleShoot = true;
-        input.Player.GrappleShoot.canceled += context => grappleShoot = false;
-        input.Player.GrappleToggle.performed += context => grappleToggle = true;
-        input.Player.GrappleToggle.canceled += context => grappleToggle = false;
+        SetupPlayerControls();
+        SetupUIControls();
 
         /* Don't show user's cursor in the game, and lock the cursor to avoid going out of the game window.
          * Note that the Escape key can be used to show the cursor again (for example to stop running the game).
@@ -175,12 +150,77 @@ public class PlayerControl : MonoBehaviour
 
     private void OnDisable()
     {
+        DisableControls();
+    }
+
+    public void EnablePlayerControls()
+    {
+        input.UI.Disable();
+        input.Player.Enable();
+    }
+
+    public void EnableUIControls()
+    {
+        input.Player.Disable();
+        input.UI.Enable();
+    }
+
+    public void DisableControls()
+    {
         input.Disable();
     }
 
     public PlayerInput GetInput()
     {
         return input;
+    }
+
+    //private int cp = 1;
+    private void SetupPlayerControls()
+    {
+        input.Player.Move.performed += context =>
+        {
+            // Set animation trigger if player is starting to run.
+            if (handsAnimator && moveVector == Vector2.zero && grounded)
+            {
+                handsAnimator.SetTrigger("StartRunning");
+            }
+            moveVector = context.ReadValue<Vector2>();
+        };
+        input.Player.Move.canceled += context => moveVector = Vector2.zero;
+
+        input.Player.Look.performed += context => lookVector = context.ReadValue<Vector2>();
+        input.Player.Look.canceled += context => lookVector = Vector2.zero;
+
+        input.Player.Jump.performed += context => Jump();
+
+        input.Player.Dash.performed += context => Dash();
+        input.Player.TimeWarp.performed += context => TimeWarp();
+        //input.Player.RestartLevel.performed += context => gameManager.RestartLevel();
+        //input.Player.RestartLevel.performed += context =>
+        //{
+        //    transform.position = GameObject.Find("" + cp).transform.position;
+        //    cp++;
+        //};
+
+        input.Player.Pause.performed += context => gameManager.PauseGame();
+
+        // TODO:  Instead, call a function within GrappleGun.
+        input.Player.GrappleShoot.performed += context => grappleShoot = true;
+        input.Player.GrappleShoot.canceled += context => grappleShoot = false;
+        input.Player.GrappleToggle.performed += context => grappleToggle = true;
+        input.Player.GrappleToggle.canceled += context => grappleToggle = false;
+    }
+
+    /**
+     * Sets up functionality for the B and start button in UI mode.
+     */
+    private void SetupUIControls()
+    {
+        input.UI.Cancel.performed += context =>
+        {
+            gameManager.PauseGame();
+        };
     }
 
     /*
@@ -212,7 +252,7 @@ public class PlayerControl : MonoBehaviour
     {
         if (timeWarpCounter > 0)
         {
-            timeWarpCounter -= Time.fixedUnscaledDeltaTime;
+            timeWarpCounter -= Time.fixedDeltaTime;
         }
 
         timeWarpCounter = Mathf.Max(timeWarpCounter, 0f);
@@ -225,7 +265,7 @@ public class PlayerControl : MonoBehaviour
 
         if (timeWarpCooldownCounter > 0)
         {
-            timeWarpCooldownCounter -= Time.fixedUnscaledDeltaTime;
+            timeWarpCooldownCounter -= Time.fixedDeltaTime;
         }
 
         timeWarpCooldownCounter = Mathf.Max(timeWarpCooldownCounter, 0f);
@@ -316,7 +356,7 @@ public class PlayerControl : MonoBehaviour
     {
         if (dashCounter > 0)
         {
-            dashCounter -= Time.fixedUnscaledDeltaTime;
+            dashCounter -= Time.fixedDeltaTime;
         }
 
         dashCounter = Mathf.Max(dashCounter, 0f);
@@ -335,7 +375,7 @@ public class PlayerControl : MonoBehaviour
 
         if (dashCooldownCounter > 0)
         {
-            dashCooldownCounter -= Time.fixedUnscaledDeltaTime;
+            dashCooldownCounter -= Time.fixedDeltaTime;
         }
 
         dashCooldownCounter = Mathf.Max(dashCooldownCounter, 0f);

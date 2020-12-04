@@ -255,7 +255,7 @@ public class GrapplingGun : MonoBehaviour
         // Start grappling once the counter gets to zero.
         if (ropeShootCounter > 0)
         {
-            ropeShootCounter -= Time.unscaledDeltaTime;
+            ropeShootCounter -= Time.deltaTime;
             if (ropeShootCounter <= 0)
             {
                 ropeShootCounter = 0f;
