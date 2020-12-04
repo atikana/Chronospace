@@ -52,25 +52,16 @@ public class OptionMenu : MonoBehaviour
 
     public void SetAutoAim()
     {
-        bool b;
-
-        if (autoaim.isOn)
-        {
-            b = true;
-        }
-        else
-        {
-            b = false;
-        }
-
-        gameSettings.SetAutoAim(b);
+        checkmark.gameObject.SetActive(autoaim.isOn);
+        gameSettings.SetAutoAim(autoaim.isOn);
 
         if (gameManager != null)
         {
-            gameManager.SetAutoAim(b);
+            gameManager.SetAutoAim(autoaim.isOn);
         }
     }
 
+    /** TODO I think we can remove this method. */
     public void SetAutoAimButton()
     {
         bool b;
