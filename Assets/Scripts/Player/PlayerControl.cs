@@ -175,7 +175,6 @@ public class PlayerControl : MonoBehaviour
         return input;
     }
 
-    //private int cp = 1;
     private void SetupPlayerControls()
     {
         input.Player.Move.performed += context =>
@@ -197,11 +196,6 @@ public class PlayerControl : MonoBehaviour
         input.Player.Dash.performed += context => Dash();
         input.Player.TimeWarp.performed += context => TimeWarp();
         //input.Player.RestartLevel.performed += context => gameManager.RestartLevel();
-        //input.Player.RestartLevel.performed += context =>
-        //{
-        //    transform.position = GameObject.Find("" + cp).transform.position;
-        //    cp++;
-        //};
 
         input.Player.Pause.performed += context => gameManager.PauseGame();
 
