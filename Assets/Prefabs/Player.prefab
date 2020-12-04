@@ -464,7 +464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 5517978682363965807}
-  jumpForce: 550
+  jumpForce: 675
   onAirControlLR: 2
   onAirControlFB: 0.8
   maxSpeed: 30
@@ -479,7 +479,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   beforeClimbTime: 0.7
-  doubleJumpWindow: 0.25
   dashMultiplier: 5
   additionalHorizontalSensitivity: 1.5
   rewindStep: 0.1
