@@ -29,7 +29,6 @@ public class OptionMenu : MonoBehaviour
         autoaim.isOn = gameSettings.GetAutoAim();
         autoaimOn = false;
         checkmark.gameObject.SetActive(gameSettings.GetAutoAim());
-
     }
 
     public void SetVolume()
