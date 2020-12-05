@@ -773,12 +773,15 @@ public class PlayerControl : MonoBehaviour
         }
         if (isRewinding)
         {
+            Rewind();
+            /***
             if (rewindPeriod > rewindStep)
             {
                 Rewind();
                 rewindPeriod = 0;
             }
             rewindPeriod += Time.deltaTime;
+            ***/
         }
     }
 
@@ -803,6 +806,8 @@ public class PlayerControl : MonoBehaviour
         }
         else
         {
+            Debug.Log("rewind finished");
+            Debug.Log(previousPositions.Count);
             isRewinding = false;
 
         }
@@ -823,7 +828,7 @@ public class PlayerControl : MonoBehaviour
             Debug.Log(previousPositions.Count);
             isRewinding = true;
             // rewindStep = 3.0f / previousPositions.Count;
-            rewindStep = 3.0f / 400;
+            // rewindStep = 3.0f / 400;
         }
     }
 
@@ -855,22 +860,22 @@ public class PlayerControl : MonoBehaviour
     {
         int partition = 20;
         int i = 1;
-        if (previousPositions.Count >= 401)
+        if (previousPositions.Count >= 201)
         {
-            /***
+            
             if (i <= partition)
             {
-                previousPositions.RemoveAt(i * 10);
+                previousPositions.RemoveAt(201 - i * 10);
                 i++;
             }
             else
             {
                 i = 1;
-                previousPositions.RemoveAt(i * 10);
+                previousPositions.RemoveAt(201 - i * 10);
             }
-            ***/
-            previousPositions.RemoveAt(200);
-            previousPositions.Insert(0, new PositionRecord(rigidBody.transform.position, cameraTransform.rotation, rigidBody.transform.rotation));
+            
+            //  previousPositions.RemoveAt(200);
+            // previousPositions.Insert(0, new PositionRecord(rigidBody.transform.position, cameraTransform.rotation, rigidBody.transform.rotation));
         }
         else if (previousPositions.Count > 0)
         {

@@ -80,6 +80,8 @@ public class GameManager : MonoBehaviour
     {
         counted = false;
         isRewinding = false;
+        rewindAnim.GetComponentInChildren<Animator>().ResetTrigger("New Trigger 0");
+        rewindAnim.GetComponentInChildren<Animator>().ResetTrigger("New Trigger");
     }
 
     public void PauseGame()
@@ -283,7 +285,9 @@ public class GameManager : MonoBehaviour
         soundManager.PlayRewindSound();
         isRewinding = true;
         rewindAnim.gameObject.SetActive(true);
-        rewindAnim.GetComponentInChildren<Animator>().SetBool("PlayRewind", true);
+        // rewindAnim.GetComponentInChildren<Animator>().SetBool("PlayRewind", true);
+        rewindAnim.GetComponentInChildren<Animator>().ResetTrigger("New Trigger 0");
+        rewindAnim.GetComponentInChildren<Animator>().SetTrigger("New Trigger");
         playerControl.StartRewind();
 
         // yield return new WaitForSecondsRealtime(3f);
@@ -293,8 +297,10 @@ public class GameManager : MonoBehaviour
         m_PostProcessVolume.isGlobal = false;
         playerControl.StopRewind();
         playerControl.EnablePlayerControls();
-        rewindAnim.GetComponentInChildren<Animator>().SetBool("PlayRewind", false);
+        // rewindAnim.GetComponentInChildren<Animator>().SetBool("PlayRewind", false);
         rewindAnim.gameObject.SetActive(false);
+        rewindAnim.GetComponentInChildren<Animator>().ResetTrigger("New Trigger");
+        rewindAnim.GetComponentInChildren<Animator>().SetTrigger("New Trigger 0"); 
         crosshair.SetActive(true);
         levelStats.StartTimer();
         RestartLevel(true);
