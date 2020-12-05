@@ -44,14 +44,21 @@ public class WinScreenMenu : MonoBehaviour
     {
         gameSettings = FindObjectOfType<GameSettings>();
         getStats();
+
+        Debug.Log("start winscreen");
+        
     }
 
     public void SetupWinScreen()
     {
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(defaultOption);
+        
+       
     }
 
+
+   
     void getStats()
     {
         int deaths = levelStats.GetNumDeath();
@@ -90,7 +97,7 @@ public class WinScreenMenu : MonoBehaviour
             foreach (var pair in ordered)
             {
 
-                if (int.Parse(pair.Value[2]) < score)
+                if (int.Parse(pair.Value[2]) < score  && !add)
                 {
 
                     CalculateRankHelper(i, gameSettings.ReturnPlayerName(), s, score.ToString(), true);

@@ -114,7 +114,7 @@ public class MusicManager : MonoBehaviour
     void SetSong(AudioClip audioClip)
     {
         songName.text = audioClips[index].name;
-        if (songName.text.StartsWith("Electric"))
+        if (songName.text.StartsWith("Electric") || songName.text.StartsWith("Exterm"))
         {
             composer.text = "by Carmine Coccimiglio";
         }

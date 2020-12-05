@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: fee23d71e9780b84fa89afecc2bba846
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Bungee Layers Rotated
+  fontNames:
+  - Bungee Layers Rotated
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 0bd9ad40a472fbe408de4637591effff, type: 3}
+  - {fileID: 12800000, guid: 40643209eb8ac464b9812fa01bc70552, type: 3}
+  - {fileID: 12800000, guid: 6b3082ff8f998344bad08ee24824287a, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
