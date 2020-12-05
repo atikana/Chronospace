@@ -9,6 +9,7 @@ public class EndTrigger : MonoBehaviour
     private MusicManager musicManager;
     private SoundManager soundManager;
     private PlayerControl playerControl;
+    private GameObject getOverHereText;
 
     private void Awake()
     {
@@ -16,6 +17,7 @@ public class EndTrigger : MonoBehaviour
         musicManager = FindObjectOfType<MusicManager>();
         soundManager = FindObjectOfType<SoundManager>();
         playerControl = FindObjectOfType<PlayerControl>();
+        getOverHereText = transform.GetChild(2).gameObject;
     }
 
     void OnTriggerEnter(Collider other)
@@ -31,6 +33,7 @@ public class EndTrigger : MonoBehaviour
             winScreenMenu.SetupWinScreen();
             musicManager.PlayWinMusic();
             soundManager.JustChangedMenus();
+            getOverHereText.SetActive(false);
             playerControl.EnableUIControls();
         }
     }

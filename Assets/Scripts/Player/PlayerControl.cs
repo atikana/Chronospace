@@ -197,6 +197,7 @@ public class PlayerControl : MonoBehaviour
         input.Player.Dash.performed += context => Dash();
         input.Player.TimeWarp.performed += context => TimeWarp();
         //input.Player.RestartLevel.performed += context => gameManager.RestartLevel();
+        //input.Player.RestartLevel.performed += context => transform.position = FindObjectOfType<EndTrigger>().transform.position;
 
         input.Player.Pause.performed += context => gameManager.PauseGame();
 
@@ -213,17 +214,6 @@ public class PlayerControl : MonoBehaviour
     private void SetupUIControls()
     {
         input.UI.Cancel.performed += context => gameManager.PauseGame();
-
-        //input.UI.Navigate.performed += context =>
-        //{
-        //    Vector2 thing = context.ReadValue<Vector2>();
-        //    float angle = Mathf.Atan2(thing.y, thing.x);
-        //    if (angle != 0 && angle != Mathf.PI)
-        //    {
-        //        soundManager.PlayMenuSwitchingSound();
-
-        //    }
-        //};
     }
 
     /*
