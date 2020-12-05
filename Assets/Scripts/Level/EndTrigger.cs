@@ -10,6 +10,8 @@ public class EndTrigger : MonoBehaviour
     private SoundManager soundManager;
     private PlayerControl playerControl;
     private GameObject getOverHereText;
+    private GameObject retrowaveSunIconFront;
+    private GameObject retrowaveSunIconBack;
 
     private void Awake()
     {
@@ -17,6 +19,8 @@ public class EndTrigger : MonoBehaviour
         musicManager = FindObjectOfType<MusicManager>();
         soundManager = FindObjectOfType<SoundManager>();
         playerControl = FindObjectOfType<PlayerControl>();
+        retrowaveSunIconFront = transform.GetChild(0).gameObject;
+        retrowaveSunIconBack = transform.GetChild(1).gameObject;
         getOverHereText = transform.GetChild(2).gameObject;
     }
 
@@ -33,6 +37,8 @@ public class EndTrigger : MonoBehaviour
             winScreenMenu.SetupWinScreen();
             musicManager.PlayWinMusic();
             soundManager.JustChangedMenus();
+            retrowaveSunIconFront.SetActive(false);
+            retrowaveSunIconBack.SetActive(false);
             getOverHereText.SetActive(false);
             playerControl.EnableUIControls();
         }

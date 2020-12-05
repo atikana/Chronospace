@@ -13,11 +13,11 @@ public class StartMenuMusic : MonoBehaviour
 
     private void OnEnable()
     {
-        SetVolume(gameSettings.GetVolume());
+        SetVolume(gameSettings.GetMusic());
     }
 
     public void SetVolume(float f)
     {
-        audioSource.volume = f;
+        audioSource.volume = 0.75f * f;
     }
 }

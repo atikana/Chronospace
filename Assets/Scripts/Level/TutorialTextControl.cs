@@ -42,34 +42,46 @@ public class TutorialTextControl : MonoBehaviour
         else if (playerTransform.position.z > -88 && playerTransform.position.z < -41)
         {
             ShowText(4);
-            animatingDashArrow = false;
         }
         else if (playerTransform.position.z > 53 && playerTransform.position.z < 92)
         {
             ShowText(5);
-            dashArrow.gameObject.SetActive(true);
-            animatingDashArrow = true;
         }
         else if (playerTransform.position.z > 139 && playerTransform.position.z < 188)
         {
             ShowText(6);
-            animatingDashArrow = false;
-            animatingTimeWarpArrow = false;
         }
         else if (playerTransform.position.z > 301 && playerTransform.position.z < 336)
         {
             ShowText(7);
-            timeWarpArrow.gameObject.SetActive(true);
-            animatingTimeWarpArrow = true;
         }
         else if (playerTransform.position.z > 371 && playerTransform.position.z < 409)
         {
             ShowText(8);
-            animatingTimeWarpArrow = false;
         }
         else if (playerTransform.position.z > 512 && playerTransform.position.z < 621)
         {
             ShowText(9);
+        }
+
+        if (playerTransform.position.z > 53 && playerTransform.position.z < 92)
+        {
+            dashArrow.gameObject.SetActive(true);
+            animatingDashArrow = true;
+        }
+        else
+        {
+            animatingDashArrow = false;
+        }
+
+        if (playerTransform.position.z > 301 && playerTransform.position.z < 336)
+        {
+            timeWarpArrow.gameObject.SetActive(true);
+            animatingTimeWarpArrow = true;
+        }
+        else
+        {
+            animatingTimeWarpArrow = false;
         }
 
         AnimateArrows();

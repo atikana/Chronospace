@@ -147,7 +147,7 @@ public class MusicManager : MonoBehaviour
 
     public void SetVolume(float f)
     {
-        audioSource.volume = f;
+        audioSource.volume = 0.75f * f;
     }
 
 

@@ -59,6 +59,9 @@ public class PlayerControl : MonoBehaviour
     // Dash speed multiplier.
     public float dashMultiplier = 5f;
 
+    // Multiplier for dash upwards force.
+    private float dashUpMultiplier = 0.01f;
+
     // Number of seconds dash lasts for.
     private float dashLength = 0.2f;
 
@@ -336,7 +339,6 @@ public class PlayerControl : MonoBehaviour
             }
 
             // Dashing gives you a very small upward force so that you can dash between platforms and not worry about falling through.
-            float dashUpMultiplier = 0.01f;
             rigidBody.AddForce(new Vector3(0, jumpForce * dashUpMultiplier, 0), ForceMode.Impulse);
         }
     }
