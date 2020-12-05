@@ -10,6 +10,7 @@ public class LaserControl : MonoBehaviour
     private bool readyToFire;
     private bool enhanceFire;
     private SoundManager soundManager;
+    private GameManager gameManager;
 
     private Transform playerTransform;
 
@@ -22,6 +23,7 @@ public class LaserControl : MonoBehaviour
     {
         playerTransform = FindObjectOfType<PlayerControl>().transform;
         soundManager = FindObjectOfType<SoundManager>();
+        gameManager = FindObjectOfType<GameManager>();
         readyToFire = true;
         enhanceFire = false;
     }
@@ -31,6 +33,9 @@ public class LaserControl : MonoBehaviour
     {
         // lr.SetPosition(0, firePoint.transform.position);
         // RaycastHit hit;
+        fireTimer = 3f / gameManager.GetTimeWarpMultiplier();
+        enhanceTimer = 0.8f / gameManager.GetTimeWarpMultiplier();
+
         if (readyToFire)
         {
             // Debug.Log("Laser created");

@@ -17,7 +17,7 @@ public class LaserBeamControl : MonoBehaviour
     {
         if (isActive)
         {
-            timer += 1.0F * Time.deltaTime;
+            timer += 1.0F * Time.deltaTime * gameManager.GetTimeWarpMultiplier();
             if (timer >= 1.5)
             {   
                 Destroy(this.gameObject);
