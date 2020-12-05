@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Composites;
 using WaterRippleForScreens;
 
 public class PlayerControl : MonoBehaviour
@@ -211,10 +212,18 @@ public class PlayerControl : MonoBehaviour
      */
     private void SetupUIControls()
     {
-        input.UI.Cancel.performed += context =>
-        {
-            gameManager.PauseGame();
-        };
+        input.UI.Cancel.performed += context => gameManager.PauseGame();
+
+        //input.UI.Navigate.performed += context =>
+        //{
+        //    Vector2 thing = context.ReadValue<Vector2>();
+        //    float angle = Mathf.Atan2(thing.y, thing.x);
+        //    if (angle != 0 && angle != Mathf.PI)
+        //    {
+        //        soundManager.PlayMenuSwitchingSound();
+
+        //    }
+        //};
     }
 
     /*

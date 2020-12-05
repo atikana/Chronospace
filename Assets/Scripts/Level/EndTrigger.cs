@@ -7,11 +7,13 @@ public class EndTrigger : MonoBehaviour
     private WinScreenMenu winScreenMenu;
     public GameObject HUD;
     private MusicManager musicManager;
+    private SoundManager soundManager;
 
     private void Awake()
     {
         winScreenMenu = winScreen.GetComponent<WinScreenMenu>();
         musicManager = FindObjectOfType<MusicManager>();
+        soundManager = FindObjectOfType<SoundManager>();
     }
 
     void OnTriggerEnter(Collider other)
@@ -26,6 +28,7 @@ public class EndTrigger : MonoBehaviour
             winScreen.SetActive(true);
             winScreenMenu.SetupWinScreen();
             musicManager.PlayWinMusic();
+            soundManager.JustChangedMenus();
         }
     }
 }

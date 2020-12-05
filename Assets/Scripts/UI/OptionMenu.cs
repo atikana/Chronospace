@@ -11,7 +11,6 @@ public class OptionMenu : MonoBehaviour
     private MusicManager musicManager;
     private StartMenuMusic startMenuMusic;
 
-
     Slider volume;
     Slider sensitivity;
     Slider music;

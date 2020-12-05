@@ -228,7 +228,7 @@ public class GameManager : MonoBehaviour
                 {
                     StartCoroutine(Rewinding());
                 }
-                else 
+                else
                 {
                     AddDeath();
                     RestartLevel(true);

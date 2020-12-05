@@ -292,6 +292,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1172940385}
   - component: {fileID: 1172940386}
+  - component: {fileID: 6715349035929667783}
   m_Layer: 5
   m_Name: AutoAim
   m_TagString: Untagged
@@ -378,6 +379,18 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   m_IsOn: 0
+--- !u!114 &6715349035929667783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1172940384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8de9a3e90e7ca45a6aac528e64f06e73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &501506794351934708
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,6 +437,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6501799264661352351}
   - component: {fileID: 1454423413745452668}
+  - component: {fileID: 2726891846966230901}
   m_Layer: 5
   m_Name: MouseSensitivitySlider
   m_TagString: Untagged
@@ -514,6 +528,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2726891846966230901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1095789247746228173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8de9a3e90e7ca45a6aac528e64f06e73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1389870046033379152
 GameObject:
   m_ObjectHideFlags: 0
@@ -598,6 +624,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3080512269674247879}
   - component: {fileID: 3080512269674247878}
+  - component: {fileID: 7118804025507489226}
   m_Layer: 5
   m_Name: MusicSlider
   m_TagString: Untagged
@@ -688,6 +715,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7118804025507489226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3080512269674247928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8de9a3e90e7ca45a6aac528e64f06e73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3080512269705267859
 GameObject:
   m_ObjectHideFlags: 0
@@ -1228,6 +1267,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3080512270593612079}
   - component: {fileID: 3080512270593612078}
+  - component: {fileID: 6577050864408272711}
   m_Layer: 5
   m_Name: VolumeSlider
   m_TagString: Untagged
@@ -1318,6 +1358,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6577050864408272711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3080512270593612064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8de9a3e90e7ca45a6aac528e64f06e73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3080512270734771440
 GameObject:
   m_ObjectHideFlags: 0
@@ -1489,6 +1541,7 @@ GameObject:
   - component: {fileID: 3080512270787070055}
   - component: {fileID: 3080512270787069976}
   - component: {fileID: 3080512270787069977}
+  - component: {fileID: 2268950672853920185}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -1634,6 +1687,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &2268950672853920185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3080512270787069979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8de9a3e90e7ca45a6aac528e64f06e73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3080512270938033331
 GameObject:
   m_ObjectHideFlags: 0

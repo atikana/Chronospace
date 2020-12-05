@@ -9,6 +9,8 @@ public class StartMenu : MonoBehaviour
 
     public GameObject levelSelectButton, aboutMenuButton, optionMenuButton;
 
+    private SoundManager soundManager;
+
     PlayerInput input;
 
 
@@ -43,18 +45,21 @@ public class StartMenu : MonoBehaviour
         {
             gameObject.SetActive(true);
             levelSelect.SetActive(false);
+            soundManager.JustChangedMenus();
             BackButtonNavi(levelSelectButton);
         }
         else if (aboutMenu.activeInHierarchy)
         {
             gameObject.SetActive(true);
             aboutMenu.SetActive(false);
+            soundManager.JustChangedMenus();
             BackButtonNavi(aboutMenuButton);
         }
         else if (optionMenu.activeInHierarchy)
         {
             gameObject.SetActive(true);
             optionMenu.SetActive(false);
+            soundManager.JustChangedMenus();
             BackButtonNavi(optionMenuButton);
         }
     }
@@ -67,6 +72,7 @@ public class StartMenu : MonoBehaviour
 
     private void Awake()
     {
+        soundManager = FindObjectOfType<SoundManager>();
         input = new PlayerInput();
         input.Enable();
         input.UI.Enable();
@@ -85,7 +91,10 @@ public class StartMenu : MonoBehaviour
 
     private void OnDestroy()
     {
-        input.Disable();
+        if (input != null)
+        {
+            input.Disable();
+        }
     }
 
     /**
@@ -106,18 +115,27 @@ public class StartMenu : MonoBehaviour
 
     public void OptionButtonNavi()
     {
+        gameObject.SetActive(false);
+        optionMenu.SetActive(true);
+        soundManager.JustChangedMenus();
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstOption);
     }
 
     public void LevelSelectButtonNavi()
     {
+        gameObject.SetActive(false);
+        levelSelect.SetActive(true);
+        soundManager.JustChangedMenus();
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstLevel);
     }
 
     public void AboutButtonNavi()
     {
+        gameObject.SetActive(false);
+        aboutMenu.SetActive(true);
+        soundManager.JustChangedMenus();
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstAbout);
     }

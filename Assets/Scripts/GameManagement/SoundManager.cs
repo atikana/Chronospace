@@ -6,8 +6,11 @@ public class SoundManager : MonoBehaviour
     private float volume = 0.5f;
     private AudioSource soundEffectsAudioSource, highPitchSoundEffectsAudioSource, laserAudioSource;
     private AudioClip jumpClip, jumpLandingClip, dashClip, timeWarpClip, pendulumClip,
-        grapplingClip, countDownClip, rewindClip, checkpointClip, deathClip;
+        grapplingClip, countDownClip, rewindClip, checkpointClip, deathClip, menuSwitchingClip;
     private AudioClip[] bulletClips;
+
+    // True only when we just switched to a different menu, so that we don't play the sound.
+    private bool changedMenus;
 
     // Keep track of which lasers are playing a sound, so that the sound turns off at the right point in time.
     private List<Vector3> lasersPlayingSound;
@@ -29,27 +32,37 @@ public class SoundManager : MonoBehaviour
         lasersPlayingSound = new List<Vector3>();
         playerTransform = FindObjectOfType<PlayerControl>().transform;
         AudioSource[] audioSources = GetComponents<AudioSource>();
-        soundEffectsAudioSource = audioSources[0];
-        highPitchSoundEffectsAudioSource = audioSources[1];
-        laserAudioSource = audioSources[2];
+        if (audioSources.Length > 0)
+        {
+            soundEffectsAudioSource = audioSources[0];
+        }
+        if (audioSources.Length > 1)
+        {
+            highPitchSoundEffectsAudioSource = audioSources[1];
+        }
+        if (audioSources.Length > 2)
+        {
+            laserAudioSource = audioSources[2];
+        }
     }
 
     void Start()
     {
-        jumpClip = Resources.Load<AudioClip>("JUMP");
-        jumpLandingClip = Resources.Load<AudioClip>("LAND");
-        dashClip = Resources.Load<AudioClip>("DASH_SHORT1");
-        timeWarpClip = Resources.Load<AudioClip>("TIME_SLOWDOWN");
-        pendulumClip = Resources.Load<AudioClip>("PENDULUM");
-        grapplingClip = Resources.Load<AudioClip>("HOOKSHOT");
-        countDownClip = Resources.Load<AudioClip>("COUNTDOWN");
-        rewindClip = Resources.Load<AudioClip>("DEATH_REWIND");
-        checkpointClip = Resources.Load<AudioClip>("CHECKPOINT");
-        deathClip = Resources.Load<AudioClip>("DEATH_HIT");
+        jumpClip = Resources.Load<AudioClip>("SoundEffects/JUMP");
+        jumpLandingClip = Resources.Load<AudioClip>("SoundEffects/LAND");
+        dashClip = Resources.Load<AudioClip>("SoundEffects/DASH_SHORT1");
+        timeWarpClip = Resources.Load<AudioClip>("SoundEffects/TIME_SLOWDOWN");
+        pendulumClip = Resources.Load<AudioClip>("SoundEffects/PENDULUM");
+        grapplingClip = Resources.Load<AudioClip>("SoundEffects/HOOKSHOT");
+        countDownClip = Resources.Load<AudioClip>("SoundEffects/COUNTDOWN");
+        rewindClip = Resources.Load<AudioClip>("SoundEffects/DEATH_REWIND");
+        checkpointClip = Resources.Load<AudioClip>("SoundEffects/CHECKPOINT");
+        deathClip = Resources.Load<AudioClip>("SoundEffects/DEATH_HIT");
+        menuSwitchingClip = Resources.Load<AudioClip>("SoundEffects/HOVERCLICK_1");
         bulletClips = new AudioClip[] {
-            Resources.Load<AudioClip>("TURRET_BULLET_1"),
-            Resources.Load<AudioClip>("TURRET_BULLET_2"),
-            Resources.Load<AudioClip>("TURRET_BULLET_3")
+            Resources.Load<AudioClip>("SoundEffects/TURRET_BULLET_1"),
+            Resources.Load<AudioClip>("SoundEffects/TURRET_BULLET_2"),
+            Resources.Load<AudioClip>("SoundEffects/TURRET_BULLET_3")
         };
     }
 
@@ -74,9 +87,18 @@ public class SoundManager : MonoBehaviour
         volume = newVolume;
 
         // Manually set the music audioSource volume.
-        soundEffectsAudioSource.volume = newVolume;
-        highPitchSoundEffectsAudioSource.volume = newVolume;
-        laserAudioSource.volume = newVolume;
+        if (soundEffectsAudioSource)
+        {
+            soundEffectsAudioSource.volume = newVolume;
+        }
+        if (highPitchSoundEffectsAudioSource)
+        {
+            highPitchSoundEffectsAudioSource.volume = newVolume;
+        }
+        if (laserAudioSource)
+        {
+            laserAudioSource.volume = newVolume;
+        }
     }
 
     public void PlayJumpSound()
@@ -169,7 +191,28 @@ public class SoundManager : MonoBehaviour
         {
             soundEffectsAudioSource.PlayOneShot(deathClip, volume);
         }
-    }    
+    }
+
+    /**
+     * If you just changed menus, call this variable so that the menu switching
+     * sound is not played as soon as you enter the new menu.
+     */
+    public void JustChangedMenus()
+    {
+        changedMenus = true;
+    }
+
+    public void PlayMenuSwitchingSound()
+    {
+        if (changedMenus)
+        {
+            changedMenus = false;
+        }
+        else if (!changedMenus && soundEffectsAudioSource && menuSwitchingClip)
+        {
+            soundEffectsAudioSource.PlayOneShot(menuSwitchingClip, volume);
+        }
+    }
 
     public void PlayBulletSound(Vector3 turretPosition)
     {
@@ -188,6 +231,10 @@ public class SoundManager : MonoBehaviour
      */
     private void UpdateLaserVolume()
     {
+        if (laserAudioSource == null)
+        {
+            return;
+        }
         // Sound volume is proportional to how far away the player is.
         float minLaserPlayerDistance = float.MaxValue;
         foreach (Vector3 laserPosition in lasersPlayingSound)

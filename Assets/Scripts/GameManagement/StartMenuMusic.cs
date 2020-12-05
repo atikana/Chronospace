@@ -2,11 +2,18 @@
 
 public class StartMenuMusic : MonoBehaviour
 {
-    AudioSource audioSource;
+    private AudioSource audioSource;
+    private GameSettings gameSettings;
 
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+        gameSettings = FindObjectOfType<GameSettings>();
+    }
+
+    private void OnEnable()
+    {
+        SetVolume(gameSettings.GetVolume());
     }
 
     public void SetVolume(float f)

@@ -39,8 +39,6 @@ public class PauseMenu : MonoBehaviour
         if (!CheckPaused())
         {
             PauseGame();
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(firstPauseMenu);
         }
         else
         {
@@ -70,6 +68,9 @@ public class PauseMenu : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
         playerControl.EnableUIControls();
+        soundManager.JustChangedMenus();
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstPauseMenu);
     }
 
     public void ResumeGame()
@@ -100,12 +101,14 @@ public class PauseMenu : MonoBehaviour
 
     public void OptionButtonNavi()
     {
+        soundManager.JustChangedMenus();
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstOption);
     }
 
     public void ExitOptionsMenu()
     {
+        soundManager.JustChangedMenus();
         optionMenu.SetActive(false);
         pauseMenu.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);
