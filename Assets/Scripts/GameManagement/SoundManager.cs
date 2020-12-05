@@ -4,7 +4,8 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     private float volume = 0.5f;
-    private AudioSource soundEffectsAudioSource, highPitchSoundEffectsAudioSource, laserAudioSource;
+    private AudioSource soundEffectsAudioSource, highPitchSoundEffectsAudioSource,
+        laserAudioSource, menuSwitchingAudioSource;
     private AudioClip jumpClip, jumpLandingClip, dashClip, timeWarpClip, pendulumClip,
         grapplingClip, countDownClip, rewindClip, checkpointClip, deathClip, menuSwitchingClip;
     private AudioClip[] bulletClips;
@@ -34,15 +35,19 @@ public class SoundManager : MonoBehaviour
         AudioSource[] audioSources = GetComponents<AudioSource>();
         if (audioSources.Length > 0)
         {
-            soundEffectsAudioSource = audioSources[0];
+            menuSwitchingAudioSource = audioSources[0];
         }
         if (audioSources.Length > 1)
         {
-            highPitchSoundEffectsAudioSource = audioSources[1];
+            soundEffectsAudioSource = audioSources[1];
         }
         if (audioSources.Length > 2)
         {
-            laserAudioSource = audioSources[2];
+            highPitchSoundEffectsAudioSource = audioSources[2];
+        }
+        if (audioSources.Length > 3)
+        {
+            laserAudioSource = audioSources[3];
         }
     }
 
@@ -208,9 +213,9 @@ public class SoundManager : MonoBehaviour
         {
             changedMenus = false;
         }
-        else if (!changedMenus && soundEffectsAudioSource && menuSwitchingClip)
+        else if (!changedMenus && menuSwitchingAudioSource && menuSwitchingClip)
         {
-            soundEffectsAudioSource.PlayOneShot(menuSwitchingClip, volume);
+            menuSwitchingAudioSource.PlayOneShot(menuSwitchingClip, volume);
         }
     }
 

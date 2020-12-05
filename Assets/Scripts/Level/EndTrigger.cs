@@ -8,12 +8,14 @@ public class EndTrigger : MonoBehaviour
     public GameObject HUD;
     private MusicManager musicManager;
     private SoundManager soundManager;
+    private PlayerControl playerControl;
 
     private void Awake()
     {
         winScreenMenu = winScreen.GetComponent<WinScreenMenu>();
         musicManager = FindObjectOfType<MusicManager>();
         soundManager = FindObjectOfType<SoundManager>();
+        playerControl = FindObjectOfType<PlayerControl>();
     }
 
     void OnTriggerEnter(Collider other)
@@ -29,6 +31,7 @@ public class EndTrigger : MonoBehaviour
             winScreenMenu.SetupWinScreen();
             musicManager.PlayWinMusic();
             soundManager.JustChangedMenus();
+            playerControl.EnableUIControls();
         }
     }
 }
