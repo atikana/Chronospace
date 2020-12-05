@@ -17215,9 +17215,21 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1384128995}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1384129002 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7160404296927356471, guid: 7044d4925b2ab40fab798b369719669b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1384128995}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1384129003 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7160404296685626891, guid: 7044d4925b2ab40fab798b369719669b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1384128995}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1384129004 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1790670303231649248, guid: 7044d4925b2ab40fab798b369719669b,
     type: 3}
   m_PrefabInstance: {fileID: 1384128995}
   m_PrefabAsset: {fileID: 0}
@@ -21595,6 +21607,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: FinalPlatformTrigger
       objectReference: {fileID: 0}
+    - target: {fileID: 2734072949958492621, guid: bde8f464715aa4d2dbb20c260d6eb87e,
+        type: 3}
+      propertyPath: winScreen
+      value: 
+      objectReference: {fileID: 1384129004}
+    - target: {fileID: 2734072949958492621, guid: bde8f464715aa4d2dbb20c260d6eb87e,
+        type: 3}
+      propertyPath: HUD
+      value: 
+      objectReference: {fileID: 1384129002}
     - target: {fileID: 2734072949958492625, guid: bde8f464715aa4d2dbb20c260d6eb87e,
         type: 3}
       propertyPath: m_LocalPosition.x
