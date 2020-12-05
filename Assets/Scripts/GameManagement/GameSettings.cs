@@ -125,8 +125,6 @@ public class GameSettings : MonoBehaviour
 
     public Dictionary<int, List<string>> getScores()
     {
-
-
         switch (SceneManager.GetActiveScene().name)
         {
             case "Level1":
