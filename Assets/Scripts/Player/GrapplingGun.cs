@@ -78,6 +78,9 @@ public class GrapplingGun : MonoBehaviour
     void Update()
     {
         //GrappleAim();
+        Vector3 forward = cameraTransform.TransformDirection(cameraTransform.forward) * 100;
+        Debug.DrawRay(cameraTransform.position, cameraTransform.forward*100, Color.red);
+
         if (playerControl.GetGrappleShoot())
         {
             if (!joint)
@@ -177,6 +180,7 @@ public class GrapplingGun : MonoBehaviour
         {
             GameObject close;
 
+           
             if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out grappleHit, maxDistance, whatIsGrappleable))
             {
                 showRope = true;
@@ -273,6 +277,7 @@ public class GrapplingGun : MonoBehaviour
         joint.connectedAnchor = grapplePoint;
 
         float distanceFromPoint = Vector3.Distance(playerTransform.position, grapplePoint);
+        Debug.Log(distanceFromPoint);
 
         //The distance the grapple will try to keep from the point
         joint.maxDistance = distanceFromPoint * 0.5f;

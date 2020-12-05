@@ -33,8 +33,8 @@ public class LaserControl : MonoBehaviour
     {
         // lr.SetPosition(0, firePoint.transform.position);
         // RaycastHit hit;
-        fireTimer = 3f / gameManager.GetTimeWarpMultiplier();
-        enhanceTimer = 0.8f / gameManager.GetTimeWarpMultiplier();
+        fireTimer = 3f;
+        enhanceTimer = 0.8f;
 
         if (readyToFire)
         {
@@ -114,14 +114,23 @@ public class LaserControl : MonoBehaviour
 
     IEnumerator FireRate()
     {
-        yield return new WaitForSeconds(fireTimer);
+        int i = 0;
+        while (i < 30)
+        {
+            yield return new WaitForSeconds(fireTimer / 30.0f / gameManager.GetTimeWarpMultiplier());
+            i++;
+        }
         readyToFire = true;
-
     }
 
     IEnumerator EnhanceFireRate()
     {
-        yield return new WaitForSeconds(enhanceTimer);
+        int i = 0;
+        while (i < 10)
+        {
+            yield return new WaitForSeconds(enhanceTimer / 10.0f / gameManager.GetTimeWarpMultiplier());
+            i++;
+        }
         enhanceFire = false;
 
     }
