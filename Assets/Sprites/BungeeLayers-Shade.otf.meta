@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: 0d01bedbcf0d24948985f585fc01c51e
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Bungee Layers
+  fontNames:
+  - Bungee Layers
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: ca97df105c3a35c44b5fd90747571b82, type: 3}
+  - {fileID: 12800000, guid: 562e49414b29ede43aabdad1a47db7c3, type: 3}
+  - {fileID: 12800000, guid: 03efebfae4c37224998c30dae3959acf, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
