@@ -16,6 +16,7 @@ public class PauseMenu : MonoBehaviour
 
     private PlayerControl playerControl;
     private SoundManager soundManager;
+    private OptionMenu opMenu;
 
     private void Awake()
     {
@@ -27,6 +28,7 @@ public class PauseMenu : MonoBehaviour
         menu = transform.GetChild(0).gameObject;
         pauseMenu = transform.GetChild(0).GetChild(0).gameObject;
         optionMenu = transform.GetChild(0).GetChild(1).gameObject;
+        opMenu = optionMenu.GetComponent<OptionMenu>();
     }
 
     public void PressPause()
@@ -44,7 +46,14 @@ public class PauseMenu : MonoBehaviour
         {
             if (optionMenu.activeInHierarchy)
             {
-                ExitOptionsMenu();
+                if (opMenu.ShowingControls())
+                {
+                    opMenu.ExitControllerScheme();
+                }
+                else
+                {
+                    ExitOptionsMenu();
+                }
             }
             else
             {

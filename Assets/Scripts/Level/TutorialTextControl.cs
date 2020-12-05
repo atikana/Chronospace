@@ -64,7 +64,7 @@ public class TutorialTextControl : MonoBehaviour
             ShowText(9);
         }
 
-        if (playerTransform.position.z > 53 && playerTransform.position.z < 92)
+        if (playerTransform.position.z > 53 && playerTransform.position.z < 130)
         {
             dashArrow.gameObject.SetActive(true);
             animatingDashArrow = true;
@@ -74,7 +74,7 @@ public class TutorialTextControl : MonoBehaviour
             animatingDashArrow = false;
         }
 
-        if (playerTransform.position.z > 301 && playerTransform.position.z < 336)
+        if (playerTransform.position.z > 301 && playerTransform.position.z < 385)
         {
             timeWarpArrow.gameObject.SetActive(true);
             animatingTimeWarpArrow = true;

@@ -104,6 +104,10 @@ public class SoundManager : MonoBehaviour
         {
             laserAudioSource.volume = newVolume;
         }
+        if (menuSwitchingAudioSource)
+        {
+            menuSwitchingAudioSource.volume = newVolume;
+        }
     }
 
     public void PlayJumpSound()

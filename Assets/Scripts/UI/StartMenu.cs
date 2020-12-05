@@ -9,6 +9,7 @@ public class StartMenu : MonoBehaviour
 
     public GameObject levelSelectButton, aboutMenuButton, optionMenuButton;
 
+    private OptionMenu opMenu;
     private SoundManager soundManager;
 
     PlayerInput input;
@@ -57,10 +58,18 @@ public class StartMenu : MonoBehaviour
         }
         else if (optionMenu.activeInHierarchy)
         {
-            gameObject.SetActive(true);
-            optionMenu.SetActive(false);
-            soundManager.JustChangedMenus();
-            BackButtonNavi(optionMenuButton);
+            if (opMenu.ShowingControls())
+            {
+                opMenu.ExitControllerScheme();
+            }
+            else
+            {
+                gameObject.SetActive(true);
+                optionMenu.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+                optionMenu.SetActive(false);
+                soundManager.JustChangedMenus();
+                BackButtonNavi(optionMenuButton);
+            }
         }
     }
 
@@ -83,6 +92,7 @@ public class StartMenu : MonoBehaviour
         optionMenu.SetActive(true);
         optionMenu.GetComponent<OptionMenu>().SetMainMenuGameSettings();
         optionMenu.SetActive(false);
+        opMenu = optionMenu.GetComponent<OptionMenu>();
         FindObjectOfType<GameSettings>().SelectNewPlayerName();
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstMain);
@@ -117,6 +127,7 @@ public class StartMenu : MonoBehaviour
     {
         gameObject.SetActive(false);
         optionMenu.SetActive(true);
+        optionMenu.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
         soundManager.JustChangedMenus();
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstOption);

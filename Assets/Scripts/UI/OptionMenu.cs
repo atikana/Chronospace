@@ -11,23 +11,36 @@ public class OptionMenu : MonoBehaviour
     private MusicManager musicManager;
     private StartMenuMusic startMenuMusic;
 
-    Slider volume;
-    Slider sensitivity;
-    Slider music;
-    Toggle autoaim;
-    bool autoaimOn;
+    private GameObject backButton;
+    private Slider volume;
+    private Slider sensitivity;
+    private Slider music;
+    private GameObject volumeText, sensitivityText, musicText;
+    private Toggle autoaim;
+    private bool autoaimOn;
     public GameObject checkmark;
-
+    private GameObject controllerImage;
+    private GameObject displayControllerButton;
+    private GameObject controllerBackButton;
+    
     void Awake()
     {
         gameSettings = FindObjectOfType<GameSettings>();
-        volume = transform.GetChild(2).GetChild(0).GetComponent<Slider>();
-        music = transform.GetChild(3).GetChild(0).GetComponent<Slider>();
-        sensitivity = transform.GetChild(4).GetChild(0).GetComponent<Slider>();
-        autoaim = transform.GetChild(5).GetComponent<Toggle>();
+        backButton = transform.GetChild(1).gameObject;
+        displayControllerButton = transform.GetChild(2).gameObject;
+        volume = transform.GetChild(3).GetChild(0).GetComponent<Slider>();
+        volumeText = transform.GetChild(3).GetChild(1).gameObject;
+        music = transform.GetChild(4).GetChild(0).GetComponent<Slider>();
+        musicText = transform.GetChild(4).GetChild(1).gameObject;
+        sensitivity = transform.GetChild(5).GetChild(0).GetComponent<Slider>();
+        sensitivityText = transform.GetChild(5).GetChild(1).gameObject;
+        autoaim = transform.GetChild(6).GetComponent<Toggle>();
         autoaim.isOn = gameSettings.GetAutoAim();
         autoaimOn = false;
         checkmark.gameObject.SetActive(gameSettings.GetAutoAim());
+        controllerBackButton = transform.GetChild(7).gameObject;
+        controllerImage = transform.GetChild(8).gameObject;
+        soundManager = FindObjectOfType<SoundManager>();
     }
 
     public void SetVolume()
@@ -98,13 +111,51 @@ public class OptionMenu : MonoBehaviour
         {
             startMenuMusic.SetVolume(music.value);
         }
+    }
 
+    public bool ShowingControls()
+    {
+        return controllerImage.activeInHierarchy;
+    }
+
+    public void DisplayControllerScheme()
+    {
+        soundManager.JustChangedMenus();
+        controllerBackButton.SetActive(true);
+        controllerImage.SetActive(true);
+        backButton.SetActive(false);
+        displayControllerButton.SetActive(false);
+        volume.gameObject.SetActive(false);
+        volumeText.SetActive(false);
+        music.gameObject.SetActive(false);
+        musicText.SetActive(false);
+        sensitivity.gameObject.SetActive(false);
+        sensitivityText.SetActive(false);
+        autoaim.gameObject.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(controllerBackButton);
+    }
+
+    public void ExitControllerScheme()
+    {
+        controllerBackButton.SetActive(false);
+        controllerImage.SetActive(false);
+        backButton.SetActive(true);
+        displayControllerButton.SetActive(true);
+        volume.gameObject.SetActive(true);
+        volumeText.SetActive(true);
+        music.gameObject.SetActive(true);
+        musicText.SetActive(true);
+        sensitivity.gameObject.SetActive(true);
+        sensitivityText.SetActive(true);
+        autoaim.gameObject.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(displayControllerButton);
     }
 
     public void SetGameSettings()
     {
         gameManager = FindObjectOfType<GameManager>();
-        soundManager = FindObjectOfType<SoundManager>();
         musicManager = FindObjectOfType<MusicManager>();
 
         volume.value = gameSettings.GetVolume();
