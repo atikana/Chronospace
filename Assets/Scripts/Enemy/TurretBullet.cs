@@ -41,7 +41,7 @@ public class TurretBullet : MonoBehaviour
             gameManager.KillPlayer();
         }
 
-        else if (!other.CompareTag("Untagged"))
+        else if (!other.CompareTag("Untagged") && !other.CompareTag("Bullet"))
         {
             Vector3 pos = this.transform.position;
             var hit = Instantiate(hitEffect, pos, Quaternion.identity);

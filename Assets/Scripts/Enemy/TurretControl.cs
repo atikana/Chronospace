@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
 
 public class TurretControl : MonoBehaviour
 {
@@ -16,6 +18,8 @@ public class TurretControl : MonoBehaviour
     private PlayerControl playerScript;
     private SoundManager soundManager;
     private bool turretEnabled = true;
+    public Animator turretAnimator;
+    private Quaternion startPosition;
 
     // If player is within this distance of a turret, bullets will play a sound.
     private const float bulletSoundThreshold = 50f;
@@ -30,7 +34,10 @@ public class TurretControl : MonoBehaviour
     {
         readyToShoot = true;
         readyToShoot2 = false;
+        turretAnimator.ResetTrigger("StartShooting");
+        turretAnimator.ResetTrigger("StopShooting");
         StartCoroutine(delay());
+        startPosition = TurretMovable.transform.rotation;
     }
 
     void Update()
@@ -67,6 +74,8 @@ public class TurretControl : MonoBehaviour
 
     void Shoot()
     {
+        turretAnimator.SetTrigger("StartShooting");
+        turretAnimator.ResetTrigger("StopShooting");
         Transform _bullet = Instantiate(bullet.transform, muzzle1.transform.position, Quaternion.identity);
         _bullet.transform.rotation = TurretMovable.transform.rotation;
         readyToShoot = false;
@@ -86,6 +95,8 @@ public class TurretControl : MonoBehaviour
     IEnumerator FireRate()
     {
         yield return new WaitForSeconds(fireTimer);
+        turretAnimator.ResetTrigger("StartShooting");
+        turretAnimator.SetTrigger("StopShooting");
         readyToShoot = true;
     }
 
@@ -128,6 +139,7 @@ public class TurretControl : MonoBehaviour
         if (other.tag == "Player")
         {
             targetLocked = false;
+            TurretMovable.transform.rotation = startPosition;
         }
     }
 
@@ -135,5 +147,6 @@ public class TurretControl : MonoBehaviour
     {
         targetLocked = false;
         target = null;
+        TurretMovable.transform.rotation = startPosition;
     }
 }
