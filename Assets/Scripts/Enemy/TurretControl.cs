@@ -47,7 +47,6 @@ public class TurretControl : MonoBehaviour
             Vector2 mag = playerScript.VelRelativeToLook();
             Vector3 playerVelocity = new Vector3(mag.x, mag.y, 0);
             TurretMovable.transform.LookAt(target.transform.position + playerVelocity * 1.0f);
-            // Angle adjustments
             TurretMovable.transform.Rotate(8, 0, 0);
 
             if (readyToShoot)
@@ -58,8 +57,6 @@ public class TurretControl : MonoBehaviour
             {
                 Shoot2();
             }
-            // targetLocked = false;
-            // target = null;
         }
     }
 

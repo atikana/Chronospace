@@ -807,7 +807,7 @@ public class PlayerControl : MonoBehaviour
 
     public void StartRewind()
     {
-        Debug.Log(previousPositions[previousPositions.Count - 1]);
+        // Debug.Log(previousPositions[previousPositions.Count - 1]);
         if (previousPositions.Count != 0)
         {
             PositionRecord p = previousPositions[previousPositions.Count - 2];
@@ -815,9 +815,8 @@ public class PlayerControl : MonoBehaviour
             {
                 previousPositions.Insert(previousPositions.Count - 1, p);
             }
-            Debug.Log("points stored:");
             rigidBody.isKinematic = true;
-            Debug.Log(previousPositions.Count);
+            // Debug.Log(previousPositions.Count);
             isRewinding = true;
             // rewindStep = 3.0f / previousPositions.Count;
             // rewindStep = 3.0f / 400;
