@@ -108,6 +108,13 @@ public class GameManager : MonoBehaviour
         return (timeWarpEnabled) ? timeWarpMultiplier : 1f;
     }
 
+    /***
+    public void AdjustTimeWarpMultiplier(float multiplier)
+    {
+        timeWarpMultiplier = multiplier;
+    }
+    ***/
+
     /**
      * Resets things related to the player, which should occur prior to rewinding.
      */
@@ -284,6 +291,8 @@ public class GameManager : MonoBehaviour
         ResetLevelObjects(true);
         soundManager.PlayRewindSound();
         isRewinding = true;
+        // timeWarpMultiplier = 0.001f;
+        // SetTimeWarpEnabled(true);
         rewindAnim.gameObject.SetActive(true);
         // rewindAnim.GetComponentInChildren<Animator>().SetBool("PlayRewind", true);
         rewindAnim.GetComponentInChildren<Animator>().ResetTrigger("New Trigger 0");
@@ -292,7 +301,9 @@ public class GameManager : MonoBehaviour
 
         // yield return new WaitForSecondsRealtime(3f);
         yield return new WaitUntil(() => playerControl.isRewinding == false);
-        Debug.Log("rewind finished");
+        // Debug.Log("rewind finished");
+        // timeWarpMultiplier = 0.4f;
+        // SetTimeWarpEnabled(false);
         EnableTurrets();
         m_PostProcessVolume.isGlobal = false;
         playerControl.StopRewind();
