@@ -25483,6 +25483,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1790670303231649250, guid: 7044d4925b2ab40fab798b369719669b,
+        type: 3}
+      propertyPath: recommendTime
+      value: 180
+      objectReference: {fileID: 0}
     - target: {fileID: 5304941653290672863, guid: 7044d4925b2ab40fab798b369719669b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
