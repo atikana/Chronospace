@@ -949,7 +949,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
       propertyPath: m_Name
-      value: Turret10
+      value: Turret1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
@@ -1003,6 +1003,7 @@ MonoBehaviour:
   bullet: {fileID: 3180358562747466990, guid: bf15f6907408b4daf8ab5a45064ec9bb, type: 3}
   muzzle1: {fileID: 646933717}
   muzzle2: {fileID: 1461338946}
+  turretAnimator: {fileID: 0}
 --- !u!135 &79701855
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1032,6 +1033,7 @@ MonoBehaviour:
   bullet: {fileID: 0}
   muzzle1: {fileID: 0}
   muzzle2: {fileID: 0}
+  turretAnimator: {fileID: 0}
 --- !u!1 &99915738
 GameObject:
   m_ObjectHideFlags: 0
@@ -3299,7 +3301,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
       propertyPath: m_Name
-      value: Turret7 (8)
+      value: Turret10
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
@@ -3353,6 +3355,7 @@ MonoBehaviour:
   bullet: {fileID: 3180358562747466990, guid: bf15f6907408b4daf8ab5a45064ec9bb, type: 3}
   muzzle1: {fileID: 636784846}
   muzzle2: {fileID: 405956568}
+  turretAnimator: {fileID: 0}
 --- !u!135 &361232425
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3382,6 +3385,7 @@ MonoBehaviour:
   bullet: {fileID: 0}
   muzzle1: {fileID: 0}
   muzzle2: {fileID: 0}
+  turretAnimator: {fileID: 0}
 --- !u!1 &374585079
 GameObject:
   m_ObjectHideFlags: 0
@@ -5555,7 +5559,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
       propertyPath: m_Name
-      value: Turret7 (6)
+      value: Turret8
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
@@ -5609,6 +5613,7 @@ MonoBehaviour:
   bullet: {fileID: 3180358562747466990, guid: bf15f6907408b4daf8ab5a45064ec9bb, type: 3}
   muzzle1: {fileID: 2027256186}
   muzzle2: {fileID: 99915738}
+  turretAnimator: {fileID: 0}
 --- !u!135 &487290725
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -5638,6 +5643,7 @@ MonoBehaviour:
   bullet: {fileID: 0}
   muzzle1: {fileID: 0}
   muzzle2: {fileID: 0}
+  turretAnimator: {fileID: 0}
 --- !u!1001 &487948489
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9800,7 +9806,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
       propertyPath: m_Name
-      value: Turret12
+      value: Turret2
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
@@ -9854,6 +9860,7 @@ MonoBehaviour:
   bullet: {fileID: 3180358562747466990, guid: bf15f6907408b4daf8ab5a45064ec9bb, type: 3}
   muzzle1: {fileID: 1944992878}
   muzzle2: {fileID: 664439980}
+  turretAnimator: {fileID: 0}
 --- !u!135 &673970964
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -9883,6 +9890,7 @@ MonoBehaviour:
   bullet: {fileID: 0}
   muzzle1: {fileID: 0}
   muzzle2: {fileID: 0}
+  turretAnimator: {fileID: 0}
 --- !u!1001 &686652549
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13376,7 +13384,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
       propertyPath: m_Name
-      value: Turret7 (3)
+      value: Turret5
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
@@ -13430,6 +13438,7 @@ MonoBehaviour:
   bullet: {fileID: 3180358562747466990, guid: bf15f6907408b4daf8ab5a45064ec9bb, type: 3}
   muzzle1: {fileID: 1814019899}
   muzzle2: {fileID: 542412554}
+  turretAnimator: {fileID: 0}
 --- !u!135 &1057576862
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -13459,6 +13468,7 @@ MonoBehaviour:
   bullet: {fileID: 0}
   muzzle1: {fileID: 0}
   muzzle2: {fileID: 0}
+  turretAnimator: {fileID: 0}
 --- !u!1001 &1060320633
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13747,7 +13757,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
       propertyPath: m_Name
-      value: Turret7 (7)
+      value: Turret9
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
@@ -13801,6 +13811,7 @@ MonoBehaviour:
   bullet: {fileID: 3180358562747466990, guid: bf15f6907408b4daf8ab5a45064ec9bb, type: 3}
   muzzle1: {fileID: 758372610}
   muzzle2: {fileID: 460927027}
+  turretAnimator: {fileID: 0}
 --- !u!135 &1072068333
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -13830,6 +13841,7 @@ MonoBehaviour:
   bullet: {fileID: 0}
   muzzle1: {fileID: 0}
   muzzle2: {fileID: 0}
+  turretAnimator: {fileID: 0}
 --- !u!1001 &1089574503
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14107,7 +14119,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
       propertyPath: m_Name
-      value: Turret7 (2)
+      value: Turret4
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
@@ -14161,6 +14173,7 @@ MonoBehaviour:
   bullet: {fileID: 3180358562747466990, guid: bf15f6907408b4daf8ab5a45064ec9bb, type: 3}
   muzzle1: {fileID: 839421279}
   muzzle2: {fileID: 1908377501}
+  turretAnimator: {fileID: 0}
 --- !u!135 &1089628443
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -14190,6 +14203,7 @@ MonoBehaviour:
   bullet: {fileID: 0}
   muzzle1: {fileID: 0}
   muzzle2: {fileID: 0}
+  turretAnimator: {fileID: 0}
 --- !u!1 &1091031296
 GameObject:
   m_ObjectHideFlags: 0
@@ -14605,7 +14619,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
       propertyPath: m_Name
-      value: Turret7 (4)
+      value: Turret6
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
@@ -14659,6 +14673,7 @@ MonoBehaviour:
   bullet: {fileID: 3180358562747466990, guid: bf15f6907408b4daf8ab5a45064ec9bb, type: 3}
   muzzle1: {fileID: 241170594}
   muzzle2: {fileID: 220214935}
+  turretAnimator: {fileID: 0}
 --- !u!135 &1130617101
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -14688,6 +14703,7 @@ MonoBehaviour:
   bullet: {fileID: 0}
   muzzle1: {fileID: 0}
   muzzle2: {fileID: 0}
+  turretAnimator: {fileID: 0}
 --- !u!1 &1140661425
 GameObject:
   m_ObjectHideFlags: 0
@@ -17689,7 +17705,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
       propertyPath: m_Name
-      value: Turret7 (5)
+      value: Turret7
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
@@ -17743,6 +17759,7 @@ MonoBehaviour:
   bullet: {fileID: 3180358562747466990, guid: bf15f6907408b4daf8ab5a45064ec9bb, type: 3}
   muzzle1: {fileID: 1419090798}
   muzzle2: {fileID: 767652465}
+  turretAnimator: {fileID: 0}
 --- !u!135 &1388648062
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -17772,6 +17789,7 @@ MonoBehaviour:
   bullet: {fileID: 0}
   muzzle1: {fileID: 0}
   muzzle2: {fileID: 0}
+  turretAnimator: {fileID: 0}
 --- !u!1001 &1389139418
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21116,7 +21134,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
       propertyPath: m_Name
-      value: Turret7 (1)
+      value: Turret3
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfeaa259961f2f441a1320ee244b3313,
         type: 3}
@@ -21170,6 +21188,7 @@ MonoBehaviour:
   bullet: {fileID: 3180358562747466990, guid: bf15f6907408b4daf8ab5a45064ec9bb, type: 3}
   muzzle1: {fileID: 1470947235}
   muzzle2: {fileID: 757988948}
+  turretAnimator: {fileID: 0}
 --- !u!135 &1604448407
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -21199,6 +21218,7 @@ MonoBehaviour:
   bullet: {fileID: 0}
   muzzle1: {fileID: 0}
   muzzle2: {fileID: 0}
+  turretAnimator: {fileID: 0}
 --- !u!1001 &1613211063
 PrefabInstance:
   m_ObjectHideFlags: 0
