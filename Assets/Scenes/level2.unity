@@ -12979,19 +12979,19 @@ Transform:
   - {fileID: 1127194439}
   - {fileID: 1250253485}
   - {fileID: 923671992}
+  - {fileID: 1495869258}
   - {fileID: 253989761}
   - {fileID: 237889173}
-  - {fileID: 1108232365}
   - {fileID: 1279365742}
+  - {fileID: 1664127886}
   - {fileID: 1053444448}
+  - {fileID: 1108232365}
   - {fileID: 595180206}
   - {fileID: 77346307}
+  - {fileID: 1424136263}
   - {fileID: 481582910}
-  - {fileID: 1495869258}
-  - {fileID: 1664127886}
   - {fileID: 276687234}
   - {fileID: 640514421}
-  - {fileID: 1424136263}
   - {fileID: 1058471565}
   - {fileID: 67911655}
   - {fileID: 469495878}
@@ -13059,7 +13059,7 @@ PrefabInstance:
     - target: {fileID: 2734072949958492625, guid: bde8f464715aa4d2dbb20c260d6eb87e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 40
+      value: 37
       objectReference: {fileID: 0}
     - target: {fileID: 2734072949958492625, guid: bde8f464715aa4d2dbb20c260d6eb87e,
         type: 3}
@@ -13079,12 +13079,12 @@ PrefabInstance:
     - target: {fileID: 2734072949958492625, guid: bde8f464715aa4d2dbb20c260d6eb87e,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 225
+      value: 110
       objectReference: {fileID: 0}
     - target: {fileID: 2734072949958492625, guid: bde8f464715aa4d2dbb20c260d6eb87e,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 155
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 2734072950277162169, guid: bde8f464715aa4d2dbb20c260d6eb87e,
         type: 3}
