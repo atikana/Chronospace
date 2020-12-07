@@ -136,7 +136,10 @@ public class TurretControl : MonoBehaviour
         if (other.tag == "Player")
         {
             targetLocked = false;
-            TurretMovable.transform.rotation = startPosition;
+            if (TurretMovable)
+            {
+                TurretMovable.transform.rotation = startPosition;
+            }
         }
     }
 
@@ -144,6 +147,9 @@ public class TurretControl : MonoBehaviour
     {
         targetLocked = false;
         target = null;
-        TurretMovable.transform.rotation = startPosition;
+        if (TurretMovable)
+        {
+            TurretMovable.transform.rotation = startPosition;
+        }
     }
 }
