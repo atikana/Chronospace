@@ -467,7 +467,7 @@ MonoBehaviour:
   jumpForce: 675
   onAirControlLR: 2
   onAirControlFB: 0.8
-  maxSpeed: 50
+  maxSpeed: 35
   counterMovement: 0.175
   groundMask:
     serializedVersion: 2
@@ -5371,6 +5371,7 @@ GameObject:
   - component: {fileID: 5517978683038504852}
   - component: {fileID: 5517978683038504853}
   - component: {fileID: 1913658575}
+  - component: {fileID: 5159476067941271455}
   m_Layer: 0
   m_Name: GrappleGun
   m_TagString: Untagged
@@ -5513,6 +5514,19 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
 --- !u!65 &1913658575
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5517978683038504850}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 0.1, y: 0.05, z: 0.1}
+  m_Center: {x: 4.4, y: -3.87, z: 34.3}
+--- !u!65 &5159476067941271455
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
