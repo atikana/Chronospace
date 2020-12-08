@@ -99,7 +99,7 @@ public class GameSettings : MonoBehaviour
             case "Level1":
                 AddScoreHelper(level1, score, time);
                 break;
-            case "level2":
+            case "Level2":
                 AddScoreHelper(level2, score, time);
                 break;
             case "Level3":
@@ -129,7 +129,7 @@ public class GameSettings : MonoBehaviour
         {
             case "Level1":
                 return level1;
-            case "level2":
+            case "Level2":
                 return level2;
             case "Level3":
                 return level3;
