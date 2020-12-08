@@ -77,9 +77,6 @@ public class GrapplingGun : MonoBehaviour
 
     void Update()
     {
-        //GrappleAim();
-        Vector3 forward = cameraTransform.TransformDirection(cameraTransform.forward) * 100;
-        Debug.DrawRay(cameraTransform.position, cameraTransform.forward*100, Color.red);
 
         if (playerControl.GetGrappleShoot())
         {

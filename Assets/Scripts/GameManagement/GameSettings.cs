@@ -96,17 +96,17 @@ public class GameSettings : MonoBehaviour
 
         switch (SceneManager.GetActiveScene().name)
         {
+            case "tutorial":
+                AddScoreHelper(tutorials, score, time);
+                break;
             case "Level1":
                 AddScoreHelper(level1, score, time);
-                break;
-            case "Level2":
-                AddScoreHelper(level2, score, time);
                 break;
             case "Level3":
                 AddScoreHelper(level3, score, time);
                 break;
             default:
-                AddScoreHelper(tutorials, score, time);
+                AddScoreHelper(level2, score, time);
                 break;
 
         }
@@ -129,7 +129,7 @@ public class GameSettings : MonoBehaviour
         {
             case "Level1":
                 return level1;
-            case "Level2":
+            case "level2":
                 return level2;
             case "Level3":
                 return level3;

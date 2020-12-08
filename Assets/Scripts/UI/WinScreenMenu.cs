@@ -222,11 +222,11 @@ public class WinScreenMenu : MonoBehaviour
             case "Level1":
                 s = "Level2";
                 break;
-            case "Level2":
-                s = "Level3";
-                break;
             case "Level3":
                 s = "Level1";
+                break;
+            default:
+                s = "Level3";
                 break;
         }
 
