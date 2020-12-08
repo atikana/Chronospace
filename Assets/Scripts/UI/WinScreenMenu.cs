@@ -219,6 +219,12 @@ public class WinScreenMenu : MonoBehaviour
             case "tutorial":
                 s = "Level1";
                 break;
+            case "Level1":
+                s = "Level2";
+                break;
+            case "Level2":
+                s = "Level3";
+                break;
         }
 
         if (s.CompareTo("") != 0)
