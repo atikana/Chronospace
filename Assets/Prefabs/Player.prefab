@@ -467,7 +467,7 @@ MonoBehaviour:
   jumpForce: 675
   onAirControlLR: 2
   onAirControlFB: 0.8
-  maxSpeed: 35
+  maxSpeed: 30
   counterMovement: 0.175
   groundMask:
     serializedVersion: 2
