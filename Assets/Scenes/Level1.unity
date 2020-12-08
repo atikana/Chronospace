@@ -28888,6 +28888,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 1790670302915023097, guid: 7044d4925b2ab40fab798b369719669b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 200.00003
+      objectReference: {fileID: 0}
     - target: {fileID: 1790670302915023098, guid: 7044d4925b2ab40fab798b369719669b,
         type: 3}
       propertyPath: m_HorizontalFit
@@ -28896,7 +28901,7 @@ PrefabInstance:
     - target: {fileID: 1790670302915023098, guid: 7044d4925b2ab40fab798b369719669b,
         type: 3}
       propertyPath: m_VerticalFit
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1790670303021996845, guid: 7044d4925b2ab40fab798b369719669b,
         type: 3}
@@ -28922,6 +28927,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1790670303611943057, guid: 7044d4925b2ab40fab798b369719669b,
+        type: 3}
+      propertyPath: m_VerticalScrollbarVisibility
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5304941653290672863, guid: 7044d4925b2ab40fab798b369719669b,
         type: 3}

@@ -69,7 +69,7 @@ public class PlayerControl : MonoBehaviour
     private float dashCooldownCounter = 0f;
 
     // Dash cooldown, in seconds.
-    private float dashCooldownLength = 3f;
+    private float dashCooldownLength = 1.5f;
 
     private int dashCapacity = 2;
     private int numDashes;
@@ -376,7 +376,7 @@ public class PlayerControl : MonoBehaviour
         dashCooldownCounter = Mathf.Max(dashCooldownCounter, 0f);
         if (dashCooldownCounter == 0 && !dashing && numDashes < dashCapacity)
         {
-            numDashes = dashCapacity;
+            numDashes++;
             dashCooldownCounter = dashCooldownLength;
         }
 
