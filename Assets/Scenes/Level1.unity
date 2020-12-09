@@ -28346,10 +28346,35 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5517978682363965793, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: dashFovSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517978682363965793, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: dashFov
+      value: 110
+      objectReference: {fileID: 0}
     - target: {fileID: 5517978682659398784, guid: 724e5968d51354200bac36b1af52c3a7,
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517978682659398785, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517978682659398785, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517978682659398785, guid: 724e5968d51354200bac36b1af52c3a7,
+        type: 3}
+      propertyPath: m_Height
+      value: 2.3
       objectReference: {fileID: 0}
     - target: {fileID: 5517978682659398788, guid: 724e5968d51354200bac36b1af52c3a7,
         type: 3}

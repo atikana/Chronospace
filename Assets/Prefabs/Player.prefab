@@ -220,8 +220,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4b42a97c7ef4cb4aaad4534edfe3289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashFov: 120
-  dashFovSpeed: 30
+  dashFov: 110
+  dashFovSpeed: 25
 --- !u!114 &5517978682363965794
 MonoBehaviour:
   m_ObjectHideFlags: 0
