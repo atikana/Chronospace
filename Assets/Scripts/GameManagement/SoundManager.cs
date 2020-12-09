@@ -5,7 +5,7 @@ public class SoundManager : MonoBehaviour
 {
     private float volume = 0.5f;
     private AudioSource soundEffectsAudioSource, highPitchSoundEffectsAudioSource,
-        laserAudioSource, menuSwitchingAudioSource;
+        laserAudioSource;
     private AudioClip jumpClip, jumpLandingClip, dashClip, timeWarpClip, pendulumClip,
         grapplingClip, countDownClip, rewindClip, checkpointClip, deathClip, menuSwitchingClip;
     private AudioClip[] bulletClips;
@@ -35,19 +35,15 @@ public class SoundManager : MonoBehaviour
         AudioSource[] audioSources = GetComponents<AudioSource>();
         if (audioSources.Length > 0)
         {
-            menuSwitchingAudioSource = audioSources[0];
+            soundEffectsAudioSource = audioSources[0];
         }
         if (audioSources.Length > 1)
         {
-            soundEffectsAudioSource = audioSources[1];
+            highPitchSoundEffectsAudioSource = audioSources[1];
         }
         if (audioSources.Length > 2)
         {
-            highPitchSoundEffectsAudioSource = audioSources[2];
-        }
-        if (audioSources.Length > 3)
-        {
-            laserAudioSource = audioSources[3];
+            laserAudioSource = audioSources[2];
         }
     }
 
@@ -103,10 +99,6 @@ public class SoundManager : MonoBehaviour
         if (laserAudioSource)
         {
             laserAudioSource.volume = newVolume;
-        }
-        if (menuSwitchingAudioSource)
-        {
-            menuSwitchingAudioSource.volume = newVolume;
         }
     }
 
@@ -211,15 +203,20 @@ public class SoundManager : MonoBehaviour
         changedMenus = true;
     }
 
-    public void PlayMenuSwitchingSound()
+    /**
+     * If overrideChangedMenus, we want to play this sound
+     * without caring about the value of changedMenus.
+     */
+    public void PlayMenuSwitchingSound(bool overrideChangedMenus)
     {
-        if (changedMenus)
+        if ((overrideChangedMenus || !changedMenus) && soundEffectsAudioSource && menuSwitchingClip)
         {
+            soundEffectsAudioSource.PlayOneShot(menuSwitchingClip, volume);
             changedMenus = false;
         }
-        else if (!changedMenus && menuSwitchingAudioSource && menuSwitchingClip)
+        else if (changedMenus)
         {
-            menuSwitchingAudioSource.PlayOneShot(menuSwitchingClip, volume);
+            changedMenus = false;
         }
     }
 

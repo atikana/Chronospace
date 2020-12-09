@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
     private int numPlayerDeaths = 0;
 
     // Look joystick/mouse sensitivity.
-    private float sensitivity = 7;
+    private float sensitivity = 8f;
 
     private const float baseSensitivity = 50f;
     private const float sensitivityMultiplier = 8f;

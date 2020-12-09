@@ -19,7 +19,7 @@ public class GameSettings : MonoBehaviour
     private static string playerName;
 
     private float volume = 0.5f;
-    private float mouseSensitivity = 7f;
+    private float mouseSensitivity = 8f;
     private float playerScore = 0;
     private float music = 0.5f;
     private bool autoAim = false;
