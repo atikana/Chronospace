@@ -42,18 +42,17 @@ public class StartMenu : MonoBehaviour
 
     public void PressBackButton()
     {
+        soundManager.JustChangedMenus();
         if (levelSelect.activeInHierarchy)
         {
             gameObject.SetActive(true);
             levelSelect.SetActive(false);
-            soundManager.JustChangedMenus();
             BackButtonNavi(levelSelectButton);
         }
         else if (aboutMenu.activeInHierarchy)
         {
             gameObject.SetActive(true);
             aboutMenu.SetActive(false);
-            soundManager.JustChangedMenus();
             BackButtonNavi(aboutMenuButton);
         }
         else if (optionMenu.activeInHierarchy)
@@ -65,9 +64,7 @@ public class StartMenu : MonoBehaviour
             else
             {
                 gameObject.SetActive(true);
-                optionMenu.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
                 optionMenu.SetActive(false);
-                soundManager.JustChangedMenus();
                 BackButtonNavi(optionMenuButton);
             }
         }
@@ -127,7 +124,6 @@ public class StartMenu : MonoBehaviour
     {
         gameObject.SetActive(false);
         optionMenu.SetActive(true);
-        optionMenu.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
         soundManager.JustChangedMenus();
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstOption);

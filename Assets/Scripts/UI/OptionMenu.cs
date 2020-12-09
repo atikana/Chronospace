@@ -11,6 +11,8 @@ public class OptionMenu : MonoBehaviour
     private MusicManager musicManager;
     private StartMenuMusic startMenuMusic;
 
+    private Text titleText;
+    private GameObject background;
     private GameObject backButton;
     private Slider volume;
     private Slider sensitivity;
@@ -26,6 +28,8 @@ public class OptionMenu : MonoBehaviour
     void Awake()
     {
         gameSettings = FindObjectOfType<GameSettings>();
+        titleText = transform.GetChild(0).GetChild(0).GetComponent<Text>();
+        background = transform.GetChild(0).GetChild(1).gameObject;
         backButton = transform.GetChild(1).gameObject;
         displayControllerButton = transform.GetChild(2).gameObject;
         volume = transform.GetChild(3).GetChild(0).GetComponent<Slider>();
@@ -120,6 +124,11 @@ public class OptionMenu : MonoBehaviour
 
     public void DisplayControllerScheme()
     {
+        if (SceneManager.GetActiveScene().name.StartsWith("StartMenu"))
+        {
+            background.SetActive(true);
+        }
+        titleText.text = "Controls";
         soundManager.JustChangedMenus();
         controllerBackButton.SetActive(true);
         controllerImage.SetActive(true);
@@ -138,6 +147,11 @@ public class OptionMenu : MonoBehaviour
 
     public void ExitControllerScheme()
     {
+        if (SceneManager.GetActiveScene().name.StartsWith("StartMenu"))
+        {
+            background.SetActive(false);
+        }
+        titleText.text = "Options";
         controllerBackButton.SetActive(false);
         controllerImage.SetActive(false);
         backButton.SetActive(true);
