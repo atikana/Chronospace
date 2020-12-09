@@ -5000,6 +5000,11 @@ PrefabInstance:
       propertyPath: winScreen
       value: 
       objectReference: {fileID: 353084917}
+    - target: {fileID: 2734072949958492623, guid: bde8f464715aa4d2dbb20c260d6eb87e,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2734072949958492625, guid: bde8f464715aa4d2dbb20c260d6eb87e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5064,6 +5069,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 58
+      objectReference: {fileID: 0}
+    - target: {fileID: 2734072950277162167, guid: bde8f464715aa4d2dbb20c260d6eb87e,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2734072950277162169, guid: bde8f464715aa4d2dbb20c260d6eb87e,
         type: 3}
