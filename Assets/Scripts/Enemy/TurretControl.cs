@@ -20,6 +20,7 @@ public class TurretControl : MonoBehaviour
     private bool turretEnabled = true;
     public Animator turretAnimator;
     private Quaternion startPosition;
+    private float aimForwardMultiplier = 3.0f;
 
     // If player is within this distance of a turret, bullets will play a sound.
     private const float bulletSoundThreshold = 50f;
@@ -45,9 +46,19 @@ public class TurretControl : MonoBehaviour
         if (targetLocked)
         {
             Vector2 mag = playerScript.VelRelativeToLook();
-            Vector3 playerVelocity = new Vector3(mag.x, mag.y, 0);
-            TurretMovable.transform.LookAt(target.transform.position + playerVelocity * 1.0f);
-            TurretMovable.transform.Rotate(8, 0, 0);
+            if (mag.x > 0 || mag.y > 0)
+            {
+                Vector3 playerVelocity = new Vector3(mag.x/ (float)(Math.Sqrt(mag.x * mag.x + mag.y * mag.y)) * aimForwardMultiplier,0, aimForwardMultiplier * mag.y / (float)(Math.Sqrt(mag.x * mag.x + mag.y * mag.y)));                
+                TurretMovable.transform.LookAt(target.transform.position + playerVelocity * 5.0f);
+                TurretMovable.transform.Rotate(8, 0, 0);
+
+            }
+            else
+            {
+                Vector3 playerVelocity = new Vector3(mag.x, mag.y, 0);
+                TurretMovable.transform.LookAt(target.transform.position);// + playerVelocity * 1.0f);
+                TurretMovable.transform.Rotate(8, 0, 0);
+            }
 
             if (readyToShoot)
             {
@@ -138,7 +149,7 @@ public class TurretControl : MonoBehaviour
             targetLocked = false;
             if (TurretMovable)
             {
-                TurretMovable.transform.rotation = startPosition;
+               // TurretMovable.transform.rotation = startPosition;
             }
         }
     }
