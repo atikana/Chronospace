@@ -596,6 +596,11 @@ public class PlayerControl : MonoBehaviour
         grounded = false;
     }
 
+    public Vector3 GetVelocity()
+    {
+        return rigidBody.velocity;
+    }
+
     /*
      * Returns the player's velocity relative to the direction they are looking.
      */

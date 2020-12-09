@@ -5,25 +5,22 @@ using System;
 
 public class TurretControl : MonoBehaviour
 {
-    private GameObject target;
     private bool targetLocked;
-    public GameObject TurretMovable;
     public GameObject bullet;
     public GameObject muzzle1;
     public GameObject muzzle2;
-    private float fireTimer = 0.8f;  // Used to be 2.
+    private float fireTimer = 0.8f;
     private bool readyToShoot;
-    private bool readyToShoot2;
-    private float delayTimer = 0.4f;  // Used to be 1.
     private PlayerControl playerScript;
     private SoundManager soundManager;
     private bool turretEnabled = true;
     public Animator turretAnimator;
     private Quaternion startPosition;
-    private float aimForwardMultiplier = 3.0f;
+    private float aimAheadOfPlayerMultiplier = 8f;
 
-    // If player is within this distance of a turret, bullets will play a sound.
-    private const float bulletSoundThreshold = 50f;
+    // Offset when looking at the player to make it seem like the bullet is hitting them higher.
+    private Vector3 playerPositionOffset = new Vector3(0f, 5f, 0f);
+    private Quaternion bulletRotation;
 
     private void Awake()
     {
@@ -34,39 +31,33 @@ public class TurretControl : MonoBehaviour
     void Start()
     {
         readyToShoot = true;
-        readyToShoot2 = false;
         turretAnimator.ResetTrigger("StartShooting");
         turretAnimator.ResetTrigger("StopShooting");
-        StartCoroutine(delay());
-        startPosition = TurretMovable.transform.rotation;
+        startPosition = transform.rotation;
     }
 
     void Update()
     {
         if (targetLocked)
         {
-            Vector2 mag = playerScript.VelRelativeToLook();
-            if (mag.x > 0 || mag.y > 0)
+            Vector3 playerNextPosition;
+            if (playerScript.GetVelocity().magnitude > 0)
             {
-                Vector3 playerVelocity = new Vector3(mag.x/ (float)(Math.Sqrt(mag.x * mag.x + mag.y * mag.y)) * aimForwardMultiplier,0, aimForwardMultiplier * mag.y / (float)(Math.Sqrt(mag.x * mag.x + mag.y * mag.y)));                
-                TurretMovable.transform.LookAt(target.transform.position + playerVelocity * 5.0f);
-                TurretMovable.transform.Rotate(8, 0, 0);
-
+                float playerTurretDistance = Vector3.Distance(transform.position, playerScript.transform.position);
+                playerNextPosition = playerScript.transform.position + playerScript.GetVelocity() * aimAheadOfPlayerMultiplier * (1.0f / playerTurretDistance);
             }
             else
             {
-                Vector3 playerVelocity = new Vector3(mag.x, mag.y, 0);
-                TurretMovable.transform.LookAt(target.transform.position);// + playerVelocity * 1.0f);
-                TurretMovable.transform.Rotate(8, 0, 0);
+                playerNextPosition = playerScript.transform.position;
             }
+
+            transform.LookAt(playerNextPosition - playerPositionOffset);
+            bulletRotation = transform.rotation;
+            transform.LookAt(new Vector3(playerNextPosition.x, transform.position.y, playerNextPosition.z));
 
             if (readyToShoot)
             {
                 Shoot();
-            }
-            if (readyToShoot2)
-            {
-                Shoot2();
             }
         }
     }
@@ -74,30 +65,28 @@ public class TurretControl : MonoBehaviour
     private void PlayBulletSound(Vector3 muzzleLocation)
     {
         // Only play bullet sound if the player is near the turret.
-        if (Vector3.Distance(playerScript.transform.position, muzzleLocation) < bulletSoundThreshold)
-        {
-            soundManager.PlayBulletSound(muzzleLocation);
-        }
+        soundManager.PlayBulletSound(muzzleLocation);
     }
 
     void Shoot()
     {
         turretAnimator.SetTrigger("StartShooting");
         turretAnimator.ResetTrigger("StopShooting");
+
+        // Shoot the first bullet.
         Transform _bullet = Instantiate(bullet.transform, muzzle1.transform.position, Quaternion.identity);
-        _bullet.transform.rotation = TurretMovable.transform.rotation;
+        _bullet.transform.rotation = bulletRotation;
+        PlayBulletSound(muzzle1.transform.position);
+
+        // Shoot the second bullet, if we are using a double turret.
+        if (muzzle2 != null)
+        {
+            Transform _bullet2 = Instantiate(bullet.transform, muzzle2.transform.position, Quaternion.identity);
+            _bullet2.transform.rotation = bulletRotation;
+        }
+
         readyToShoot = false;
         StartCoroutine(FireRate());
-        PlayBulletSound(muzzle1.transform.position);
-    }
-
-    void Shoot2()
-    {
-        Transform _bullet = Instantiate(bullet.transform, muzzle2.transform.position, Quaternion.identity);
-        _bullet.transform.rotation = TurretMovable.transform.rotation;
-        readyToShoot2 = false;
-        StartCoroutine(FireRate2());
-        PlayBulletSound(muzzle2.transform.position);
     }
 
     IEnumerator FireRate()
@@ -106,19 +95,6 @@ public class TurretControl : MonoBehaviour
         turretAnimator.ResetTrigger("StartShooting");
         turretAnimator.SetTrigger("StopShooting");
         readyToShoot = true;
-    }
-
-    IEnumerator FireRate2()
-    {
-        yield return new WaitForSeconds(fireTimer);
-        readyToShoot2 = true;
-    }
-
-    IEnumerator delay()
-    {
-        yield return new WaitForSeconds(delayTimer);
-        readyToShoot2 = true;
-
     }
 
     public void EnableTurret()
@@ -130,13 +106,13 @@ public class TurretControl : MonoBehaviour
     {
         turretEnabled = false;
         targetLocked = false;
+        transform.rotation = startPosition;
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (turretEnabled && other.tag == "Player")
         {
-            target = other.gameObject;
             targetLocked = true;
         }
     }
@@ -147,20 +123,13 @@ public class TurretControl : MonoBehaviour
         if (other.tag == "Player")
         {
             targetLocked = false;
-            if (TurretMovable)
-            {
-               // TurretMovable.transform.rotation = startPosition;
-            }
+            transform.rotation = startPosition;
         }
     }
 
     public void ResetTurret()
     {
         targetLocked = false;
-        target = null;
-        if (TurretMovable)
-        {
-            TurretMovable.transform.rotation = startPosition;
-        }
+        transform.rotation = startPosition;
     }
 }
