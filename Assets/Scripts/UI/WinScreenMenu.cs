@@ -161,10 +161,11 @@ public class WinScreenMenu : MonoBehaviour
         if (current)
         {
 
-            slotRank.color = Color.yellow;
-            slotName.color = Color.yellow;
-            slotTime.color = Color.yellow;
-            slotScore.color = Color.yellow;
+            Color c = new Color(212f / 255f, 175f / 255f, 55f / 255f);
+            slotRank.color = c;
+            slotName.color = c;
+            slotTime.color = c;
+            slotScore.color = c;
             slotRank.fontStyle = FontStyle.Bold;
             slotName.fontStyle = FontStyle.Bold;
             slotTime.fontStyle = FontStyle.Bold;
