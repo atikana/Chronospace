@@ -45,8 +45,12 @@ public class TurretControl : MonoBehaviour
         if (targetLocked)
         {
             Vector2 mag = playerScript.VelRelativeToLook();
-            Vector3 playerVelocity = new Vector3(mag.x, mag.y, 0);
-            TurretMovable.transform.LookAt(target.transform.position + playerVelocity * 1.0f);
+            // Vector3 playerVelocity = new Vector3(mag.x / (float)Math.Sqrt(mag.x * mag.x + mag.y * mag.y), mag.y / (float)(Math.Sqrt(mag.x * mag.x + mag.y * mag.y)), 0);
+            Vector3 playerVelocity = new Vector3(mag.x , mag.y , 0);
+            Vector3 relativePos = TurretMovable.transform.position - target.transform.position;
+            Quaternion rotation = Quaternion.LookRotation(target.transform.position, new Vector3(0, 1, 0));
+            TurretMovable.transform.localRotation = rotation;
+            // TurretMovable.transform.LookAt(target.transform.position + playerVelocity * 1.0f);
             TurretMovable.transform.Rotate(8, 0, 0);
 
             if (readyToShoot)
