@@ -109,22 +109,18 @@ public class TurretControl : MonoBehaviour
         transform.rotation = startPosition;
     }
 
-    void OnTriggerEnter(Collider other)
+    public void PlayerNearby()
     {
-        if (turretEnabled && other.tag == "Player")
+        if (turretEnabled)
         {
             targetLocked = true;
         }
     }
 
-    void OnTriggerExit(Collider other)
+    public void PlayerNoLongerNearby()
     {
         // Stop shooting at the player when they're far away.
-        if (other.tag == "Player")
-        {
-            targetLocked = false;
-            transform.rotation = startPosition;
-        }
+        targetLocked = false;
     }
 
     public void ResetTurret()

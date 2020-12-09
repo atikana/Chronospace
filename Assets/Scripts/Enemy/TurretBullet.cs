@@ -31,7 +31,7 @@ public class TurretBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") || (!other.CompareTag("Untagged") && !other.CompareTag("Bullet")))
+        if (other.CompareTag("Player") || (!other.CompareTag("Untagged") && !other.CompareTag("Bullet") && !other.CompareTag("Turret")))
         {
             Vector3 pos = this.transform.position;
             Instantiate(hitEffect, pos, Quaternion.identity);
