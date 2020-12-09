@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class WinScreenMenu : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class WinScreenMenu : MonoBehaviour
 
     public GameObject defaultOption;
     public GameObject slot;
+  
 
     GameSettings gameSettings;
 
@@ -78,7 +80,14 @@ public class WinScreenMenu : MonoBehaviour
 
         int timeScore = Mathf.CeilToInt(381000 * Mathf.Ceil(recommendTime - time) % 10000);
 
-        return 381000 + timeScore - (death * 1500);
+        int totalScore = 381000 + timeScore - (death * 1500);
+
+       if (gameSettings.GetAutoAim())
+        {
+            totalScore = Convert.ToInt32(totalScore * 0.5);
+        }
+
+        return totalScore;
     }
 
     int CalculateRank(int score, string s)

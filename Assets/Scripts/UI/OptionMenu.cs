@@ -24,7 +24,6 @@ public class OptionMenu : MonoBehaviour
     private GameObject controllerImage;
     private GameObject displayControllerButton;
     private GameObject controllerBackButton;
-    
     void Awake()
     {
         gameSettings = FindObjectOfType<GameSettings>();
@@ -195,5 +194,6 @@ public class OptionMenu : MonoBehaviour
         music.value = gameSettings.GetMusic();
         startMenuMusic.SetVolume(music.value);
     }
+
 
 }
