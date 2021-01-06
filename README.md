@@ -2,7 +2,7 @@
 Video Game for CSC404
 
 # Chronospace Trailer
-<iframe  title="YouTube video player" width="480" height="390" src="https://www.youtube.com/watch?v=1QR-KO2Gw3I" frameborder="0" allowfullscreen></iframe>
+[![Chronospace Trailer](http://i.imgur.com/Ot5DWAW.png)](https://youtu.be/1QR-KO2Gw3I"Chronospace Trailer")
 
 # PLAY IT HERE:
 https://mdlin.itch.io/chronospace
