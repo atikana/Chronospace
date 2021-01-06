@@ -11,43 +11,43 @@ https://mdlin.itch.io/chronospace
 
 Creative Director:
 
-Steven Webb
+Steven Webb  <br />
 
 
 Programming:
 
-Pratana Atikhomkamalasai
-Bojian Li
-Jingwei Shang
-Justin Smeal
+Pratana Atikhomkamalasai  <br />
+Bojian Li  <br />
+Jingwei Shang  <br />
+Justin Smeal  <br />
 
 
 Game Art:
 
-Shianne Carrington
-Min Khoanh Fam
-German Fuquene Rodriguez
-Dahye Rachel Lee
+Shianne Carrington  <br />
+Min Khoanh Fam  <br />
+German Fuquene Rodriguez  <br />
+Dahye Rachel Lee  <br />
 
 
 Animation:
 
-Dewayne Clarke
-Kateryna Oliinyk
-Celine Zhang
+Dewayne Clarke  <br />
+Kateryna Oliinyk  <br />
+Celine Zhang  <br />
 
 
 Music and Sound:
 
-Carmine Coccimiglio
-Justin Poon
-Steven Webb
+Carmine Coccimiglio  <br />
+Justin Poon  <br />
+Steven Webb  <br />
 
 
 Special Thanks To:
 
-Elias Adum
-John Lee
-Karthik Mahadevan
-Mike Romaniak
-Michael Wong
+Elias Adum  <br />
+John Lee  <br />
+Karthik Mahadevan  <br />
+Mike Romaniak  <br />
+Michael Wong  <br />
